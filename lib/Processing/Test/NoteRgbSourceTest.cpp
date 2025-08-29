@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -89,7 +89,7 @@ public:
             mockTime);
         noteRgbSource->activate();
 
-        auto* rgbFunction(new NiceMock<MockRgbFunction>);
+        auto rgbFunction(std::make_shared<NiceMock<MockRgbFunction>>());
         ON_CALL(*rgbFunction, calculate(_, _)).WillByDefault(ReturnFullWhiteWhenSounding());
         noteRgbSource->setRgbFunction(rgbFunction);
    }
@@ -254,7 +254,7 @@ ACTION(ReturnBlueWhenNoteSoundingOtherwiseRed)
 
 TEST_F(NoteRgbSourceTest, otherRgbFunction)
 {
-    MockRgbFunction* mockRgbFunction = new MockRgbFunction();
+    auto mockRgbFunction = std::make_shared<MockRgbFunction>();
     EXPECT_CALL(*mockRgbFunction, calculate(_, _))
         .WillRepeatedly(ReturnBlueWhenNoteSoundingOtherwiseRed());
     noteRgbSource->setRgbFunction(mockRgbFunction);
@@ -287,7 +287,8 @@ TEST_F(NoteRgbSourceTest, timePassedToRgbFunction)
         .WillOnce(Return(43))
         .WillRepeatedly(Return(44));
 
-    MockRgbFunction* mockRgbFunction = new MockRgbFunction();
+    auto mockRgbFunction = std::make_shared<MockRgbFunction>();
+
     {
         InSequence dummy;
         EXPECT_CALL(*mockRgbFunction, calculate(_, 42));
@@ -338,8 +339,8 @@ TEST_F(NoteRgbSourceTest, doNotWriteOutsideStrip)
 
 TEST_F(NoteRgbSourceTest, deleteRgbFunction)
 {
-    MockRgbFunction* mock1 = new MockRgbFunction();
-    MockRgbFunction* mock2 = new MockRgbFunction();
+    auto mock1 = std::make_shared<MockRgbFunction>();
+    auto mock2 = std::make_shared<MockRgbFunction>();
 
     // Need to set an action, to make Google Test throw an error in case of a leaked mock.
     ON_CALL(*mock1, calculate(_, _))
@@ -353,7 +354,7 @@ TEST_F(NoteRgbSourceTest, deleteRgbFunction)
 
 TEST_F(NoteRgbSourceTest, convertToJson)
 {
-    MockRgbFunction* mockRgbFunction = new MockRgbFunction();
+    auto mockRgbFunction = std::make_shared<MockRgbFunction>();
     ASSERT_NE(nullptr, mockRgbFunction);
 
     Json::object mockRgbFunctionJson;
@@ -383,7 +384,7 @@ TEST_F(NoteRgbSourceTest, convertFromJson)
     mockRgbFunctionJson["objectType"] = "MockRgbFunction";
     mockRgbFunctionJson["someParameter"] = 42;
 
-    MockRgbFunction* mockRgbFunction = new MockRgbFunction();
+    auto mockRgbFunction = std::make_shared<MockRgbFunction>();
     ASSERT_NE(nullptr, mockRgbFunction);
     EXPECT_CALL(*mockRgbFunction, calculate(_, _))
         .WillRepeatedly(Return(Processing::TRgb(1, 2, 3)));

@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,32 +30,17 @@
 #define PROCESSING_INTERFACES_IRGBFUNCTIONFACTORY_H_
 
 #include <json11.hpp>
-// for convenience
+#include <memory>
+
 using Json = json11::Json;
 
 class IRgbFunction;
 
-/**
- * Interface for RGB function factories.
- */
 class IRgbFunctionFactory
 {
 public:
-    /**
-     * Destructor.
-     */
-    virtual ~IRgbFunctionFactory()
-    {
-    }
-
-    /**
-     * Create RGB function from JSON input.
-     *
-     * @param   [in]    converted   The JSON object containing the type name and persistent properties.
-     *
-     * @return  The newly created RGB function or nullptr if type could not be determined.
-     */
-    virtual IRgbFunction* createRgbFunction(const Json& converted) const = 0;
+    virtual ~IRgbFunctionFactory() = default;
+    virtual std::shared_ptr<IRgbFunction> createRgbFunction(const Json& converted) const = 0;
 };
 
 

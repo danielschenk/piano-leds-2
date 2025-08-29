@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,6 +35,7 @@
 
 #include <mutex>
 #include <array>
+#include <memory>
 
 class IRgbFunction;
 class IRgbFunctionFactory;
@@ -77,7 +78,7 @@ public:
     bool isUsingPedal() const;
     void setUsingPedal(bool usingPedal);
 
-    void setRgbFunction(IRgbFunction* rgbFunction);
+    void setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction);
 
     // IMidiInput::IObserver implementation
     void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) override;
@@ -105,7 +106,7 @@ private:
     Scheduler scheduler;
     std::array<Processing::TNoteState, IMidiInterface::c_numNotes> noteStates;
     bool pedalPressed;
-    IRgbFunction* rgbFunction;
+    std::shared_ptr<IRgbFunction> rgbFunction;
     const ITime& time;
 };
 

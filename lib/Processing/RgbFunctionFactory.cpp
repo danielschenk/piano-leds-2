@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,9 +33,9 @@
 
 #include "Json11Helper.h"
 
-IRgbFunction* RgbFunctionFactory::createRgbFunction(const Json& converted) const
+std::shared_ptr<IRgbFunction> RgbFunctionFactory::createRgbFunction(const Json& converted) const
 {
-    IRgbFunction* rgbFunction = nullptr;
+    std::shared_ptr<IRgbFunction> rgbFunction;
 
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
 
@@ -44,13 +44,13 @@ IRgbFunction* RgbFunctionFactory::createRgbFunction(const Json& converted) const
     {
         if(objectType == IRgbFunction::c_jsonTypeNameLinearRgbFunction)
         {
-            rgbFunction = new LinearRgbFunction;
+            rgbFunction = std::make_shared<LinearRgbFunction>();
         }
         else if(objectType == IRgbFunction::c_jsonTypeNamePianoDecayRgbFunction)
         {
-            rgbFunction = new PianoDecayRgbFunction;
+            rgbFunction = std::make_shared<PianoDecayRgbFunction>();
         }
-        
+
         if(rgbFunction != nullptr)
         {
             rgbFunction->convertFromJson(converted);

@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2018 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -148,7 +148,7 @@ void setup()
     auto src2(new NoteRgbSource(*midiInput,
                                 *rgbFunctionFactory,
                                 *freeRtosTime));
-    auto rgbFunction(new LinearRgbFunction);
+    auto rgbFunction(std::make_shared<LinearRgbFunction>());
     const Processing::TLinearConstants fullWhite({255, 0});
     rgbFunction->setRedConstants(fullWhite);
     rgbFunction->setGreenConstants(fullWhite);
@@ -165,7 +165,7 @@ void setup()
                                 *freeRtosTime));
 
     // Sounding notes become blue, intensity is the velocity of the note multiplied by 2
-    rgbFunction = new LinearRgbFunction;
+    rgbFunction = std::make_shared<LinearRgbFunction>();
     rgbFunction->setBlueConstants({2, 0});
     src3->setRgbFunction(rgbFunction);
 
@@ -188,7 +188,7 @@ void setup()
                                 *rgbFunctionFactory,
                                 *freeRtosTime));
 
-    auto fnc(new PianoDecayRgbFunction);
+    auto fnc(std::make_shared<PianoDecayRgbFunction>());
     src5->setRgbFunction(fnc);
     src5->setUsingPedal(true);
     patch3->getProcessingChain().insertBlock(src5);
