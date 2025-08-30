@@ -51,7 +51,7 @@
 
 #define LOGGING_COMPONENT "Esp32Application"
 
-static MidiTask* gs_midiTask(nullptr);
+static MidiTask* midiTask(nullptr);
 
 static constexpr uint32_t defaultStackSize(4096);
 
@@ -106,7 +106,7 @@ void setup()
     Serial2.begin(31250, SERIAL_8N1, MIDI_RX_PIN, MIDI_TX_PIN);
 
     auto midiInput = new ArduinoMidiInput(Serial2);
-    gs_midiTask = new MidiTask(*midiInput,
+    midiTask = new MidiTask(*midiInput,
                                defaultStackSize,
                                PRIORITY_CRITICAL);
 
@@ -242,5 +242,5 @@ void loop()
 // TODO This function is not called on ESP32... :-(
 void serialEvent2()
 {
-    gs_midiTask->wake();
+    midiTask->wake();
 }
