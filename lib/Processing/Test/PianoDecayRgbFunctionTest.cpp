@@ -56,12 +56,7 @@ TEST_F(PianoDecayRgbFunctionTest, decay)
             {15000, {0, 0, 0}},
     };
 
-    const Processing::TNoteState noteState = {
-            .noteOnTimeStamp = 0,
-            .pressDownVelocity = 100,
-            .pressed = true,
-            .sounding = true,
-    };
+    const Processing::TNoteState noteState(true, true, 100, 0);
 
     function.setRedConstants({2, 0});
     function.setGreenConstants({1, 0});
@@ -76,13 +71,7 @@ TEST_F(PianoDecayRgbFunctionTest, decay)
 
 TEST_F(PianoDecayRgbFunctionTest, notSounding)
 {
-    const Processing::TNoteState noteState = {
-            .noteOnTimeStamp = 0,
-            .pressDownVelocity = 127,
-            .pressed = false,
-            .sounding = false,
-    };
-
+    const Processing::TNoteState noteState(false, false, 127, 0);
     EXPECT_EQ(Processing::TRgb(0, 0, 0), function.calculate(noteState, 42));
 }
 

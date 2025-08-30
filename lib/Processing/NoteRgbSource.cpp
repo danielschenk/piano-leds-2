@@ -97,7 +97,9 @@ void NoteRgbSource::onNoteChange(uint8_t channel, uint8_t number, uint8_t veloci
         return;
     }
 
-    scheduler.schedule([=]() {
+    scheduler.schedule([this, channel, number, velocity, on]() {
+        std::lock_guard<std::mutex> lock(mutex);
+
         if(channel == this->channel)
         {
             if(on)
@@ -132,7 +134,9 @@ void NoteRgbSource::onControlChange(uint8_t channel, IMidiInput::TControllerNumb
     // Channel check must be scheduled as it uses a member
     if(number == IMidiInterface::DAMPER_PEDAL)
     {
-        scheduler.schedule([=]() {
+        scheduler.schedule([this, channel, value]() {
+            std::lock_guard<std::mutex> lock(mutex);
+
             if(channel == this->channel && usingPedal)
             {
                 pedalPressed = (value >= 64);

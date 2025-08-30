@@ -179,6 +179,11 @@ TNoteToLightMap convert(const Json& source)
     return converted;
 }
 
+TNoteState::TNoteState(bool pressed, bool sounding, uint8_t pressDownVelocity, TTime noteOnTimeStamp)
+    : pressed(pressed)
+    , sounding(sounding)
+    , pressDownVelocity(pressDownVelocity)
+    , noteOnTimeStamp(noteOnTimeStamp)
+{}
+
 } /* namespace Processing */
-
-

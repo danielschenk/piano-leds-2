@@ -137,11 +137,11 @@ TEST_F(NoteRgbSourceTest, noteOn)
     noteRgbSource.execute(strip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto reference = Processing::TRgbStrip(c_StripSize);
-    reference[0] = {0xff, 0xff, 0xff};
-    reference[5] = {0xff, 0xff, 0xff};
+    auto expected = Processing::TRgbStrip(c_StripSize);
+    expected[0] = {0xff, 0xff, 0xff};
+    expected[5] = {0xff, 0xff, 0xff};
 
-    EXPECT_EQ(reference, strip);
+    EXPECT_EQ(expected, strip);
 }
 
 TEST_F(NoteRgbSourceTest, deactivateDisablesAllNotes)
@@ -167,10 +167,10 @@ TEST_F(NoteRgbSourceTest, noteOff)
     noteRgbSource.execute(strip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto reference = Processing::TRgbStrip(c_StripSize);
-    reference[5] = {0xff, 0xff, 0xff};
+    auto expected = Processing::TRgbStrip(c_StripSize);
+    expected[5] = {0xff, 0xff, 0xff};
 
-    EXPECT_EQ(reference, strip);
+    EXPECT_EQ(expected, strip);
 }
 
 TEST_F(NoteRgbSourceTest, ignoreOtherChannel)
@@ -204,12 +204,12 @@ TEST_F(NoteRgbSourceTest, usePedal)
     // Press another key
     observer->onNoteChange(0, 2, 1, true);
 
-    auto reference = Processing::TRgbStrip(c_StripSize);
+    auto expected = Processing::TRgbStrip(c_StripSize);
     // Both notes are still sounding
-    reference[0] = {0xff, 0xff, 0xff};
-    reference[2] = {0xff, 0xff, 0xff};
+    expected[0] = {0xff, 0xff, 0xff};
+    expected[2] = {0xff, 0xff, 0xff};
     noteRgbSource.execute(strip, noteToLightMap);
-    EXPECT_EQ(reference, strip);
+    EXPECT_EQ(expected, strip);
 
     // Release keys
     observer->onNoteChange(0, 0, 1, false);
@@ -218,17 +218,17 @@ TEST_F(NoteRgbSourceTest, usePedal)
     // Both notes are still sounding
     resetStrip();
     noteRgbSource.execute(strip, noteToLightMap);
-    EXPECT_EQ(reference, strip);
+    EXPECT_EQ(expected, strip);
 
     // Release pedal
     observer->onControlChange(0, IMidiInterface::DAMPER_PEDAL, 0);
 
     // Notes are not sounding anymore
-    reference[0] = {0, 0, 0};
-    reference[2] = {0, 0, 0};
+    expected[0] = {0, 0, 0};
+    expected[2] = {0, 0, 0};
     resetStrip();
     noteRgbSource.execute(strip, noteToLightMap);
-    EXPECT_EQ(reference, strip);
+    EXPECT_EQ(expected, strip);
 }
 
 /** Action definition for mock RGB function. */
@@ -260,19 +260,19 @@ TEST_F(NoteRgbSourceTest, otherRgbFunction)
 
     noteRgbSource.execute(strip, noteToLightMap);
 
-    auto reference = Processing::TRgbStrip(c_StripSize);
-    reference[0] = {0, 0, 1};
-    reference[1] = {1, 0, 0};
-    reference[2] = {1, 0, 0};
-    reference[3] = {1, 0, 0};
-    reference[4] = {1, 0, 0};
-    reference[5] = {0, 0, 1};
-    reference[6] = {1, 0, 0};
-    reference[7] = {1, 0, 0};
-    reference[8] = {1, 0, 0};
-    reference[9] = {1, 0, 0};
+    auto expected = Processing::TRgbStrip(c_StripSize);
+    expected[0] = {0, 0, 1};
+    expected[1] = {1, 0, 0};
+    expected[2] = {1, 0, 0};
+    expected[3] = {1, 0, 0};
+    expected[4] = {1, 0, 0};
+    expected[5] = {0, 0, 1};
+    expected[6] = {1, 0, 0};
+    expected[7] = {1, 0, 0};
+    expected[8] = {1, 0, 0};
+    expected[9] = {1, 0, 0};
 
-    EXPECT_EQ(reference, strip);
+    EXPECT_EQ(expected, strip);
 }
 
 TEST_F(NoteRgbSourceTest, timePassedToRgbFunction)
@@ -309,11 +309,11 @@ TEST_F(NoteRgbSourceTest, otherNoteToLightMap)
     noteRgbSource.execute(strip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto reference = Processing::TRgbStrip(c_StripSize);
-    reference[9] = {0xff, 0xff, 0xff};
-    reference[8] = {0xff, 0xff, 0xff};
+    auto expected = Processing::TRgbStrip(c_StripSize);
+    expected[9] = {0xff, 0xff, 0xff};
+    expected[8] = {0xff, 0xff, 0xff};
 
-    EXPECT_EQ(reference, strip);
+    EXPECT_EQ(expected, strip);
 }
 
 TEST_F(NoteRgbSourceTest, doNotWriteOutsideStrip)
@@ -326,10 +326,10 @@ TEST_F(NoteRgbSourceTest, doNotWriteOutsideStrip)
     noteRgbSource.execute(shorterStrip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto reference = Processing::TRgbStrip(5);
-    reference[0] = {0xff, 0xff, 0xff};
+    auto expected = Processing::TRgbStrip(5);
+    expected[0] = {0xff, 0xff, 0xff};
 
-    EXPECT_EQ(reference, shorterStrip);
+    EXPECT_EQ(expected, shorterStrip);
 }
 
 TEST_F(NoteRgbSourceTest, deleteRgbFunction)
@@ -391,11 +391,11 @@ TEST_F(NoteRgbSourceTest, convertFromJson)
     EXPECT_EQ(6, noteRgbSource.getChannel());
     EXPECT_EQ(false, noteRgbSource.isUsingPedal());
 
-    Processing::TRgbStrip reference(3);
-    reference[0] = {1, 2, 3};
-    reference[1] = {1, 2, 3};
-    reference[2] = {1, 2, 3};
+    Processing::TRgbStrip expected(3);
+    expected[0] = {1, 2, 3};
+    expected[1] = {1, 2, 3};
+    expected[2] = {1, 2, 3};
     Processing::TRgbStrip testStrip(3);
     noteRgbSource.execute(testStrip, noteToLightMap);
-    EXPECT_EQ(reference, testStrip);
+    EXPECT_EQ(expected, testStrip);
 }
