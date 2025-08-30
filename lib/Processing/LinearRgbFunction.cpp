@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -77,13 +77,13 @@ Processing::TLinearConstants LinearRgbFunction::getBlueConstants() const
 Json LinearRgbFunction::convertToJson() const
 {
     Json::object json;
-    json[IJsonConvertible::c_objectTypeKey] = getObjectType();
-    json[c_rFactorJsonKey] = redConstants.factor;
-    json[c_gFactorJsonKey] = greenConstants.factor;
-    json[c_bFactorJsonKey] = blueConstants.factor;
-    json[c_rOffsetJsonKey] = redConstants.offset;
-    json[c_gOffsetJsonKey] = greenConstants.offset;
-    json[c_bOffsetJsonKey] = blueConstants.offset;
+    json[IJsonConvertible::objectTypeKey] = getObjectType();
+    json[rFactorJsonKey] = redConstants.factor;
+    json[gFactorJsonKey] = greenConstants.factor;
+    json[bFactorJsonKey] = blueConstants.factor;
+    json[rOffsetJsonKey] = redConstants.offset;
+    json[gOffsetJsonKey] = greenConstants.offset;
+    json[bOffsetJsonKey] = blueConstants.offset;
 
     return Json(json);
 }
@@ -91,15 +91,15 @@ Json LinearRgbFunction::convertToJson() const
 void LinearRgbFunction::convertFromJson(const Json& converted)
 {
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
-    helper.getItemIfPresent(c_rFactorJsonKey, redConstants.factor);
-    helper.getItemIfPresent(c_rOffsetJsonKey, redConstants.offset);
-    helper.getItemIfPresent(c_gFactorJsonKey, greenConstants.factor);
-    helper.getItemIfPresent(c_gOffsetJsonKey, greenConstants.offset);
-    helper.getItemIfPresent(c_bFactorJsonKey, blueConstants.factor);
-    helper.getItemIfPresent(c_bOffsetJsonKey, blueConstants.offset);
+    helper.getItemIfPresent(rFactorJsonKey, redConstants.factor);
+    helper.getItemIfPresent(rOffsetJsonKey, redConstants.offset);
+    helper.getItemIfPresent(gFactorJsonKey, greenConstants.factor);
+    helper.getItemIfPresent(gOffsetJsonKey, greenConstants.offset);
+    helper.getItemIfPresent(bFactorJsonKey, blueConstants.factor);
+    helper.getItemIfPresent(bOffsetJsonKey, blueConstants.offset);
 }
 
 std::string LinearRgbFunction::getObjectType() const
 {
-    return IRgbFunction::c_jsonTypeNameLinearRgbFunction;
+    return IRgbFunction::jsonTypeNameLinearRgbFunction;
 }

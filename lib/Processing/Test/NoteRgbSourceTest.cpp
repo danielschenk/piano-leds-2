@@ -66,10 +66,10 @@ class NoteRgbSourceTest
     , public ::testing::Test
 {
 public:
-    static constexpr unsigned int c_StripSize = 10;
+    static constexpr size_t stripSize = 10;
 
     NoteRgbSourceTest()
-        : strip(c_StripSize)
+        : strip(stripSize)
         , exampleJson(R"(
              {
                  "objectType": "NoteRgbSource",
@@ -82,7 +82,7 @@ public:
              })")
         , noteRgbSource(mockMidiInput, mockRgbFunctionFactory, mockTime)
     {
-        for(int i = 0; i < c_StripSize; ++i)
+        for(int i = 0; i < stripSize; ++i)
         {
             // Default: simple 1-to-1 mapping
             noteToLightMap[i] = i;
@@ -118,7 +118,7 @@ TEST_F(NoteRgbSourceTest, noNotesSounding)
 {
     strip[0] = {4, 5, 6};
     strip[6] = {7, 8, 9};
-    strip[c_StripSize-1] = {11, 12, 13};
+    strip[stripSize-1] = {11, 12, 13};
 
     auto expectedStrip(strip);
 
@@ -137,7 +137,7 @@ TEST_F(NoteRgbSourceTest, noteOn)
     noteRgbSource.execute(strip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto expected = Processing::TRgbStrip(c_StripSize);
+    auto expected = Processing::TRgbStrip(stripSize);
     expected[0] = {0xff, 0xff, 0xff};
     expected[5] = {0xff, 0xff, 0xff};
 
@@ -167,7 +167,7 @@ TEST_F(NoteRgbSourceTest, noteOff)
     noteRgbSource.execute(strip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto expected = Processing::TRgbStrip(c_StripSize);
+    auto expected = Processing::TRgbStrip(stripSize);
     expected[5] = {0xff, 0xff, 0xff};
 
     EXPECT_EQ(expected, strip);
@@ -204,7 +204,7 @@ TEST_F(NoteRgbSourceTest, usePedal)
     // Press another key
     observer->onNoteChange(0, 2, 1, true);
 
-    auto expected = Processing::TRgbStrip(c_StripSize);
+    auto expected = Processing::TRgbStrip(stripSize);
     // Both notes are still sounding
     expected[0] = {0xff, 0xff, 0xff};
     expected[2] = {0xff, 0xff, 0xff};
@@ -260,7 +260,7 @@ TEST_F(NoteRgbSourceTest, otherRgbFunction)
 
     noteRgbSource.execute(strip, noteToLightMap);
 
-    auto expected = Processing::TRgbStrip(c_StripSize);
+    auto expected = Processing::TRgbStrip(stripSize);
     expected[0] = {0, 0, 1};
     expected[1] = {1, 0, 0};
     expected[2] = {1, 0, 0};
@@ -309,7 +309,7 @@ TEST_F(NoteRgbSourceTest, otherNoteToLightMap)
     noteRgbSource.execute(strip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto expected = Processing::TRgbStrip(c_StripSize);
+    auto expected = Processing::TRgbStrip(stripSize);
     expected[9] = {0xff, 0xff, 0xff};
     expected[8] = {0xff, 0xff, 0xff};
 

@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -50,16 +50,16 @@ Json Patch::convertToJson() const
     std::lock_guard<std::mutex> lock(mutex);
 
     Json::object converted;
-    converted[IJsonConvertible::c_objectTypeKey] = getObjectType();
+    converted[IJsonConvertible::objectTypeKey] = getObjectType();
 
     // Add items specific for Patch
-    converted[c_hasBankAndProgramJsonKey] = bankAndProgramSet;
-    converted[c_bankJsonKey] = bank;
-    converted[c_programJsonKey] = program;
-    converted[c_nameJsonKey] = name;
+    converted[hasBankAndProgramJsonKey] = bankAndProgramSet;
+    converted[bankJsonKey] = bank;
+    converted[programJsonKey] = program;
+    converted[nameJsonKey] = name;
 
     // Add processing chain
-    converted[c_processingChainJsonKey] = processingChain->convertToJson();
+    converted[processingChainJsonKey] = processingChain->convertToJson();
 
     return converted;
 }
@@ -70,14 +70,14 @@ void Patch::convertFromJson(const Json& converted)
 
     // Get items specific for Patch
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
-    helper.getItemIfPresent(c_hasBankAndProgramJsonKey, bankAndProgramSet);
-    helper.getItemIfPresent(c_programJsonKey, program);
-    helper.getItemIfPresent(c_bankJsonKey, bank);
-    helper.getItemIfPresent(c_nameJsonKey, name);
-    
+    helper.getItemIfPresent(hasBankAndProgramJsonKey, bankAndProgramSet);
+    helper.getItemIfPresent(programJsonKey, program);
+    helper.getItemIfPresent(bankJsonKey, bank);
+    helper.getItemIfPresent(nameJsonKey, name);
+
     // Get processing chain
     Json::object convertedProcessingChain;
-    if(helper.getItemIfPresent(c_processingChainJsonKey, convertedProcessingChain))
+    if(helper.getItemIfPresent(processingChainJsonKey, convertedProcessingChain))
     {
         processingChain->convertFromJson(convertedProcessingChain);
     }
@@ -91,7 +91,7 @@ void Patch::convertFromJson(const Json& converted)
 
 std::string Patch::getObjectType() const
 {
-    return c_typeName;
+    return typeName;
 }
 
 void Patch::activate()

@@ -56,7 +56,7 @@ public:
 
 TEST_F(ProcessingChainTest, empty)
 {
-    auto testStrip = Processing::TRgbStrip(c_stripSize);
+    auto testStrip = Processing::TRgbStrip(stripSize);
     testStrip[0] = { 1, 0, 0 };
     testStrip[1] = { 0, 1, 0 };
     testStrip[2] = { 0, 0, 1 };
@@ -71,7 +71,7 @@ TEST_F(ProcessingChainTest, insertOne)
     processingChain.insertBlock(redSource);
     redSource = nullptr;
 
-    auto reference = Processing::TRgbStrip(c_stripSize);
+    auto reference = Processing::TRgbStrip(stripSize);
     reference[0] = { 10, 0, 0 };
     reference[1] = { 10, 0, 0 };
     reference[2] = { 10, 0, 0 };
@@ -87,7 +87,7 @@ TEST_F(ProcessingChainTest, insertTwo)
     processingChain.insertBlock(valueDoubler);
     valueDoubler = nullptr;
 
-    auto reference = Processing::TRgbStrip(c_stripSize);
+    auto reference = Processing::TRgbStrip(stripSize);
     reference[0] = { 20, 0, 0 };
     reference[1] = { 20, 0, 0 };
     reference[2] = { 20, 0, 0 };

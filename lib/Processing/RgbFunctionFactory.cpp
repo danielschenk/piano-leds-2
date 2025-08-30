@@ -40,13 +40,13 @@ std::shared_ptr<IRgbFunction> RgbFunctionFactory::createRgbFunction(const Json& 
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
 
     std::string objectType;
-    if(helper.getItemIfPresent(IJsonConvertible::c_objectTypeKey, objectType))
+    if(helper.getItemIfPresent(IJsonConvertible::objectTypeKey, objectType))
     {
-        if(objectType == IRgbFunction::c_jsonTypeNameLinearRgbFunction)
+        if(objectType == IRgbFunction::jsonTypeNameLinearRgbFunction)
         {
             rgbFunction = std::make_shared<LinearRgbFunction>();
         }
-        else if(objectType == IRgbFunction::c_jsonTypeNamePianoDecayRgbFunction)
+        else if(objectType == IRgbFunction::jsonTypeNamePianoDecayRgbFunction)
         {
             rgbFunction = std::make_shared<PianoDecayRgbFunction>();
         }

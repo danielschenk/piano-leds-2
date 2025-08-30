@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2018 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -76,7 +76,7 @@ void LedTask::onStripUpdate(const Processing::TRgbStrip& strip)
 void LedTask::run()
 {
     // Wait until a strip update comes, or the auto-refresh interval has been reached.
-    auto notifyGiveCount(ulTaskNotifyTake(pdTRUE, c_autoRefreshInterval));
+    auto notifyGiveCount(ulTaskNotifyTake(pdTRUE, autoRefreshInterval));
 
     if (notifyGiveCount != 0)
     {

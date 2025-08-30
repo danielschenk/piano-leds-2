@@ -53,7 +53,7 @@
 
 static MidiTask* gs_midiTask(nullptr);
 
-static constexpr uint32_t c_defaultStackSize(4096);
+static constexpr uint32_t defaultStackSize(4096);
 
 enum
 {
@@ -91,7 +91,7 @@ void setup()
     LoggingEntryPoint::setTime(freeRtosTime);
     Serial.begin(115200, SERIAL_8N1, DEBUG_RX_PIN, DEBUG_TX_PIN);
     new LoggingTask(Serial,
-                    c_defaultStackSize,
+                    defaultStackSize,
                     PRIORITY_LOW);
 
     LOG_INFO("MIDI-LED-Controller (MLC) (c) Daniel Schenk, 2017");
@@ -107,7 +107,7 @@ void setup()
 
     auto midiInput = new ArduinoMidiInput(Serial2);
     gs_midiTask = new MidiTask(*midiInput,
-                               c_defaultStackSize,
+                               defaultStackSize,
                                PRIORITY_CRITICAL);
 
     // Initialize printing of MIDI messages
@@ -200,21 +200,21 @@ void setup()
 
     // Start processing
     new ProcessingTask(*concert,
-                       c_defaultStackSize,
+                       defaultStackSize,
                        PRIORITY_CRITICAL);
 
     // Start LED output
     new LedTask(*concert,
                 LED_DATA_PIN,
                 LED_CLOCK_PIN,
-                c_defaultStackSize,
+                defaultStackSize,
                 PRIORITY_CRITICAL);
 
 
     // Start network
     auto systemSettingsModel(new SystemSettingsModel);
     new NetworkTask(*systemSettingsModel,
-                    c_defaultStackSize,
+                    defaultStackSize,
                     PRIORITY_LOW);
 
     LOG_INFO("initialization done");

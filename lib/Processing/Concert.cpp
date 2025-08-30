@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -120,18 +120,18 @@ Json Concert::convertToJson() const
     std::lock_guard<std::mutex> lock(mutex);
 
     Json::object converted;
-    converted[IJsonConvertible::c_objectTypeKey] = getObjectType();
-    converted[c_isListeningToProgramChangeJsonKey] = listeningToProgramChange;
-    converted[c_programChangeChannelJsonKey] = programChangeChannel;
-    converted[c_currentBankJsonKey] = currentBank;
-    converted[c_noteToLightMapJsonKey] = Processing::convert(noteToLightMap);
+    converted[IJsonConvertible::objectTypeKey] = getObjectType();
+    converted[isListeningToProgramChangeJsonKey] = listeningToProgramChange;
+    converted[programChangeChannelJsonKey] = programChangeChannel;
+    converted[currentBankJsonKey] = currentBank;
+    converted[noteToLightMapJsonKey] = Processing::convert(noteToLightMap);
 
     Json::array convertedPatches;
     for(const IPatch* patch : patches)
     {
         convertedPatches.push_back(patch->convertToJson());
     }
-    converted[c_patchesJsonKey] = convertedPatches;
+    converted[patchesJsonKey] = convertedPatches;
 
     return Json(converted);
 }
@@ -139,14 +139,14 @@ Json Concert::convertToJson() const
 void Concert::convertFromJson(const Json& converted)
 {
     std::lock_guard<std::mutex> lock(mutex);
-    
+
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
-    helper.getItemIfPresent(c_isListeningToProgramChangeJsonKey, listeningToProgramChange);
-    helper.getItemIfPresent(c_programChangeChannelJsonKey, programChangeChannel);
-    helper.getItemIfPresent(c_currentBankJsonKey, currentBank);
-    
+    helper.getItemIfPresent(isListeningToProgramChangeJsonKey, listeningToProgramChange);
+    helper.getItemIfPresent(programChangeChannelJsonKey, programChangeChannel);
+    helper.getItemIfPresent(currentBankJsonKey, currentBank);
+
     Json::object convertedNoteToLightMap;
-    if(helper.getItemIfPresent(c_noteToLightMapJsonKey, convertedNoteToLightMap))
+    if(helper.getItemIfPresent(noteToLightMapJsonKey, convertedNoteToLightMap))
     {
         noteToLightMap = Processing::convert(convertedNoteToLightMap);
         // Make sure all mapped lights fit into the strip
@@ -160,7 +160,7 @@ void Concert::convertFromJson(const Json& converted)
     patches.clear();
 
     Json::array convertedPatches;
-    if(helper.getItemIfPresent(c_patchesJsonKey, convertedPatches))
+    if(helper.getItemIfPresent(patchesJsonKey, convertedPatches))
     {
         for(const Json& convertedPatch : convertedPatches)
         {
@@ -172,28 +172,28 @@ void Concert::convertFromJson(const Json& converted)
 bool Concert::isListeningToProgramChange() const
 {
     std::lock_guard<std::mutex> lock(mutex);
-    
+
     return listeningToProgramChange;
 }
 
 void Concert::setListeningToProgramChange(bool listeningToProgramChange)
 {
     std::lock_guard<std::mutex> lock(mutex);
-    
+
     this->listeningToProgramChange = listeningToProgramChange;
 }
 
 Processing::TNoteToLightMap Concert::getNoteToLightMap() const
 {
     std::lock_guard<std::mutex> lock(mutex);
-    
+
     return noteToLightMap;
 }
 
 void Concert::setNoteToLightMap(Processing::TNoteToLightMap noteToLightMap)
 {
     std::lock_guard<std::mutex> lock(mutex);
-    
+
     this->noteToLightMap = noteToLightMap;
 
     // Make sure all mapped lights fit into the strip
@@ -229,28 +229,28 @@ size_t Concert::getStripSize() const
 uint8_t Concert::getProgramChangeChannel() const
 {
     std::lock_guard<std::mutex> lock(mutex);
-    
+
     return programChangeChannel;
 }
 
 void Concert::setProgramChangeChannel(uint8_t programChangeChannel)
 {
     std::lock_guard<std::mutex> lock(mutex);
-    
+
     this->programChangeChannel = programChangeChannel;
 }
 
 uint16_t Concert::getCurrentBank() const
 {
     std::lock_guard<std::mutex> lock(mutex);
-    
+
     return currentBank;
 }
 
 void Concert::setCurrentBank(uint16_t bank)
 {
     std::lock_guard<std::mutex> lock(mutex);
-    
+
     currentBank = bank;
 }
 
@@ -260,7 +260,7 @@ void Concert::execute()
 
     std::lock_guard<std::mutex> lock(mutex);
 
-    if(activePatchPosition != c_invalidPatchPosition)
+    if(activePatchPosition != invalidPatchPosition)
     {
         patches.at(activePatchPosition)->execute(strip, noteToLightMap);
 
@@ -285,7 +285,7 @@ void Concert::unsubscribe(IObserver& observer)
 
 std::string Concert::getObjectType() const
 {
-    return c_typeName;
+    return typeName;
 }
 
 void Concert::onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on)
@@ -313,7 +313,7 @@ void Concert::onProgramChange(uint8_t channel, uint8_t program)
                     if(patch->getProgram() == program)
                     {
                         // Found a patch which matches the received program number and active bank.
-                        if(activePatchPosition != c_invalidPatchPosition)
+                        if(activePatchPosition != invalidPatchPosition)
                         {
                             IPatch* activePatch(patches.at(activePatchPosition));
                             LOG_INFO_PARAMS("deactivating patch '%s'", activePatch->getName().c_str());

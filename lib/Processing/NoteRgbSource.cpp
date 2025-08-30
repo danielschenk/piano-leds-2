@@ -143,7 +143,7 @@ void NoteRgbSource::onControlChange(uint8_t channel, IMidiInput::TControllerNumb
                 if(!pedalPressed)
                 {
                     // Stop all notes which are sounding due to pedal only
-                    for(int note = 0; note < IMidiInterface::c_numNotes; ++note)
+                    for(int note = 0; note < IMidiInterface::numNotes; ++note)
                     {
                         if(!noteStates[note].pressed)
                         {
@@ -206,12 +206,12 @@ Json NoteRgbSource::convertToJson() const
     std::lock_guard<std::mutex> lock(mutex);
 
     Json::object json;
-    json[IJsonConvertible::c_objectTypeKey] = getObjectType();
-    json[c_usingPedalJsonKey] = usingPedal;
-    json[c_channelJsonKey] = channel;
+    json[IJsonConvertible::objectTypeKey] = getObjectType();
+    json[usingPedalJsonKey] = usingPedal;
+    json[channelJsonKey] = channel;
     if(rgbFunction != nullptr)
     {
-        json[c_rgbFunctionJsonKey] = rgbFunction->convertToJson();
+        json[rgbFunctionJsonKey] = rgbFunction->convertToJson();
     }
 
     return json;
@@ -222,15 +222,15 @@ void NoteRgbSource::convertFromJson(const Json& converted)
     std::lock_guard<std::mutex> lock(mutex);
 
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
-    helper.getItemIfPresent(c_usingPedalJsonKey, usingPedal);
-    helper.getItemIfPresent(c_channelJsonKey, channel);
+    helper.getItemIfPresent(usingPedalJsonKey, usingPedal);
+    helper.getItemIfPresent(channelJsonKey, channel);
 
     Json::object convertedRgbFunction;
-    if(helper.getItemIfPresent(c_rgbFunctionJsonKey, convertedRgbFunction))
+    if(helper.getItemIfPresent(rgbFunctionJsonKey, convertedRgbFunction))
         rgbFunction = rgbFunctionFactory.createRgbFunction(convertedRgbFunction);
 }
 
 std::string NoteRgbSource::getObjectType() const
 {
-    return IProcessingBlock::c_typeNameNoteRgbSource;
+    return IProcessingBlock::typeNameNoteRgbSource;
 }

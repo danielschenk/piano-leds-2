@@ -76,7 +76,7 @@ public:
     }
 
     // Should not be default and go beyond the byte range, to test LSB and MSB
-    static const uint16_t c_testBankNumber;
+    static const uint16_t testBankNumber;
 
     // Required mocks
     NiceMock<MockProcessingBlockFactory> mockProcessingBlockFactory;
@@ -86,7 +86,7 @@ public:
     Concert*  concert;
 };
 
-const uint16_t ConcertTest::c_testBankNumber = 129;
+const uint16_t ConcertTest::testBankNumber = 129;
 
 TEST_F(ConcertTest, bankSelect)
 {
@@ -96,11 +96,11 @@ TEST_F(ConcertTest, bankSelect)
     concert->setProgramChangeChannel(channel);
 
     // Simulate a bank select sequence
-    sendBankSelectSequence(channel, c_testBankNumber);
+    sendBankSelectSequence(channel, testBankNumber);
     concert->execute();
 
     // Check stored bank
-    ASSERT_EQ(c_testBankNumber, concert->getCurrentBank());
+    ASSERT_EQ(testBankNumber, concert->getCurrentBank());
 }
 
 TEST_F(ConcertTest, bankSelectFromOtherChannelIgnored)
@@ -180,7 +180,7 @@ TEST_F(ConcertTest, patchChangeOnProgramChange)
     auto mockPatch(new NiceMock<MockPatch>);
     auto mockPatch2(new NiceMock<MockPatch>);
     ON_CALL(*mockPatch2, getBank())
-        .WillByDefault(Return(c_testBankNumber));
+        .WillByDefault(Return(testBankNumber));
     ON_CALL(*mockPatch2, getProgram())
         .WillByDefault(Return(program));
     ON_CALL(*mockPatch2, hasBankAndProgram())
@@ -196,7 +196,7 @@ TEST_F(ConcertTest, patchChangeOnProgramChange)
     uint8_t channel(2);
     concert->setListeningToProgramChange(true);
     concert->setProgramChangeChannel(channel);
-    sendBankSelectSequence(channel, c_testBankNumber);
+    sendBankSelectSequence(channel, testBankNumber);
     concert->onProgramChange(channel, program);
     concert->execute();
 }

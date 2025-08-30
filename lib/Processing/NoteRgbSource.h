@@ -93,9 +93,9 @@ protected:
     std::string getObjectType() const override;
 
 private:
-    static constexpr const char* c_usingPedalJsonKey    = "usingPedal";
-    static constexpr const char* c_channelJsonKey       = "channel";
-    static constexpr const char* c_rgbFunctionJsonKey   = "rgbFunction";
+    static constexpr const char* usingPedalJsonKey    = "usingPedal";
+    static constexpr const char* channelJsonKey       = "channel";
+    static constexpr const char* rgbFunctionJsonKey   = "rgbFunction";
 
     mutable std::mutex mutex;
     bool active = false;
@@ -104,7 +104,7 @@ private:
     IMidiInput& midiInput;
     uint8_t channel = 0;
     Scheduler scheduler;
-    std::array<Processing::TNoteState, IMidiInterface::c_numNotes> noteStates;
+    std::array<Processing::TNoteState, IMidiInterface::numNotes> noteStates;
     bool pedalPressed;
     std::shared_ptr<IRgbFunction> rgbFunction;
     const ITime& time;

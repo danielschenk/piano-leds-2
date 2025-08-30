@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -77,7 +77,7 @@ public:
     virtual void convertFromJson(const Json& converted);
 
     typedef int TPatchPosition;
-    static constexpr TPatchPosition c_invalidPatchPosition = -1;
+    static constexpr TPatchPosition invalidPatchPosition = -1;
 
     /**
      * Get the number of patches.
@@ -86,8 +86,8 @@ public:
 
     /**
      * Add a new patch.
-     * 
-     * @return The patch position, or @ref c_invalidPatchPosition on error.
+     *
+     * @return The patch position, or @ref invalidPatchPosition on error.
      */
     TPatchPosition addPatch();
 
@@ -103,18 +103,18 @@ public:
     /**
      * Get the patch at the specified position, for modifications.
      * Concert stays owner of the patch.
-     * 
+     *
      * @param[in] position  The patch position.
-     * 
+     *
      * @return Pointer to the patch, or nullptr on error.
      */
     IPatch* getPatch(TPatchPosition position) const;
-    
+
     /**
      * Remove the patch at the specified position.
-     * 
+     *
      * @param[in] position  The patch position.
-     * 
+     *
      * @return True on success.
      */
     bool removePatch(TPatchPosition position);
@@ -122,9 +122,9 @@ public:
     /**
      * @TODO
      * Move a patch up in the list.
-     * 
+     *
      * @param[in] position  The patch position.
-     * 
+     *
      * @return The new patch position.
      */
     // TPatchPosition movePatchUp(TPatchPosition position);
@@ -132,11 +132,11 @@ public:
     /**
      * @TODO
      * Move a patch down in the list.
-     * 
+     *
      * @param[in] position  The patch position.
-     * 
+     *
      * @return The new patch position.
-     */    
+     */
     // TPatchPosition movePatchDown(TPatchPosition position);
 
     bool isListeningToProgramChange() const;
@@ -178,12 +178,12 @@ protected:
     std::string getObjectType() const;
 
 private:
-    static constexpr const char* c_typeName                             = "Concert";
-    static constexpr const char* c_isListeningToProgramChangeJsonKey    = "isListeningToProgramChange";
-    static constexpr const char* c_noteToLightMapJsonKey                = "noteToLightMap";
-    static constexpr const char* c_programChangeChannelJsonKey          = "programChangeChannel";
-    static constexpr const char* c_currentBankJsonKey                   = "currentBank";
-    static constexpr const char* c_patchesJsonKey                       = "patches";
+    static constexpr const char* typeName                             = "Concert";
+    static constexpr const char* isListeningToProgramChangeJsonKey    = "isListeningToProgramChange";
+    static constexpr const char* noteToLightMapJsonKey                = "noteToLightMap";
+    static constexpr const char* programChangeChannelJsonKey          = "programChangeChannel";
+    static constexpr const char* currentBankJsonKey                   = "currentBank";
+    static constexpr const char* patchesJsonKey                       = "patches";
 
     typedef std::vector<IPatch*> TPatches;
 
@@ -194,7 +194,7 @@ private:
 
     Processing::TRgbStrip strip;
     TPatches patches;
-    TPatchPosition activePatchPosition = c_invalidPatchPosition;
+    TPatchPosition activePatchPosition = invalidPatchPosition;
     bool listeningToProgramChange = false;
     uint8_t programChangeChannel = 0;
     uint16_t currentBank = 0;

@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -53,17 +53,17 @@ IProcessingBlock* ProcessingBlockFactory::createProcessingBlock(const Json& conv
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
 
     std::string objectType;
-    if(helper.getItemIfPresent(IJsonConvertible::c_objectTypeKey, objectType))
+    if(helper.getItemIfPresent(IJsonConvertible::objectTypeKey, objectType))
     {
-        if(objectType == IProcessingBlock::c_typeNameEqualRangeRgbSource)
+        if(objectType == IProcessingBlock::typeNameEqualRangeRgbSource)
         {
             processingBlock = new EqualRangeRgbSource();
         }
-        else if(objectType == IProcessingBlock::c_typeNameNoteRgbSource)
+        else if(objectType == IProcessingBlock::typeNameNoteRgbSource)
         {
             processingBlock = new NoteRgbSource(midiInput, rgbFunctionFactory, time);
         }
-        else if(objectType == IProcessingBlock::c_typeNameProcessingChain)
+        else if(objectType == IProcessingBlock::typeNameProcessingChain)
         {
             // A processing chain needs the factory to construct its children
             processingBlock = new ProcessingChain(*this);
