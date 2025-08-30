@@ -2,7 +2,7 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) Daniel Schenk, 2017
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -49,6 +49,7 @@ public:
 
 class ConcertTest
     : public MidiInputObserverTest
+    , public ::testing::Test
 {
 public:
     ConcertTest()
@@ -90,7 +91,7 @@ const uint16_t ConcertTest::c_testBankNumber = 129;
 TEST_F(ConcertTest, bankSelect)
 {
     const uint8_t channel(0);
-    
+
     concert->setListeningToProgramChange(true);
     concert->setProgramChangeChannel(channel);
 
@@ -106,7 +107,7 @@ TEST_F(ConcertTest, bankSelectFromOtherChannelIgnored)
 {
     const uint8_t channel(0);
     const uint16_t bank(concert->getCurrentBank());
-    
+
     concert->setListeningToProgramChange(true);
     concert->setProgramChangeChannel(channel);
 
@@ -244,7 +245,7 @@ TEST_F(ConcertTest, convertToJson)
 
     Processing::TNoteToLightMap map({{1, 10}, {2, 20}});
     concert->setNoteToLightMap(map);
-    
+
     Json::object mockPatchJson, mockPatch2Json;
     mockPatchJson["objectType"] = "MockPatch";
     mockPatchJson["someParameter"] = 42;
@@ -274,7 +275,7 @@ TEST_F(ConcertTest, convertToJson)
     EXPECT_EQ(2, converted.at("currentBank").number_value());
     EXPECT_EQ(3, converted.at("programChangeChannel").number_value());
     EXPECT_EQ(Processing::convert(map), converted.at("noteToLightMap").object_items());
-    
+
     Json::array patches = converted.at("patches").array_items();
     EXPECT_EQ(2, patches.size());
     EXPECT_EQ(42, patches.at(0).object_items().at("someParameter").number_value());
@@ -317,7 +318,7 @@ TEST_F(ConcertTest, convertFromJson)
     ON_CALL(*convertedPatch2, getName())
         .WillByDefault(Return(name2));
 
-    // Re-create the sub-objects of the above test input, 
+    // Re-create the sub-objects of the above test input,
     // so we can verify that they are passed to the factory in order.
     Json::object mockPatch1Json;
     mockPatch1Json["objectType"] = "MockPatch";

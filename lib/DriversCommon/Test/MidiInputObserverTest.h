@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2018 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -41,7 +41,6 @@ ACTION_P(StoreArg0Address, target) { *target = &arg0; }
  * Base fixture for tests of classes which implement @ref IMidiInput::IObserver
  */
 class MidiInputObserverTest
-    : public virtual ::testing::Test
 {
 public:
     MidiInputObserverTest()
@@ -52,8 +51,6 @@ public:
         ON_CALL(mockMidiInput, subscribe(_))
             .WillByDefault(StoreArg0Address(&observer));
     }
-
-    virtual ~MidiInputObserverTest() = default;
 
     NiceMock<MockMidiInput> mockMidiInput;
     IMidiInput::IObserver* observer;
