@@ -2,19 +2,19 @@
  * @file
  *
  * MIT License
- * 
+ *
  * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,6 +32,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <iostream>
+#include <iomanip>
 
 namespace Processing
 {
@@ -114,10 +115,10 @@ TRgb& TRgb::operator-=(const TRgb& other)
 
 std::ostream& operator<<(std::ostream& os, const TRgb& color)
 {
-    return os <<
-        "{.r = " << static_cast<unsigned int>(color.r) <<
-        ", .g = " << static_cast<unsigned int>(color.g) <<
-        ", .b = " << static_cast<unsigned int>(color.b) << "}";
+    return os << '#' << std::hex
+        << std::setfill('0') << std::setw(2) << static_cast<int>(color.r)
+        << std::setfill('0') << std::setw(2) << static_cast<int>(color.g)
+        << std::setfill('0') << std::setw(2) << static_cast<int>(color.b);
 }
 
 /**
