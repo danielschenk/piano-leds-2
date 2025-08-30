@@ -1,31 +1,3 @@
-/**
- * @file
- *
- * MIT License
- * 
- * @copyright (c) 2018 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- * @brief Helper class to fetch JSON items with type checking.
- */
-
 #ifndef COMMON_UTILITIES_JSON11HELPER_H_
 #define COMMON_UTILITIES_JSON11HELPER_H_
 
@@ -59,15 +31,15 @@ public:
     template<typename T>
     bool getItemIfPresent(std::string key, T& target) const
     {
-        if(!m_json[key].is_null())
+        if(!json[key].is_null())
         {
             return getItem(key, target);
         }
         else
         {
-            if(m_logMissingKeys)
+            if(logMissingKeys)
             {
-                LOG_ERROR_PARAMS("%s: Missing JSON key '%s'", m_user.c_str(), key.c_str());
+                LOG_ERROR_PARAMS("%s: Missing JSON key '%s'", user.c_str(), key.c_str());
             }
             return false;
         }
@@ -81,7 +53,7 @@ private:
     template <typename IntegerType>
     bool getInt(std::string key, IntegerType& target) const
     {
-        const auto& item = m_json[key];
+        const auto& item = json[key];
 
         if(item.is_number())
         {
@@ -90,7 +62,7 @@ private:
         }
         else
         {
-            LOG_ERROR_PARAMS("%s: JSON value with key '%s' not a number", m_user.c_str(), key.c_str());
+            LOG_ERROR_PARAMS("%s: JSON value with key '%s' not a number", user.c_str(), key.c_str());
             return false;
         }
     }
@@ -98,7 +70,7 @@ private:
     template <typename FloatType>
     bool getFloat(std::string key, FloatType& target) const
     {
-        const auto& item = m_json[key];
+        const auto& item = json[key];
 
         if(item.is_number())
         {
@@ -107,7 +79,7 @@ private:
         }
         else
         {
-            LOG_ERROR_PARAMS("%s: JSON value with key '%s' not a number", m_user.c_str(), key.c_str());
+            LOG_ERROR_PARAMS("%s: JSON value with key '%s' not a number", user.c_str(), key.c_str());
             return false;
         }
     }
@@ -122,9 +94,9 @@ private:
     bool getItem(std::string key, Json::object& target) const;
     bool getItem(std::string key, Json::array& target) const;
 
-    std::string     m_user;
-    const Json&     m_json;
-    bool            m_logMissingKeys;
+    std::string     user;
+    const Json&     json;
+    bool            logMissingKeys;
 };
 
 #undef LOGGING_COMPONENT

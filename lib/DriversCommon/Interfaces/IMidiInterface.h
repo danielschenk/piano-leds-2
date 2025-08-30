@@ -1,31 +1,3 @@
-/**
- * @file
- *
- * MIT License
- * 
- * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- * 
- * @brief Interface for MIDI inputs/outputs.
- */
-
 #ifndef DRIVERS_INTERFACES_IMIDIINTERFACE_H_
 #define DRIVERS_INTERFACES_IMIDIINTERFACE_H_
 
@@ -43,7 +15,7 @@ public:
         NOTE_OFF = 0x80,
         NOTE_ON = 0x90,
         CONTROL_CHANGE = 0xB0,
-        PROGRAM_CHANGE = 0xC0,
+        PROGRACHANGE = 0xC0,
         /** Channel pressure is also known as after-touch. */
         CHANNEL_PRESSURE_CHANGE = 0xD0,
         PITCH_BEND_CHANGE = 0xE0,
@@ -57,11 +29,11 @@ public:
         DAMPER_PEDAL = 0x40,
     };
 
-    static constexpr unsigned int c_numNotes = 256;
-    static constexpr unsigned int c_maxNoteNumber = 255;
-    static constexpr unsigned int c_numVelocities = 256;
-    static constexpr unsigned int c_maxVelocity = 255;
-    static constexpr uint16_t     c_pitchBendCenter = 0x2000;
+    static constexpr unsigned int numNotes = 256;
+    static constexpr unsigned int maxNoteNumber = 255;
+    static constexpr unsigned int numVelocities = 256;
+    static constexpr unsigned int maxVelocity = 255;
+    static constexpr uint16_t     pitchBendCenter = 0x2000;
 
     /**
      * Destructor.

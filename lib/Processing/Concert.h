@@ -1,31 +1,3 @@
-/**
- * @file
- *
- * MIT License
- * 
- * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- * @brief Class which represents a concert.
- */
-
 #ifndef PROCESSING_CONCERT_H_
 #define PROCESSING_CONCERT_H_
 
@@ -77,7 +49,7 @@ public:
     virtual void convertFromJson(const Json& converted);
 
     typedef int TPatchPosition;
-    static constexpr TPatchPosition c_invalidPatchPosition = -1;
+    static constexpr TPatchPosition invalidPatchPosition = -1;
 
     /**
      * Get the number of patches.
@@ -86,8 +58,8 @@ public:
 
     /**
      * Add a new patch.
-     * 
-     * @return The patch position, or @ref c_invalidPatchPosition on error.
+     *
+     * @return The patch position, or @ref invalidPatchPosition on error.
      */
     TPatchPosition addPatch();
 
@@ -103,18 +75,18 @@ public:
     /**
      * Get the patch at the specified position, for modifications.
      * Concert stays owner of the patch.
-     * 
+     *
      * @param[in] position  The patch position.
-     * 
+     *
      * @return Pointer to the patch, or nullptr on error.
      */
     IPatch* getPatch(TPatchPosition position) const;
-    
+
     /**
      * Remove the patch at the specified position.
-     * 
+     *
      * @param[in] position  The patch position.
-     * 
+     *
      * @return True on success.
      */
     bool removePatch(TPatchPosition position);
@@ -122,9 +94,9 @@ public:
     /**
      * @TODO
      * Move a patch up in the list.
-     * 
+     *
      * @param[in] position  The patch position.
-     * 
+     *
      * @return The new patch position.
      */
     // TPatchPosition movePatchUp(TPatchPosition position);
@@ -132,11 +104,11 @@ public:
     /**
      * @TODO
      * Move a patch down in the list.
-     * 
+     *
      * @param[in] position  The patch position.
-     * 
+     *
      * @return The new patch position.
-     */    
+     */
     // TPatchPosition movePatchDown(TPatchPosition position);
 
     bool isListeningToProgramChange() const;
@@ -178,52 +150,31 @@ protected:
     std::string getObjectType() const;
 
 private:
-    static constexpr const char* c_typeName                             = "Concert";
-    static constexpr const char* c_isListeningToProgramChangeJsonKey    = "isListeningToProgramChange";
-    static constexpr const char* c_noteToLightMapJsonKey                = "noteToLightMap";
-    static constexpr const char* c_programChangeChannelJsonKey          = "programChangeChannel";
-    static constexpr const char* c_currentBankJsonKey                   = "currentBank";
-    static constexpr const char* c_patchesJsonKey                       = "patches";
+    static constexpr const char* typeName                             = "Concert";
+    static constexpr const char* isListeningToProgramChangeJsonKey    = "isListeningToProgramChange";
+    static constexpr const char* noteToLightMapJsonKey                = "noteToLightMap";
+    static constexpr const char* programChangeChannelJsonKey          = "programChangeChannel";
+    static constexpr const char* currentBankJsonKey                   = "currentBank";
+    static constexpr const char* patchesJsonKey                       = "patches";
 
     typedef std::vector<IPatch*> TPatches;
 
     TPatchPosition addPatchInternal(IPatch* patch);
     void createMinimumAmountOfLights();
 
-    /** The note-to-light mapping. */
-    Processing::TNoteToLightMap m_noteToLightMap;
+    Processing::TNoteToLightMap noteToLightMap;
 
-    /** The actual state of the RGB LED strip. */
-    Processing::TRgbStrip m_strip;
-
-    /** The collection of patches. */
-    TPatches m_patches;
-
-    /** The active patch. */
-    TPatchPosition m_activePatch;
-
-    /** Whether program changes should be able to change the patch. */
-    bool m_listeningToProgramChange;
-
-    /** The channel to listen to for program changes. */
-    uint8_t m_programChangeChannel;
-
-    /** The last selected bank. */
-    uint16_t m_currentBank;
-    
-    /** Reference to the MIDI input. */
-    IMidiInput& m_midiInput;
-
-    /** Reference to the processing block factory. */
-    IProcessingBlockFactory& m_processingBlockFactory;
-
-    /** Scheduler to decouple callbacks */
-    Scheduler m_scheduler;
-
-    std::list<IObserver*> m_observers;
-
-    /** Mutex to protect the members. */
-    mutable std::mutex m_mutex;
+    Processing::TRgbStrip strip;
+    TPatches patches;
+    TPatchPosition activePatchPosition = invalidPatchPosition;
+    bool listeningToProgramChange = false;
+    uint8_t programChangeChannel = 0;
+    uint16_t currentBank = 0;
+    IMidiInput& midiInput;
+    IProcessingBlockFactory& processingBlockFactory;
+    Scheduler scheduler;
+    std::list<IObserver*> observers;
+    mutable std::mutex mutex;
 };
 
 #endif /* PROCESSING_CONCERT_H_ */

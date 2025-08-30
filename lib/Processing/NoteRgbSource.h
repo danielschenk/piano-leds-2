@@ -1,31 +1,3 @@
-/**
- * @file
- *
- * MIT License
- * 
- * @copyright (c) 2017 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- * @brief RGB source which generates RGB data based on note on/off events.
- */
-
 #ifndef PROCESSING_NOTERGBSOURCE_H_
 #define PROCESSING_NOTERGBSOURCE_H_
 
@@ -35,6 +7,7 @@
 
 #include <mutex>
 #include <array>
+#include <memory>
 
 class IRgbFunction;
 class IRgbFunctionFactory;
@@ -60,13 +33,8 @@ public:
                   const IRgbFunctionFactory& rgbFunctionFactory,
                   const ITime& time);
 
-    /**
-     * Destructor.
-     */
     ~NoteRgbSource() override;
 
-    // Prevent implicit constructors and assignment operator.
-    NoteRgbSource() = delete;
     NoteRgbSource(NoteRgbSource&) = delete;
     NoteRgbSource& operator=(NoteRgbSource&) = delete;
 
@@ -82,7 +50,7 @@ public:
     bool isUsingPedal() const;
     void setUsingPedal(bool usingPedal);
 
-    void setRgbFunction(IRgbFunction* rgbFunction);
+    void setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction);
 
     // IMidiInput::IObserver implementation
     void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) override;
@@ -97,42 +65,21 @@ protected:
     std::string getObjectType() const override;
 
 private:
-    static constexpr const char* c_usingPedalJsonKey    = "usingPedal";
-    static constexpr const char* c_channelJsonKey       = "channel";
-    static constexpr const char* c_rgbFunctionJsonKey   = "rgbFunction";
+    static constexpr const char* usingPedalJsonKey    = "usingPedal";
+    static constexpr const char* channelJsonKey       = "channel";
+    static constexpr const char* rgbFunctionJsonKey   = "rgbFunction";
 
-    /** Mutex to protect the members. */
-    mutable std::mutex m_mutex;
-
-    /** Whether this block is active. */
-    bool m_active;
-
-    /** Indicates whether pedal should be used. */
-    bool m_usingPedal;
-
-    /** Reference to the RGB function factory. */
-    const IRgbFunctionFactory& m_rgbFunctionFactory;
-
-    /** Reference to the MIDI input. */
-    IMidiInput& m_midiInput;
-
-    /** MIDI channel to listen to. */
-    uint8_t m_channel;
-
-    /** Scheduler to decouple callbacks. */
-    Scheduler m_scheduler;
-
-    /** Actual note states. */
-    std::array<Processing::TNoteState, IMidiInterface::c_numNotes> m_noteState;
-
-    /** Actual pedal pressed state. */
-    bool m_pedalPressed;
-
-    /** Pointer to the RGB function. */
-    IRgbFunction* m_rgbFunction;
-
-    /** The time provider. */
-    const ITime& m_time;
+    mutable std::mutex mutex;
+    bool active = false;
+    bool usingPedal = true;
+    const IRgbFunctionFactory& rgbFunctionFactory;
+    IMidiInput& midiInput;
+    uint8_t channel = 0;
+    Scheduler scheduler;
+    std::array<Processing::TNoteState, IMidiInterface::numNotes> noteStates;
+    bool pedalPressed;
+    std::shared_ptr<IRgbFunction> rgbFunction;
+    const ITime& time;
 };
 
 #endif /* PROCESSING_NOTERGBSOURCE_H_ */

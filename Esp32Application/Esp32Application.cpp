@@ -1,31 +1,3 @@
-/**
- * @file
- *
- * MIT License
- * 
- * @copyright (c) 2018 Daniel Schenk <danielschenk@users.noreply.github.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- * The MLC2 application for the ESP32, using the Arduino core.
- */
-
 #include "ArduinoMidiInput.h"
 #include "LoggingTask.h"
 #include "Logging.h"
@@ -51,9 +23,9 @@
 
 #define LOGGING_COMPONENT "Esp32Application"
 
-static MidiTask* gs_midiTask(nullptr);
+static MidiTask* midiTask(nullptr);
 
-static constexpr uint32_t c_defaultStackSize(4096);
+static constexpr uint32_t defaultStackSize(4096);
 
 enum
 {
@@ -91,7 +63,7 @@ void setup()
     LoggingEntryPoint::setTime(freeRtosTime);
     Serial.begin(115200, SERIAL_8N1, DEBUG_RX_PIN, DEBUG_TX_PIN);
     new LoggingTask(Serial,
-                    c_defaultStackSize,
+                    defaultStackSize,
                     PRIORITY_LOW);
 
     LOG_INFO("MIDI-LED-Controller (MLC) (c) Daniel Schenk, 2017");
@@ -106,8 +78,8 @@ void setup()
     Serial2.begin(31250, SERIAL_8N1, MIDI_RX_PIN, MIDI_TX_PIN);
 
     auto midiInput = new ArduinoMidiInput(Serial2);
-    gs_midiTask = new MidiTask(*midiInput,
-                               c_defaultStackSize,
+    midiTask = new MidiTask(*midiInput,
+                               defaultStackSize,
                                PRIORITY_CRITICAL);
 
     // Initialize printing of MIDI messages
@@ -148,7 +120,7 @@ void setup()
     auto src2(new NoteRgbSource(*midiInput,
                                 *rgbFunctionFactory,
                                 *freeRtosTime));
-    auto rgbFunction(new LinearRgbFunction);
+    auto rgbFunction(std::make_shared<LinearRgbFunction>());
     const Processing::TLinearConstants fullWhite({255, 0});
     rgbFunction->setRedConstants(fullWhite);
     rgbFunction->setGreenConstants(fullWhite);
@@ -165,7 +137,7 @@ void setup()
                                 *freeRtosTime));
 
     // Sounding notes become blue, intensity is the velocity of the note multiplied by 2
-    rgbFunction = new LinearRgbFunction;
+    rgbFunction = std::make_shared<LinearRgbFunction>();
     rgbFunction->setBlueConstants({2, 0});
     src3->setRgbFunction(rgbFunction);
 
@@ -188,7 +160,7 @@ void setup()
                                 *rgbFunctionFactory,
                                 *freeRtosTime));
 
-    auto fnc(new PianoDecayRgbFunction);
+    auto fnc(std::make_shared<PianoDecayRgbFunction>());
     src5->setRgbFunction(fnc);
     src5->setUsingPedal(true);
     patch3->getProcessingChain().insertBlock(src5);
@@ -200,21 +172,21 @@ void setup()
 
     // Start processing
     new ProcessingTask(*concert,
-                       c_defaultStackSize,
+                       defaultStackSize,
                        PRIORITY_CRITICAL);
 
     // Start LED output
     new LedTask(*concert,
                 LED_DATA_PIN,
                 LED_CLOCK_PIN,
-                c_defaultStackSize,
+                defaultStackSize,
                 PRIORITY_CRITICAL);
 
 
     // Start network
     auto systemSettingsModel(new SystemSettingsModel);
     new NetworkTask(*systemSettingsModel,
-                    c_defaultStackSize,
+                    defaultStackSize,
                     PRIORITY_LOW);
 
     LOG_INFO("initialization done");
@@ -242,5 +214,5 @@ void loop()
 // TODO This function is not called on ESP32... :-(
 void serialEvent2()
 {
-    gs_midiTask->wake();
+    midiTask->wake();
 }
