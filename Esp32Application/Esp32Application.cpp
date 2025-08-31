@@ -70,12 +70,11 @@ void setup()
     pinMode(RUN_LED_PIN, OUTPUT);
     digitalWrite(RUN_LED_PIN, 0);
 
-    Serial2.begin(31250, SERIAL_8N1, MIDI_RX_PIN, MIDI_TX_PIN);
-
     static ArduinoMidiInput midiInput(Serial2);
     static MidiTask midiTask(midiInput, defaultStackSize, PRIORITY_CRITICAL);
-    // Required by UART interrupt. TODO find better solution to this
+    // Required by Serial2 callback. TODO find better solution to this
     midiTaskPtr = &midiTask;
+    Serial2.begin(31250, SERIAL_8N1, MIDI_RX_PIN, MIDI_TX_PIN);
 
     static MidiMessageLogger midiMessageLogger(midiInput);
 
@@ -198,8 +197,6 @@ void loop()
     ++s_loopCount;
 }
 
-
-// TODO This function is not called on ESP32... :-(
 void serialEvent2()
 {
     midiTaskPtr->wake();
