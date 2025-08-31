@@ -56,7 +56,7 @@ void NoteRgbSource::execute(Processing::TRgbStrip& strip, const Processing::TNot
         // first: note number, second: light number
         if(rgbFunction != nullptr && pair.second < strip.size())
         {
-            strip[pair.second] += rgbFunction->calculate(noteStates[pair.first], time.getMilliseconds());
+            strip[pair.second] = rgbFunction->calculate(noteStates[pair.first], time.getMilliseconds());
         }
     }
 }

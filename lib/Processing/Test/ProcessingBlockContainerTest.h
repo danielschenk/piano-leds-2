@@ -12,6 +12,7 @@ using ::testing::_;
 using ::testing::Invoke;
 using ::testing::NiceMock;
 using ::testing::Unused;
+using ::testing::Return;
 
 static void addRed(Processing::TRgbStrip& strip, Unused)
 {
@@ -65,6 +66,8 @@ public:
             .WillByDefault(Invoke(addGreen));
         ON_CALL(*valueDoubler, execute(_, _))
             .WillByDefault(Invoke(doubleValue));
+        ON_CALL(*valueDoubler, mode())
+            .WillByDefault(Return(IProcessingBlock::Mode::overwriting));
     }
 
     virtual ~ProcessingBlockContainerTest()

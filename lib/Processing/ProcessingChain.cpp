@@ -6,6 +6,8 @@
 #include "IProcessingBlock.h"
 #include "IProcessingBlockFactory.h"
 
+#include <algorithm>
+
 #define LOGGING_COMPONENT "ProcessingChain"
 
 ProcessingChain::ProcessingChain(const IProcessingBlockFactory& processingBlockFactory)
@@ -125,7 +127,21 @@ void ProcessingChain::execute(Processing::TRgbStrip& strip, const Processing::TN
 
     for(auto processingBlock : processingChain)
     {
-        processingBlock->execute(strip, noteToLightMap);
+        auto mode = processingBlock->mode();
+        if (mode == IProcessingBlock::Mode::additive)
+        {
+            intermediateStrip.resize(strip.size());
+            std::fill(intermediateStrip.begin(), intermediateStrip.end(), Processing::ColorValue::off);
+
+            processingBlock->execute(intermediateStrip, noteToLightMap);
+
+            std::transform(strip.begin(), strip.end(),
+                intermediateStrip.begin(), strip.begin(), std::plus<Processing::TRgb>());
+        }
+        else if (mode == IProcessingBlock::Mode::overwriting)
+        {
+            processingBlock->execute(strip, noteToLightMap);
+        }
     }
 }
 

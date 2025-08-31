@@ -9,12 +9,18 @@ class MockProcessingBlock
     : public IProcessingBlock
 {
 public:
+    MockProcessingBlock()
+    {
+        ON_CALL(*this, mode()).WillByDefault(::testing::Return(Mode::additive));
+    }
+
     // IProcessingBlock implementation
     MOCK_METHOD0(activate, void());
     MOCK_METHOD0(deactivate, void());
     MOCK_METHOD2(execute, void(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap));
     MOCK_CONST_METHOD0(convertToJson, Json());
     MOCK_METHOD1(convertFromJson, void(const Json& converted));
+    MOCK_CONST_METHOD0(mode, Mode());
 
 protected:
     MOCK_CONST_METHOD0(getObjectType, std::string());

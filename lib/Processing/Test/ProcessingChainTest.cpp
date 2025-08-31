@@ -7,11 +7,13 @@
 #include "ProcessingBlockContainerTest.h"
 #include "ProcessingChain.h"
 #include "ProcessingTypes.h"
+#include "../Interfaces/IProcessingBlock.h"
 
 #define LOGGING_COMPONENT "ProcessingChain"
 
 using ::testing::Return;
 using ::testing::HasSubstr;
+using ::testing::ElementsAre;
 
 class ProcessingChainTest
     : public ProcessingBlockContainerTest
@@ -167,4 +169,87 @@ TEST_F(ProcessingChainTest, deactivateOnInsert)
         processingChain.insertBlock(block);
         block = nullptr;
     }
+}
+
+class FakeAdditiveBlock
+    : public IProcessingBlock
+{
+public:
+    FakeAdditiveBlock(const Processing::TRgb& color) : color(color) {}
+
+    void activate() override {}
+    void deactivate() override {}
+    void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap&) override
+    {
+        strip[0] = color;
+    }
+
+    Json convertToJson() const override { return Json(); };
+    void convertFromJson(const Json& converted) override {};
+    std::string getObjectType() const override { return ""; }
+
+    Processing::TRgb color;
+};
+
+class FakeOverwritingBlock
+    : public FakeAdditiveBlock
+{
+public:
+    using FakeAdditiveBlock::FakeAdditiveBlock;
+    Mode mode() const override
+    {
+        return Mode::overwriting;
+    }
+};
+
+TEST_F(ProcessingChainTest, additive)
+{
+    Processing::TRgbStrip strip;
+    strip.push_back(Processing::ColorValue::off);
+    strip.push_back(Processing::ColorValue::off);
+
+    Processing::TNoteToLightMap map;
+    map[0] = 0;
+    map[1] = 1;
+
+    processingChain.insertBlock(new FakeAdditiveBlock(Processing::ColorValue::red));
+    processingChain.insertBlock(new FakeAdditiveBlock(Processing::ColorValue::green));
+
+    processingChain.execute(strip, map);
+    EXPECT_THAT(strip, ElementsAre(Processing::ColorValue::cyan, Processing::ColorValue::off));
+}
+
+TEST_F(ProcessingChainTest, overwriting)
+{
+    Processing::TRgbStrip strip;
+    strip.push_back(Processing::ColorValue::off);
+    strip.push_back(Processing::ColorValue::off);
+
+    Processing::TNoteToLightMap map;
+    map[0] = 0;
+    map[1] = 1;
+
+    processingChain.insertBlock(new FakeAdditiveBlock(Processing::ColorValue::red));
+    processingChain.insertBlock(new FakeOverwritingBlock(Processing::ColorValue::green));
+
+    processingChain.execute(strip, map);
+    EXPECT_THAT(strip, ElementsAre(Processing::ColorValue::green, Processing::ColorValue::off));
+}
+
+TEST_F(ProcessingChainTest, additiveAndOverwriting)
+{
+    Processing::TRgbStrip strip;
+    strip.push_back(Processing::ColorValue::off);
+    strip.push_back(Processing::ColorValue::off);
+
+    Processing::TNoteToLightMap map;
+    map[0] = 0;
+    map[1] = 1;
+
+    processingChain.insertBlock(new FakeAdditiveBlock(Processing::ColorValue::red));
+    processingChain.insertBlock(new FakeOverwritingBlock(Processing::ColorValue::green));
+    processingChain.insertBlock(new FakeAdditiveBlock(Processing::ColorValue::blue));
+
+    processingChain.execute(strip, map);
+    EXPECT_THAT(strip, ElementsAre(Processing::ColorValue::yellow, Processing::ColorValue::off));
 }
