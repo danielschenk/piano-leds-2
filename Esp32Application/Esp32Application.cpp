@@ -23,7 +23,7 @@
 
 #define LOGGING_COMPONENT "Esp32Application"
 
-static MidiTask* midiTask(nullptr);
+static MidiTask* midiTaskPtr(nullptr);
 
 static constexpr uint32_t defaultStackSize(4096);
 
@@ -58,39 +58,31 @@ static void startNetwork();
 
 void setup()
 {
-    // Initialize time
-    auto freeRtosTime = new FreeRtosTime;
+    static FreeRtosTime freeRtosTime;
 
-    // Initialize logging
-    LoggingEntryPoint::setTime(freeRtosTime);
+    LoggingEntryPoint::setTime(&freeRtosTime);
     Serial.begin(115200, SERIAL_8N1, DEBUG_RX_PIN, DEBUG_TX_PIN);
-    new LoggingTask(Serial,
-                    defaultStackSize,
-                    PRIORITY_LOW);
+    static LoggingTask loggingTask(Serial, defaultStackSize, PRIORITY_LOW);
 
-    LOG_INFO("MIDI-LED-Controller (MLC) (c) Daniel Schenk, 2017");
+    LOG_INFO("MIDI-LED-Controller (MLC) (c) Daniel Schenk, 2017-2025");
     LOG_INFO("initializing application...");
 
-    // Initialize run LED
     pinMode(RUN_LED_PIN, OUTPUT);
-    // LED off during initialization
     digitalWrite(RUN_LED_PIN, 0);
 
-    // Initialize MIDI, baud rate is 31.25k
     Serial2.begin(31250, SERIAL_8N1, MIDI_RX_PIN, MIDI_TX_PIN);
 
-    auto midiInput = new ArduinoMidiInput(Serial2);
-    midiTask = new MidiTask(*midiInput,
-                               defaultStackSize,
-                               PRIORITY_CRITICAL);
+    static ArduinoMidiInput midiInput(Serial2);
+    static MidiTask midiTask(midiInput, defaultStackSize, PRIORITY_CRITICAL);
+    // Required by UART interrupt. TODO find better solution to this
+    midiTaskPtr = &midiTask;
 
-    // Initialize printing of MIDI messages
-    new MidiMessageLogger(*midiInput);
+    static MidiMessageLogger midiMessageLogger(midiInput);
 
     // Initialize concert dependencies.
-    auto rgbFunctionFactory = new RgbFunctionFactory;
+    static RgbFunctionFactory rgbFunctionFactory;
 
-    Processing::TNoteToLightMap noteToLightMap;
+    static Processing::TNoteToLightMap noteToLightMap;
     uint8_t lightNumber = 0;
     for(uint8_t noteNumber = 48 /* C below middle C */; noteNumber < 72; ++noteNumber)
     {
@@ -98,17 +90,16 @@ void setup()
         ++lightNumber;
     }
 
-    auto processingBlockFactory = new ProcessingBlockFactory(*midiInput,
-                                                             *rgbFunctionFactory,
-                                                             *freeRtosTime);
+    static ProcessingBlockFactory processingBlockFactory(midiInput,
+                                                         rgbFunctionFactory,
+                                                         freeRtosTime);
 
-    auto concert = new Concert(*midiInput,
-                               *processingBlockFactory);
+    static Concert concert(midiInput, processingBlockFactory);
 
     // TODO read concert from storage
     // For now, add something to test with.
-    concert->setNoteToLightMap(noteToLightMap);
-    IPatch* patch(concert->getPatch(concert->addPatch()));
+    concert.setNoteToLightMap(noteToLightMap);
+    IPatch* patch(concert.getPatch(concert.addPatch()));
     patch->setName("whiteOnBlue");
     patch->setBank(0);
     patch->setProgram(6);
@@ -119,9 +110,9 @@ void setup()
     patch->getProcessingChain().insertBlock(src1);
 
     // Full white for any sounding key
-    auto src2(new NoteRgbSource(*midiInput,
-                                *rgbFunctionFactory,
-                                *freeRtosTime));
+    auto src2(new NoteRgbSource(midiInput,
+                                rgbFunctionFactory,
+                                freeRtosTime));
     auto rgbFunction(std::make_shared<LinearRgbFunction>());
     const Processing::TLinearConstants fullWhite({255, 0});
     rgbFunction->setRedConstants(fullWhite);
@@ -133,10 +124,10 @@ void setup()
     patch->activate();
 
     // Add another patch
-    IPatch* patch2(concert->getPatch(concert->addPatch()));
-    auto src3(new NoteRgbSource(*midiInput,
-                                *rgbFunctionFactory,
-                                *freeRtosTime));
+    IPatch* patch2(concert.getPatch(concert.addPatch()));
+    auto src3(new NoteRgbSource(midiInput,
+                                rgbFunctionFactory,
+                                freeRtosTime));
 
     // Sounding notes become blue, intensity is the velocity of the note multiplied by 2
     rgbFunction = std::make_shared<LinearRgbFunction>();
@@ -151,16 +142,16 @@ void setup()
     patch2->setProgram(11);
 
     // Add another patch
-    IPatch* patch3(concert->getPatch(concert->addPatch()));
+    IPatch* patch3(concert.getPatch(concert.addPatch()));
 
     // Red background, white notes, mimic piano
     auto src4(new EqualRangeRgbSource);
     src4->setColor({32, 0, 0});
     patch3->getProcessingChain().insertBlock(src4);
 
-    auto src5(new NoteRgbSource(*midiInput,
-                                *rgbFunctionFactory,
-                                *freeRtosTime));
+    auto src5(new NoteRgbSource(midiInput,
+                                rgbFunctionFactory,
+                                freeRtosTime));
 
     auto fnc(std::make_shared<PianoDecayRgbFunction>());
     src5->setRgbFunction(fnc);
@@ -170,19 +161,12 @@ void setup()
     patch3->setBank(0);
     patch3->setProgram(12);
 
-    concert->setListeningToProgramChange(true);
+    concert.setListeningToProgramChange(true);
 
-    // Start processing
-    new ProcessingTask(*concert,
-                       defaultStackSize,
-                       PRIORITY_CRITICAL);
+    static ProcessingTask processingTask(concert, defaultStackSize, PRIORITY_CRITICAL);
 
-    // Start LED output
-    new LedTask(*concert,
-                LED_DATA_PIN,
-                LED_CLOCK_PIN,
-                defaultStackSize,
-                PRIORITY_CRITICAL);
+    static LedTask ledTask(concert, LED_DATA_PIN, LED_CLOCK_PIN, defaultStackSize,
+        PRIORITY_CRITICAL);
 
     if (false)
         startNetwork();
@@ -192,10 +176,8 @@ void setup()
 
 static void startNetwork()
 {
-    auto systemSettingsModel(new SystemSettingsModel);
-    new NetworkTask(*systemSettingsModel,
-                    defaultStackSize,
-                    PRIORITY_LOW);
+    static SystemSettingsModel systemSettingsModel;
+    static NetworkTask networkTask(systemSettingsModel, defaultStackSize, PRIORITY_LOW);
 }
 
 void loop()
@@ -220,5 +202,5 @@ void loop()
 // TODO This function is not called on ESP32... :-(
 void serialEvent2()
 {
-    midiTask->wake();
+    midiTaskPtr->wake();
 }
