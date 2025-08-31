@@ -214,7 +214,7 @@ TEST_F(ProcessingChainTest, additive)
     processingChain.insertBlock(new FakeAdditiveBlock(green));
 
     processingChain.execute(strip, map);
-    EXPECT_THAT(strip, ElementsAre(cyan, off, off));
+    EXPECT_THAT(strip, ElementsAre(yellow, off, off));
 }
 
 TEST_F(ProcessingChainTest, overwriting)
@@ -235,7 +235,7 @@ TEST_F(ProcessingChainTest, additiveAndOverwriting)
     processingChain.insertBlock(new FakeAdditiveBlock(blue));
 
     processingChain.execute(strip, map);
-    EXPECT_THAT(strip, ElementsAre(yellow, off, off));
+    EXPECT_THAT(strip, ElementsAre(cyan, off, off));
 }
 
 TEST_F(ProcessingChainTest, doNotAccumulateIntoNextCycle)
