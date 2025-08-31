@@ -167,7 +167,7 @@ private:
     Processing::TRgbStrip strip;
     TPatches patches;
     TPatchPosition activePatchPosition = invalidPatchPosition;
-    bool listeningToProgramChange = false;
+    bool listeningToProgramChange{true};
     uint8_t programChangeChannel = 0;
     uint16_t currentBank = 0;
     IMidiInput& midiInput;

@@ -1,6 +1,13 @@
 #include "LinearRgbFunction.h"
 #include "Json11Helper.h"
 
+LinearRgbFunction::LinearRgbFunction(const Processing::TRgb& color)
+{
+    redConstants = {2.0f * color.r / 255.0f, 0};
+    greenConstants = {2.0f * color.g / 255.0f, 0};
+    blueConstants = {2.0f * color.b / 255.0f, 0};
+}
+
 Processing::TRgb LinearRgbFunction::calculate(const Processing::TNoteState& noteState, Processing::TTime currentTime) const
 {
     Processing::TRgb output;
