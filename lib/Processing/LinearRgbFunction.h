@@ -11,10 +11,8 @@ class LinearRgbFunction
     : public IRgbFunction
 {
 public:
-    /**
-     * Constructor.
-     */
     LinearRgbFunction() = default;
+    explicit LinearRgbFunction(const Processing::TRgb& color);
 
     void setRedConstants(Processing::TLinearConstants redConstants);
     void setGreenConstants(Processing::TLinearConstants greenConstants);

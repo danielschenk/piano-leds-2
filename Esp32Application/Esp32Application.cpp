@@ -5,9 +5,7 @@
 
 #include "MidiTask.h"
 
-#include "RgbFunctionFactory.h"
-#include "ProcessingBlockFactory.h"
-#include "Concert.h"
+#include "ConcertInfrastructure.h"
 #include "IPatch.h"
 #include "EqualRangeRgbSource.h"
 #include "NoteRgbSource.h"
@@ -78,30 +76,15 @@ void setup()
 
     static MidiMessageLogger midiMessageLogger(midiInput);
 
-    // Initialize concert dependencies.
-    static RgbFunctionFactory rgbFunctionFactory;
-
-    static Processing::TNoteToLightMap noteToLightMap;
-    uint8_t lightNumber = 0;
-    for(uint8_t noteNumber = 48 /* C below middle C */; noteNumber < 72; ++noteNumber)
-    {
-        noteToLightMap[noteNumber] = lightNumber;
-        ++lightNumber;
-    }
-
-    static ProcessingBlockFactory processingBlockFactory(midiInput,
-                                                         rgbFunctionFactory,
-                                                         freeRtosTime);
-
-    static Concert concert(midiInput, processingBlockFactory);
+    static application::ConcertInfrastructure concertInfrastructure(midiInput, freeRtosTime);
 
     // TODO read concert from storage
     // For now, add something to test with.
-    concert.setNoteToLightMap(noteToLightMap);
+    auto& concert = concertInfrastructure.concert;
     IPatch* patch(concert.getPatch(concert.addPatch()));
     patch->setName("whiteOnBlue");
     patch->setBank(0);
-    patch->setProgram(6);
+    patch->setProgram(19);
 
     // Add constant blue background
     auto src1(new EqualRangeRgbSource);
@@ -110,7 +93,7 @@ void setup()
 
     // Full white for any sounding key
     auto src2(new NoteRgbSource(midiInput,
-                                rgbFunctionFactory,
+                                concertInfrastructure.rgbFunctionFactory,
                                 freeRtosTime));
     auto rgbFunction(std::make_shared<LinearRgbFunction>());
     const Processing::TLinearConstants fullWhite({255, 0});
@@ -125,7 +108,7 @@ void setup()
     // Add another patch
     IPatch* patch2(concert.getPatch(concert.addPatch()));
     auto src3(new NoteRgbSource(midiInput,
-                                rgbFunctionFactory,
+                                concertInfrastructure.rgbFunctionFactory,
                                 freeRtosTime));
 
     // Sounding notes become blue, intensity is the velocity of the note multiplied by 2
@@ -138,7 +121,7 @@ void setup()
     patch2->getProcessingChain().insertBlock(src3);
     patch2->setName("blueNote");
     patch2->setBank(0);
-    patch2->setProgram(11);
+    patch2->setProgram(20);
 
     // Add another patch
     IPatch* patch3(concert.getPatch(concert.addPatch()));
@@ -149,7 +132,7 @@ void setup()
     patch3->getProcessingChain().insertBlock(src4);
 
     auto src5(new NoteRgbSource(midiInput,
-                                rgbFunctionFactory,
+                                concertInfrastructure.rgbFunctionFactory,
                                 freeRtosTime));
 
     auto fnc(std::make_shared<PianoDecayRgbFunction>());
@@ -158,9 +141,7 @@ void setup()
     patch3->getProcessingChain().insertBlock(src5);
     patch3->setName("whitePianoNotes");
     patch3->setBank(0);
-    patch3->setProgram(12);
-
-    concert.setListeningToProgramChange(true);
+    patch3->setProgram(21);
 
     static ProcessingTask processingTask(concert, defaultStackSize, PRIORITY_CRITICAL);
 

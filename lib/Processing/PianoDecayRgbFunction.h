@@ -11,7 +11,7 @@
 class PianoDecayRgbFunction : public LinearRgbFunction
 {
 public:
-    PianoDecayRgbFunction() = default;
+    using LinearRgbFunction::LinearRgbFunction;
 
     PianoDecayRgbFunction(const PianoDecayRgbFunction&) = delete;
     PianoDecayRgbFunction& operator=(const PianoDecayRgbFunction&) = delete;
