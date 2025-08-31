@@ -40,7 +40,7 @@ private:
     mutable std::mutex mutex;
 
     const IProcessingBlockFactory& processingBlockFactory;
-    bool active;
+    bool active{false};
     std::vector<IProcessingBlock*> processingChain;
     Processing::TRgbStrip intermediateStrip;
 

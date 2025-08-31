@@ -11,10 +11,7 @@
 #define LOGGING_COMPONENT "ProcessingChain"
 
 ProcessingChain::ProcessingChain(const IProcessingBlockFactory& processingBlockFactory)
-    : mutex()
-    , processingBlockFactory(processingBlockFactory)
-    , active()
-    , processingChain()
+    : processingBlockFactory(processingBlockFactory)
 {
 }
 
@@ -117,13 +114,7 @@ void ProcessingChain::execute(Processing::TRgbStrip& strip, const Processing::TN
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    // Start clean
-    for(auto& color : strip)
-    {
-        color.r = 0;
-        color.g = 0;
-        color.b = 0;
-    }
+    std::fill(strip.begin(), strip.end(), Processing::ColorValue::off);
 
     for(auto processingBlock : processingChain)
     {
