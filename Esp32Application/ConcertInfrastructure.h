@@ -1,5 +1,5 @@
-#ifndef LEGACY_PATCHES_H
-#define LEGACY_PATCHES_H
+#ifndef CONCERT_INFRASTRUCTURE_H
+#define CONCERT_INFRASTRUCTURE_H
 
 #include "Concert.h"
 #include "ProcessingBlockFactory.h"
