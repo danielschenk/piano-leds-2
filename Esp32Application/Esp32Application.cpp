@@ -54,6 +54,8 @@ enum
     PRIORITY_CRITICAL = 3
 };
 
+static void startNetwork();
+
 void setup()
 {
     // Initialize time
@@ -182,14 +184,18 @@ void setup()
                 defaultStackSize,
                 PRIORITY_CRITICAL);
 
+    if (false)
+        startNetwork();
 
-    // Start network
+    LOG_INFO("initialization done");
+}
+
+static void startNetwork()
+{
     auto systemSettingsModel(new SystemSettingsModel);
     new NetworkTask(*systemSettingsModel,
                     defaultStackSize,
                     PRIORITY_LOW);
-
-    LOG_INFO("initialization done");
 }
 
 void loop()
