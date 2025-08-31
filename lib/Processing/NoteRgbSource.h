@@ -70,14 +70,14 @@ private:
     static constexpr const char* rgbFunctionJsonKey   = "rgbFunction";
 
     mutable std::mutex mutex;
-    bool active = false;
-    bool usingPedal = true;
+    bool active{false};
+    bool usingPedal{true};
     const IRgbFunctionFactory& rgbFunctionFactory;
     IMidiInput& midiInput;
     uint8_t channel = 0;
     Scheduler scheduler;
     std::array<Processing::TNoteState, IMidiInterface::numNotes> noteStates;
-    bool pedalPressed;
+    bool pedalPressed{false};
     std::shared_ptr<IRgbFunction> rgbFunction;
     const ITime& time;
 };
