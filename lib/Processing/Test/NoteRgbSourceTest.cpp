@@ -18,7 +18,6 @@ using ::testing::AnyNumber;
 
 #define LOGGING_COMPONENT "NoteRgbSource"
 
-/** Action definition for mock RGB function. */
 ACTION(ReturnFullWhiteWhenSounding)
 {
     Processing::TRgb output;
@@ -27,6 +26,19 @@ ACTION(ReturnFullWhiteWhenSounding)
         output.r = 0xff;
         output.g = 0xff;
         output.b = 0xff;
+    }
+
+    return output;
+}
+
+ACTION(ReturnMinimalWhiteWhenSounding)
+{
+    Processing::TRgb output;
+    if(arg0.sounding)
+    {
+        output.r = 0x01;
+        output.g = 0x01;
+        output.b = 0x01;
     }
 
     return output;
@@ -92,12 +104,9 @@ TEST_F(NoteRgbSourceTest, noNotesSounding)
     strip[6] = {7, 8, 9};
     strip[stripSize-1] = {11, 12, 13};
 
-    auto expectedStrip(strip);
-
     noteRgbSource.execute(strip, noteToLightMap);
 
-    // No notes sounding should leave strip untouched
-    ASSERT_EQ(expectedStrip, strip);
+    EXPECT_THAT(strip, Each(Processing::TRgb({0, 0, 0})));
 }
 
 TEST_F(NoteRgbSourceTest, noteOn)
@@ -112,6 +121,27 @@ TEST_F(NoteRgbSourceTest, noteOn)
     auto expected = Processing::TRgbStrip(stripSize);
     expected[0] = {0xff, 0xff, 0xff};
     expected[5] = {0xff, 0xff, 0xff};
+
+    EXPECT_EQ(expected, strip);
+}
+
+TEST_F(NoteRgbSourceTest, noteOnOverwritesAlreadyEnabledLed)
+{
+    auto rgbFunction(std::make_shared<NiceMock<MockRgbFunction>>());
+    ON_CALL(*rgbFunction, calculate(_, _)).WillByDefault(ReturnMinimalWhiteWhenSounding());
+    noteRgbSource.setRgbFunction(rgbFunction);
+
+    std::fill(strip.begin(), strip.end(), Processing::TRgb{0xff, 0xff, 0xff});
+
+    // (channel, number, velocity, on/off)
+    observer->onNoteChange(0, 0, 1, true);
+    observer->onNoteChange(0, 5, 6, true);
+
+    noteRgbSource.execute(strip, noteToLightMap);
+
+    Processing::TRgbStrip expected(strip);
+    expected[0] = {0x01, 0x01, 0x01};
+    expected[5] = {0x01, 0x01, 0x01};
 
     EXPECT_EQ(expected, strip);
 }

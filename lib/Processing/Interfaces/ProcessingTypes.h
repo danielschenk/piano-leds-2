@@ -15,19 +15,14 @@ namespace Processing
 /** Type for single RGB color. */
 struct TRgb
 {
-    /**
-     * Constructor.
-     *
-     * @param[in]   r   Initial red value.
-     * @param[in]   g   Initial green value.
-     * @param[in]   b   Initial blue value.
-     */
-    TRgb(uint8_t r, uint8_t g, uint8_t b);
+    constexpr TRgb(uint8_t r, uint8_t g, uint8_t b)
+        : r(r)
+        , g(g)
+        , b(b)
+    {
+    }
 
-    /**
-     * Default constructor, initializes values to 0.
-     */
-    TRgb();
+    constexpr TRgb() = default;
 
     /**
      * Compare with another @ref TRgb.
@@ -68,10 +63,22 @@ struct TRgb
     // Implements custom value printing for Google Test
     friend std::ostream& operator<<(std::ostream& os, const TRgb& color);
 
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
+    uint8_t r{0};
+    uint8_t g{0};
+    uint8_t b{0};
 };
+
+namespace ColorValue
+{
+    constexpr TRgb off{};
+    constexpr TRgb red{0xff, 0x00, 0x00};
+    constexpr TRgb green{0x00, 0xff, 0x00};
+    constexpr TRgb blue{0x00, 0x00, 0xff};
+    constexpr TRgb cyan{0xff, 0xff, 0x00};
+    constexpr TRgb magenta{0xff, 0x00, 0xff};
+    constexpr TRgb yellow{0x00, 0xff, 0xff};
+    constexpr TRgb white{0xff, 0xff, 0xff};
+}
 
 /**
  * Multiply every color by a single factor.

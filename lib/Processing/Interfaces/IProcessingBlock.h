@@ -6,9 +6,6 @@
 #include "ProcessingTypes.h"
 #include "IJsonConvertible.h"
 
-/**
- * Interface for processing blocks.
- */
 class IProcessingBlock
     : public IJsonConvertible
 {
@@ -17,9 +14,6 @@ public:
     static constexpr const char* typeNameNoteRgbSource        = "NoteRgbSource";
     static constexpr const char* typeNameProcessingChain      = "ProcessingChain";
 
-    /**
-     * Destructor.
-     */
     virtual ~IProcessingBlock() = default;
 
     /**
@@ -44,6 +38,13 @@ public:
      * @param   [in/out]    noteToLightMap  To map from note number to light number.
      */
     virtual void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap) = 0;
+
+    enum class Mode
+    {
+        additive,
+        overwriting,
+    };
+    virtual Mode mode() const;
 };
 
 #endif /* PROCESSING_IPROCESSINGBLOCK_H_ */

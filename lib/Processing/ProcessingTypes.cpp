@@ -9,20 +9,6 @@
 namespace Processing
 {
 
-TRgb::TRgb(uint8_t r, uint8_t g, uint8_t b)
-{
-    this->r = r;
-    this->g = g;
-    this->b = b;
-};
-
-TRgb::TRgb()
-{
-    r = 0;
-    g = 0;
-    b = 0;
-};
-
 bool TRgb::operator==(const TRgb& other) const
 {
     return (other.r == r) &&

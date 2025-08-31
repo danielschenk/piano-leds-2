@@ -66,24 +66,13 @@ private:
     static constexpr const char* nameJsonKey              = "name";
     static constexpr const char* processingChainJsonKey   = "processingChain";
 
-    /** Mutex to protect the members. */
     mutable std::mutex mutex;
 
-    /** Whether this patch is bound to a bank and program number. */
     bool bankAndProgramSet = false;
-
-    /** The bank number bound to this patch. */
     uint8_t bank = 0;
-
-    /** The program number bound to this patch. */
     uint8_t program = 0;
-
-    /** The name of the patch. */
     std::string name = "Untitled Patch";
-
-    /** The processing chain. */
     IProcessingChain* processingChain;
-
     const IProcessingBlockFactory& processingBlockFactory;
 };
 

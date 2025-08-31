@@ -6,13 +6,12 @@
 #include "IProcessingBlock.h"
 #include "IProcessingBlockFactory.h"
 
+#include <algorithm>
+
 #define LOGGING_COMPONENT "ProcessingChain"
 
 ProcessingChain::ProcessingChain(const IProcessingBlockFactory& processingBlockFactory)
-    : mutex()
-    , processingBlockFactory(processingBlockFactory)
-    , active()
-    , processingChain()
+    : processingBlockFactory(processingBlockFactory)
 {
 }
 
@@ -115,17 +114,25 @@ void ProcessingChain::execute(Processing::TRgbStrip& strip, const Processing::TN
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    // Start clean
-    for(auto& color : strip)
-    {
-        color.r = 0;
-        color.g = 0;
-        color.b = 0;
-    }
+    std::fill(strip.begin(), strip.end(), Processing::ColorValue::off);
 
     for(auto processingBlock : processingChain)
     {
-        processingBlock->execute(strip, noteToLightMap);
+        auto mode = processingBlock->mode();
+        if (mode == IProcessingBlock::Mode::additive)
+        {
+            intermediateStrip.resize(strip.size());
+            std::fill(intermediateStrip.begin(), intermediateStrip.end(), Processing::ColorValue::off);
+
+            processingBlock->execute(intermediateStrip, noteToLightMap);
+
+            std::transform(strip.begin(), strip.end(),
+                intermediateStrip.begin(), strip.begin(), std::plus<Processing::TRgb>());
+        }
+        else if (mode == IProcessingBlock::Mode::overwriting)
+        {
+            processingBlock->execute(strip, noteToLightMap);
+        }
     }
 }
 
