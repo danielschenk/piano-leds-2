@@ -62,7 +62,7 @@ Processing::TNoteToLightMap ConcertInfrastructure::createDefaultOneToOneFullPian
     uint16_t lightNumber = 0;
     constexpr uint8_t noteNumberA0 = 21;
     constexpr uint8_t noteNumberC8 = 108;
-    for(uint8_t noteNumber = noteNumberA0; noteNumber <= noteNumberC8; ++noteNumber)
+    for(uint8_t noteNumber = noteNumberC8; noteNumber >= noteNumberA0; --noteNumber)
     {
         noteToLightMap[noteNumber] = lightNumber;
         lightNumber += (1 + skipLedsPerNote);
