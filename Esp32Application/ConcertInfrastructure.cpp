@@ -4,9 +4,12 @@
 #include "LinearRgbFunction.h"
 #include "PianoDecayRgbFunction.h"
 #include "ProcessingTypes.h"
+#include "Logging.h"
 
 namespace application
 {
+
+#define LOGGING_COMPONENT "ConcertInfrastructure"
 
 ConcertInfrastructure::ConcertInfrastructure(IMidiInput& midiInput, const ITime& time)
     : midiInput(midiInput)
@@ -15,6 +18,7 @@ ConcertInfrastructure::ConcertInfrastructure(IMidiInput& midiInput, const ITime&
     , concert(midiInput, processingBlockFactory)
 {
     concert.setNoteToLightMap(createDefaultOneToOneFullPianoMapping(1));
+    LOG_INFO_PARAMS("strip size: %zd", concert.getStripSize());
     createLegacyPatches();
 }
 
