@@ -1,27 +1,23 @@
-#ifndef ESP32APPLICATION_LEDTASK_H_
-#define ESP32APPLICATION_LEDTASK_H_
+#ifndef ESP32APPLICATION_LEDTASKNEOPIXEL_H_
+#define ESP32APPLICATION_LEDTASKNEOPIXEL_H_
 
 #include <mutex>
-#include <Adafruit_WS2801.h>
 
+#include "NeoPixelBus.h"
 #include "BaseTask.h"
 #include "Concert.h"
 
-/**
- * Task which performs the output to the LED strip.
- */
-class LedTask
+class LedTaskNeoPixel
     : public BaseTask
     , public Concert::IObserver
 {
 public:
-    LedTask(Concert& concert,
+    LedTaskNeoPixel(Concert& concert,
             int16_t dataPin,
-            int16_t clockPin,
             uint32_t stackSize,
             UBaseType_t priority);
 
-    ~LedTask() override;
+    ~LedTaskNeoPixel() override;
 
     // Concert::IObserver implementation
     void onStripUpdate(const Processing::TRgbStrip& strip) override;
@@ -33,9 +29,9 @@ private:
     static constexpr TickType_t autoRefreshInterval = 100;
 
     Processing::TRgbStrip pendingValues;
-    Adafruit_WS2801 strip;
+    NeoPixelBus<NeoGrbFeature, NeoEsp32Rmt0Ws2812xMethod> strip;
     mutable std::mutex mutex;
     Concert& concert;
 };
 
-#endif /* ESP32APPLICATION_LEDTASK_H_ */
+#endif

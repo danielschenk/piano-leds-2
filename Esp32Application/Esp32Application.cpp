@@ -12,7 +12,11 @@
 #include "LinearRgbFunction.h"
 #include "PianoDecayRgbFunction.h"
 #include "ProcessingTask.h"
+#if PIANOLEDS_NEOPIXEL
+#include "LedTaskNeoPixel.h"
+#else
 #include "LedTask.h"
+#endif
 #include "SystemSettingsModel.h"
 #include "NetworkTask.h"
 
@@ -145,8 +149,13 @@ void setup()
 
     static ProcessingTask processingTask(concert, defaultStackSize, PRIORITY_CRITICAL);
 
+#if PIANOLEDS_NEOPIXEL
+    static LedTaskNeoPixel ledTask(concert, LED_DATA_PIN, defaultStackSize,
+        PRIORITY_CRITICAL);
+#else
     static LedTask ledTask(concert, LED_DATA_PIN, LED_CLOCK_PIN, defaultStackSize,
         PRIORITY_CRITICAL);
+#endif
 
     if (false)
         startNetwork();

@@ -16,11 +16,11 @@ struct ConcertInfrastructure
 {
     ConcertInfrastructure(IMidiInput& midiInput, const ITime& time);
     void createLegacyPatches();
+    static Processing::TNoteToLightMap createDefaultOneToOneFullPianoMapping(uint16_t skipLedsPerNote = 0);
 
     IMidiInput& midiInput;
     const ITime& time;
 
-    Processing::TNoteToLightMap noteToLightMap;
     RgbFunctionFactory rgbFunctionFactory;
     ProcessingBlockFactory processingBlockFactory;
     Concert concert;
