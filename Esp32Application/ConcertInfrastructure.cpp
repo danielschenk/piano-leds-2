@@ -3,6 +3,7 @@
 #include "NoteRgbSource.h"
 #include "LinearRgbFunction.h"
 #include "PianoDecayRgbFunction.h"
+#include "ProcessingTypes.h"
 
 namespace application
 {
@@ -13,14 +14,7 @@ ConcertInfrastructure::ConcertInfrastructure(IMidiInput& midiInput, const ITime&
     , processingBlockFactory(midiInput, rgbFunctionFactory, time)
     , concert(midiInput, processingBlockFactory)
 {
-    uint8_t lightNumber = 0;
-    for(uint8_t noteNumber = 48 /* C below middle C */; noteNumber < 72; ++noteNumber)
-    {
-        noteToLightMap[noteNumber] = lightNumber;
-        ++lightNumber;
-    }
-    concert.setNoteToLightMap(noteToLightMap);
-
+    concert.setNoteToLightMap(createDefaultOneToOneFullPianoMapping(1));
     createLegacyPatches();
 }
 
@@ -56,6 +50,21 @@ void ConcertInfrastructure::createLegacyPatches()
             concert.addPatch(patch);
         }
     }
+}
+
+Processing::TNoteToLightMap ConcertInfrastructure::createDefaultOneToOneFullPianoMapping(uint16_t skipLedsPerNote)
+{
+    Processing::TNoteToLightMap noteToLightMap;
+    uint16_t lightNumber = 0;
+    constexpr uint8_t noteNumberA0 = 21;
+    constexpr uint8_t noteNumberC8 = 108;
+    for(uint8_t noteNumber = noteNumberA0; noteNumber <= noteNumberC8; ++noteNumber)
+    {
+        noteToLightMap[noteNumber] = lightNumber;
+        lightNumber += (1 + skipLedsPerNote);
+    }
+
+    return noteToLightMap;
 }
 
 }
