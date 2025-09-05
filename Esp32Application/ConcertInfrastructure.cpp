@@ -1,6 +1,6 @@
 #include "ConcertInfrastructure.h"
 #include "Patch.h"
-#include "NoteRgbSource.h"
+#include "NoteVisualizer.h"
 #include "LinearRgbFunction.h"
 #include "PianoDecayRgbFunction.h"
 #include "ProcessingTypes.h"
@@ -37,7 +37,7 @@ void ConcertInfrastructure::createLegacyPatches()
             patch->setBank(bank);
             patch->setProgram(program++);
 
-            auto block = new NoteRgbSource(midiInput, rgbFunctionFactory, time);
+            auto block = new NoteVisualizer(midiInput, rgbFunctionFactory, time);
             bool likePiano(i > 0);
             std::shared_ptr<IRgbFunction> rgbFunction;
             if (likePiano)

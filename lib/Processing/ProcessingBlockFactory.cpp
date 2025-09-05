@@ -1,7 +1,7 @@
 #include <Json11Helper.h>
 
 #include "ProcessingBlockFactory.h"
-#include "NoteRgbSource.h"
+#include "NoteVisualizer.h"
 #include "SingleColorFill.h"
 #include "ProcessingChain.h"
 #include "Patch.h"
@@ -32,9 +32,9 @@ ProcessingBlock* ProcessingBlockFactory::createProcessingBlock(const Json& conve
         {
             processingBlock = new SingleColorFill();
         }
-        else if(objectType == ProcessingBlock::typeNameNoteRgbSource)
+        else if(objectType == ProcessingBlock::typeNameNoteVisualizer)
         {
-            processingBlock = new NoteRgbSource(midiInput, rgbFunctionFactory, time);
+            processingBlock = new NoteVisualizer(midiInput, rgbFunctionFactory, time);
         }
         else if(objectType == ProcessingBlock::typeNameProcessingChain)
         {

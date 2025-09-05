@@ -31,7 +31,7 @@ public:
     void convertFromJson(const Json& converted) override;
 
 protected:
-    // IProcessingBlock implementation
+    // ProcessingBlock implementation
     std::string getObjectType() const override;
 
 private:

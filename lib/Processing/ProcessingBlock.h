@@ -11,7 +11,7 @@ class ProcessingBlock
 {
 public:
     static constexpr const char* typeNameSingleColorFill  = "SingleColorFill";
-    static constexpr const char* typeNameNoteRgbSource        = "NoteRgbSource";
+    static constexpr const char* typeNameNoteVisualizer        = "NoteVisualizer";
     static constexpr const char* typeNameProcessingChain      = "ProcessingChain";
 
     virtual ~ProcessingBlock() = default;

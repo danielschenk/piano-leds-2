@@ -1,4 +1,4 @@
-#include "NoteRgbSource.h"
+#include "NoteVisualizer.h"
 
 #include "IRgbFunctionFactory.h"
 #include "IRgbFunction.h"
@@ -8,9 +8,9 @@
 
 #include <functional>
 
-#define LOGGING_COMPONENT "NoteRgbSource"
+#define LOGGING_COMPONENT "NoteVisualizer"
 
-NoteRgbSource::NoteRgbSource(IMidiInput& midiInput,
+NoteVisualizer::NoteVisualizer(IMidiInput& midiInput,
                              const IRgbFunctionFactory& rgbFunctionFactory,
                              const ITime& time)
     : rgbFunctionFactory(rgbFunctionFactory)
@@ -20,19 +20,19 @@ NoteRgbSource::NoteRgbSource(IMidiInput& midiInput,
     midiInput.subscribe(*this);
 }
 
-NoteRgbSource::~NoteRgbSource()
+NoteVisualizer::~NoteVisualizer()
 {
     midiInput.unsubscribe(*this);
 }
 
-void NoteRgbSource::activate()
+void NoteVisualizer::activate()
 {
     std::lock_guard<std::mutex> lock(mutex);
 
     active = true;
 }
 
-void NoteRgbSource::deactivate()
+void NoteVisualizer::deactivate()
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -47,7 +47,7 @@ void NoteRgbSource::deactivate()
     active = false;
 }
 
-void NoteRgbSource::execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap)
+void NoteVisualizer::execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap)
 {
     scheduler.executeAll();
 
@@ -61,7 +61,7 @@ void NoteRgbSource::execute(Processing::TRgbStrip& strip, const Processing::TNot
     }
 }
 
-void NoteRgbSource::onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on)
+void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -94,7 +94,7 @@ void NoteRgbSource::onNoteChange(uint8_t channel, uint8_t number, uint8_t veloci
     });
 }
 
-void NoteRgbSource::onControlChange(uint8_t channel, IMidiInput::TControllerNumber number, uint8_t value)
+void NoteVisualizer::onControlChange(uint8_t channel, IMidiInput::TControllerNumber number, uint8_t value)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -129,52 +129,52 @@ void NoteRgbSource::onControlChange(uint8_t channel, IMidiInput::TControllerNumb
     }
 }
 
-void NoteRgbSource::onProgramChange(uint8_t channel, uint8_t program)
+void NoteVisualizer::onProgramChange(uint8_t channel, uint8_t program)
 {
     // ignore
 }
 
-void NoteRgbSource::onChannelPressureChange(uint8_t channel, uint8_t value)
+void NoteVisualizer::onChannelPressureChange(uint8_t channel, uint8_t value)
 {
     // ignore
 }
 
-void NoteRgbSource::onPitchBendChange(uint8_t channel, uint16_t value)
+void NoteVisualizer::onPitchBendChange(uint8_t channel, uint16_t value)
 {
     // ignore
 }
 
-uint8_t NoteRgbSource::getChannel() const
+uint8_t NoteVisualizer::getChannel() const
 {
     std::lock_guard<std::mutex> lock(mutex);
     return channel;
 }
 
-void NoteRgbSource::setChannel(uint8_t channel)
+void NoteVisualizer::setChannel(uint8_t channel)
 {
     std::lock_guard<std::mutex> lock(mutex);
     this->channel = channel;
 }
 
-bool NoteRgbSource::isUsingPedal() const
+bool NoteVisualizer::isUsingPedal() const
 {
     std::lock_guard<std::mutex> lock(mutex);
     return usingPedal;
 }
 
-void NoteRgbSource::setUsingPedal(bool usingPedal)
+void NoteVisualizer::setUsingPedal(bool usingPedal)
 {
     std::lock_guard<std::mutex> lock(mutex);
     this->usingPedal = usingPedal;
 }
 
-void NoteRgbSource::setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction)
+void NoteVisualizer::setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction)
 {
     std::lock_guard<std::mutex> lock(mutex);
     this->rgbFunction = rgbFunction;
 }
 
-Json NoteRgbSource::convertToJson() const
+Json NoteVisualizer::convertToJson() const
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -190,7 +190,7 @@ Json NoteRgbSource::convertToJson() const
     return json;
 }
 
-void NoteRgbSource::convertFromJson(const Json& converted)
+void NoteVisualizer::convertFromJson(const Json& converted)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -203,7 +203,7 @@ void NoteRgbSource::convertFromJson(const Json& converted)
         rgbFunction = rgbFunctionFactory.createRgbFunction(convertedRgbFunction);
 }
 
-std::string NoteRgbSource::getObjectType() const
+std::string NoteVisualizer::getObjectType() const
 {
-    return ProcessingBlock::typeNameNoteRgbSource;
+    return ProcessingBlock::typeNameNoteVisualizer;
 }
