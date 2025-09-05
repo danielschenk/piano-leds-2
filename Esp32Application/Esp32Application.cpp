@@ -7,7 +7,7 @@
 
 #include "ConcertInfrastructure.h"
 #include "IPatch.h"
-#include "EqualRangeRgbSource.h"
+#include "SingleColorFill.h"
 #include "NoteRgbSource.h"
 #include "LinearRgbFunction.h"
 #include "PianoDecayRgbFunction.h"
@@ -91,7 +91,7 @@ void setup()
     patch->setProgram(19);
 
     // Add constant blue background
-    auto src1(new EqualRangeRgbSource);
+    auto src1(new SingleColorFill);
     src1->setColor(Processing::TRgb({0, 0, 32}));
     patch->getProcessingChain().insertBlock(src1);
 
@@ -131,7 +131,7 @@ void setup()
     IPatch* patch3(concert.getPatch(concert.addPatch()));
 
     // Red background, white notes, mimic piano
-    auto src4(new EqualRangeRgbSource);
+    auto src4(new SingleColorFill);
     src4->setColor({32, 0, 0});
     patch3->getProcessingChain().insertBlock(src4);
 

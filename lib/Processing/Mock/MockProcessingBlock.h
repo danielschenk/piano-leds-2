@@ -3,10 +3,10 @@
 
 #include <gmock/gmock.h>
 
-#include "../Interfaces/IProcessingBlock.h"
+#include "../ProcessingBlock.h"
 
 class MockProcessingBlock
-    : public IProcessingBlock
+    : public ProcessingBlock
 {
 public:
     MockProcessingBlock()
@@ -14,7 +14,7 @@ public:
         ON_CALL(*this, mode()).WillByDefault(::testing::Return(Mode::additive));
     }
 
-    // IProcessingBlock implementation
+    // ProcessingBlock implementation
     MOCK_METHOD0(activate, void());
     MOCK_METHOD0(deactivate, void());
     MOCK_METHOD2(execute, void(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap));

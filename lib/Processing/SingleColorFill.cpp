@@ -1,15 +1,15 @@
-#include "EqualRangeRgbSource.h"
+#include "SingleColorFill.h"
 #include "Json11Helper.h"
 
-void EqualRangeRgbSource::activate()
+void SingleColorFill::activate()
 {
 }
 
-void EqualRangeRgbSource::deactivate()
+void SingleColorFill::deactivate()
 {
 }
 
-void EqualRangeRgbSource::execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap)
+void SingleColorFill::execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -21,21 +21,21 @@ void EqualRangeRgbSource::execute(Processing::TRgbStrip& strip, const Processing
     }
 }
 
-Processing::TRgb EqualRangeRgbSource::getColor() const
+Processing::TRgb SingleColorFill::getColor() const
 {
     std::lock_guard<std::mutex> lock(mutex);
 
     return color;
 }
 
-void EqualRangeRgbSource::setColor(Processing::TRgb color)
+void SingleColorFill::setColor(Processing::TRgb color)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
     this->color = color;
 }
 
-Json EqualRangeRgbSource::convertToJson() const
+Json SingleColorFill::convertToJson() const
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -48,7 +48,7 @@ Json EqualRangeRgbSource::convertToJson() const
     return Json(json);
 }
 
-void EqualRangeRgbSource::convertFromJson(const Json& converted)
+void SingleColorFill::convertFromJson(const Json& converted)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -58,7 +58,7 @@ void EqualRangeRgbSource::convertFromJson(const Json& converted)
     helper.getItemIfPresent(bJsonKey, color.b);
 }
 
-std::string EqualRangeRgbSource::getObjectType() const
+std::string SingleColorFill::getObjectType() const
 {
-     return IProcessingBlock::typeNameEqualRangeRgbSource;
+     return ProcessingBlock::typeNameSingleColorFill;
 }

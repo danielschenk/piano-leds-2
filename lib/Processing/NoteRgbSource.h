@@ -3,7 +3,7 @@
 
 #include "IMidiInput.h"
 #include "Scheduler.h"
-#include "IProcessingBlock.h"
+#include "ProcessingBlock.h"
 
 #include <mutex>
 #include <array>
@@ -17,7 +17,7 @@ class ITime;
  * RGB source which generates RGB data based on note on/off events.
  */
 class NoteRgbSource
-    : public IProcessingBlock
+    : public ProcessingBlock
     , public IMidiInput::IObserver
 {
 public:

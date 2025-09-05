@@ -3,7 +3,7 @@
 
 #include "ProcessingChain.h"
 
-#include "IProcessingBlock.h"
+#include "ProcessingBlock.h"
 #include "IProcessingBlockFactory.h"
 
 #include <algorithm>
@@ -20,7 +20,7 @@ ProcessingChain::~ProcessingChain()
     deleteProcessingBlocks();
 }
 
-void ProcessingChain::insertBlock(IProcessingBlock* block, unsigned int index)
+void ProcessingChain::insertBlock(ProcessingBlock* block, unsigned int index)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -33,7 +33,7 @@ void ProcessingChain::insertBlock(IProcessingBlock* block, unsigned int index)
     active ? block->activate() : block->deactivate();
 }
 
-void ProcessingChain::insertBlock(IProcessingBlock* block)
+void ProcessingChain::insertBlock(ProcessingBlock* block)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -46,7 +46,7 @@ Json ProcessingChain::convertToJson() const
     std::lock_guard<std::mutex> lock(mutex);
 
     Json::object converted;
-    converted[IProcessingBlock::objectTypeKey] = getObjectType();
+    converted[ProcessingBlock::objectTypeKey] = getObjectType();
 
     Json::array convertedChain;
     for(auto processingBlock : processingChain)
@@ -83,7 +83,7 @@ void ProcessingChain::convertFromJson(const Json& converted)
 
 std::string ProcessingChain::getObjectType() const
 {
-    return IProcessingBlock::typeNameProcessingChain;
+    return ProcessingBlock::typeNameProcessingChain;
 }
 
 void ProcessingChain::activate()
@@ -119,7 +119,7 @@ void ProcessingChain::execute(Processing::TRgbStrip& strip, const Processing::TN
     for(auto processingBlock : processingChain)
     {
         auto mode = processingBlock->mode();
-        if (mode == IProcessingBlock::Mode::additive)
+        if (mode == ProcessingBlock::Mode::additive)
         {
             intermediateStrip.resize(strip.size());
             std::fill(intermediateStrip.begin(), intermediateStrip.end(), Processing::ColorValue::off);
@@ -129,7 +129,7 @@ void ProcessingChain::execute(Processing::TRgbStrip& strip, const Processing::TN
             std::transform(strip.begin(), strip.end(),
                 intermediateStrip.begin(), strip.begin(), std::plus<Processing::TRgb>());
         }
-        else if (mode == IProcessingBlock::Mode::overwriting)
+        else if (mode == ProcessingBlock::Mode::overwriting)
         {
             processingBlock->execute(strip, noteToLightMap);
         }

@@ -1,40 +1,30 @@
-#ifndef PROCESSING_EQUALRANGERGBSOURCE_H_
-#define PROCESSING_EQUALRANGERGBSOURCE_H_
+#ifndef PROCESSING_SINGLECOLORFILL_H_
+#define PROCESSING_SINGLECOLORFILL_H_
 
-#include "IProcessingBlock.h"
+#include "ProcessingBlock.h"
 #include <mutex>
 
-/**
- * RGB source which generates an equal range of colors.
- */
-class EqualRangeRgbSource
-    : public IProcessingBlock
+class SingleColorFill
+    : public ProcessingBlock
 {
 public:
-    EqualRangeRgbSource() = default;
+    SingleColorFill() = default;
 
-    EqualRangeRgbSource(EqualRangeRgbSource&) = delete;
-    EqualRangeRgbSource& operator=(EqualRangeRgbSource&) = delete;
+    SingleColorFill(SingleColorFill&) = delete;
+    SingleColorFill& operator=(SingleColorFill&) = delete;
 
-    // IProcessingBlock implementation.
+    // ProcessingBlock implementation.
     virtual void activate();
     virtual void deactivate();
     virtual void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap);
     virtual Json convertToJson() const;
     virtual void convertFromJson(const Json& converted);
 
-    /**
-     * Get color.
-     */
     Processing::TRgb getColor() const;
-
-    /**
-     * Set color.
-     */
     void setColor(Processing::TRgb color);
 
 protected:
-    // IProcessingBlock implementation
+    // ProcessingBlock implementation
     virtual std::string getObjectType() const;
 
 private:
@@ -48,4 +38,4 @@ private:
     Processing::TRgb color;
 };
 
-#endif /* PROCESSING_EQUALRANGERGBSOURCE_H_ */
+#endif /* PROCESSING_SINGLECOLORFILL_H_ */

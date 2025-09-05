@@ -205,5 +205,5 @@ void NoteRgbSource::convertFromJson(const Json& converted)
 
 std::string NoteRgbSource::getObjectType() const
 {
-    return IProcessingBlock::typeNameNoteRgbSource;
+    return ProcessingBlock::typeNameNoteRgbSource;
 }

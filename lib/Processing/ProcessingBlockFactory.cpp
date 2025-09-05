@@ -2,7 +2,7 @@
 
 #include "ProcessingBlockFactory.h"
 #include "NoteRgbSource.h"
-#include "EqualRangeRgbSource.h"
+#include "SingleColorFill.h"
 #include "ProcessingChain.h"
 #include "Patch.h"
 
@@ -19,24 +19,24 @@ ProcessingBlockFactory::~ProcessingBlockFactory()
 {
 }
 
-IProcessingBlock* ProcessingBlockFactory::createProcessingBlock(const Json& converted) const
+ProcessingBlock* ProcessingBlockFactory::createProcessingBlock(const Json& converted) const
 {
-    IProcessingBlock* processingBlock = nullptr;
+    ProcessingBlock* processingBlock = nullptr;
 
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
 
     std::string objectType;
     if(helper.getItemIfPresent(JsonConvertible::objectTypeKey, objectType))
     {
-        if(objectType == IProcessingBlock::typeNameEqualRangeRgbSource)
+        if(objectType == ProcessingBlock::typeNameSingleColorFill)
         {
-            processingBlock = new EqualRangeRgbSource();
+            processingBlock = new SingleColorFill();
         }
-        else if(objectType == IProcessingBlock::typeNameNoteRgbSource)
+        else if(objectType == ProcessingBlock::typeNameNoteRgbSource)
         {
             processingBlock = new NoteRgbSource(midiInput, rgbFunctionFactory, time);
         }
-        else if(objectType == IProcessingBlock::typeNameProcessingChain)
+        else if(objectType == ProcessingBlock::typeNameProcessingChain)
         {
             // A processing chain needs the factory to construct its children
             processingBlock = new ProcessingChain(*this);
