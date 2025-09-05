@@ -33,7 +33,7 @@ public:
     virtual ~ProcessingBlockFactory();
 
     // IProcessingBlockFactory implementation
-    virtual IProcessingBlock* createProcessingBlock(const Json& converted) const;
+    virtual ProcessingBlock* createProcessingBlock(const Json& converted) const;
     virtual IPatch* createPatch() const;
     virtual IPatch* createPatch(const Json& converted) const;
     virtual IProcessingChain* createProcessingChain() const;

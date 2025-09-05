@@ -7,7 +7,7 @@
 #include "ProcessingBlockContainerTest.h"
 #include "ProcessingChain.h"
 #include "ProcessingTypes.h"
-#include "../Interfaces/IProcessingBlock.h"
+#include "../ProcessingBlock.h"
 
 #define LOGGING_COMPONENT "ProcessingChain"
 
@@ -98,7 +98,7 @@ TEST_F(ProcessingChainTest, convertToJson)
 
 TEST_F(ProcessingChainTest, convertFromJson)
 {
-    std::vector<IProcessingBlock*> mockBlocks({greenSource, valueDoubler});
+    std::vector<ProcessingBlock*> mockBlocks({greenSource, valueDoubler});
 
     // Processing chain takes over ownership of the mock block when our mock factory returns it.
     // Prevent that the fixture teardown deletes already deleted object
@@ -177,7 +177,7 @@ TEST_F(ProcessingChainTest, deactivateOnInsert)
 }
 
 class FakeAdditiveBlock
-    : public IProcessingBlock
+    : public ProcessingBlock
 {
 public:
     FakeAdditiveBlock(const Processing::TRgb& color) : color(color) {}

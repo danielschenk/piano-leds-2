@@ -25,13 +25,13 @@ public:
     void activate() override;
     void deactivate() override;
     void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap) override;
-    void insertBlock(IProcessingBlock* block, unsigned int index) override;
-    void insertBlock(IProcessingBlock* block) override;
+    void insertBlock(ProcessingBlock* block, unsigned int index) override;
+    void insertBlock(ProcessingBlock* block) override;
     Json convertToJson() const override;
     void convertFromJson(const Json& converted) override;
 
 protected:
-    // IProcessingBlock implementation
+    // ProcessingBlock implementation
     std::string getObjectType() const override;
 
 private:
@@ -41,7 +41,7 @@ private:
 
     const IProcessingBlockFactory& processingBlockFactory;
     bool active{false};
-    std::vector<IProcessingBlock*> processingChain;
+    std::vector<ProcessingBlock*> processingChain;
     Processing::TRgbStrip intermediateStrip;
 
     void deleteProcessingBlocks();

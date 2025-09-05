@@ -1,9 +1,9 @@
-#ifndef PROCESSING_NOTERGBSOURCE_H_
-#define PROCESSING_NOTERGBSOURCE_H_
+#ifndef PROCESSING_NOTEVISUALIZER_H_
+#define PROCESSING_NOTEVISUALIZER_H_
 
 #include "IMidiInput.h"
 #include "Scheduler.h"
-#include "IProcessingBlock.h"
+#include "ProcessingBlock.h"
 
 #include <mutex>
 #include <array>
@@ -13,32 +13,21 @@ class IRgbFunction;
 class IRgbFunctionFactory;
 class ITime;
 
-/**
- * RGB source which generates RGB data based on note on/off events.
- */
-class NoteRgbSource
-    : public IProcessingBlock
+class NoteVisualizer
+    : public ProcessingBlock
     , public IMidiInput::IObserver
 {
 public:
-    /**
-     * Constructor.
-     *
-     * @param midiInput             MIDI input to subscribe to incoming notes.
-     * @param rgbFunctionFactory    The factory needed to construct the RGB function from JSON.
-     * @param time                  The time provider to get the execution time and pass it to the RGB function.
-     *
-     */
-    NoteRgbSource(IMidiInput& midiDriver,
+    NoteVisualizer(IMidiInput& midiDriver,
                   const IRgbFunctionFactory& rgbFunctionFactory,
                   const ITime& time);
 
-    ~NoteRgbSource() override;
+    ~NoteVisualizer() override;
 
-    NoteRgbSource(NoteRgbSource&) = delete;
-    NoteRgbSource& operator=(NoteRgbSource&) = delete;
+    NoteVisualizer(NoteVisualizer&) = delete;
+    NoteVisualizer& operator=(NoteVisualizer&) = delete;
 
-    // IProcessingBlock implementation.
+    // ProcessingBlock implementation
     void activate() override;
     void deactivate() override;
     void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap) override;
@@ -61,7 +50,7 @@ public:
 
 
 protected:
-    // IProcessingBlock implementation
+    // ProcessingBlock implementation
     std::string getObjectType() const override;
 
 private:
@@ -82,4 +71,4 @@ private:
     const ITime& time;
 };
 
-#endif /* PROCESSING_NOTERGBSOURCE_H_ */
+#endif /* PROCESSING_NOTEVISUALIZER_H_ */

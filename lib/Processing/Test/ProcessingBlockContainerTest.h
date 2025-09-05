@@ -67,7 +67,7 @@ public:
         ON_CALL(*valueDoubler, execute(_, _))
             .WillByDefault(Invoke(doubleValue));
         ON_CALL(*valueDoubler, mode())
-            .WillByDefault(Return(IProcessingBlock::Mode::overwriting));
+            .WillByDefault(Return(ProcessingBlock::Mode::overwriting));
     }
 
     virtual ~ProcessingBlockContainerTest()

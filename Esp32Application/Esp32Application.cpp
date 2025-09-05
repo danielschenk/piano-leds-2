@@ -7,8 +7,8 @@
 
 #include "ConcertInfrastructure.h"
 #include "IPatch.h"
-#include "EqualRangeRgbSource.h"
-#include "NoteRgbSource.h"
+#include "SingleColorFill.h"
+#include "NoteVisualizer.h"
 #include "LinearRgbFunction.h"
 #include "PianoDecayRgbFunction.h"
 #include "ProcessingTask.h"
@@ -91,12 +91,12 @@ void setup()
     patch->setProgram(19);
 
     // Add constant blue background
-    auto src1(new EqualRangeRgbSource);
+    auto src1(new SingleColorFill);
     src1->setColor(Processing::TRgb({0, 0, 32}));
     patch->getProcessingChain().insertBlock(src1);
 
     // Full white for any sounding key
-    auto src2(new NoteRgbSource(midiInput,
+    auto src2(new NoteVisualizer(midiInput,
                                 concertInfrastructure.rgbFunctionFactory,
                                 freeRtosTime));
     auto rgbFunction(std::make_shared<LinearRgbFunction>());
@@ -111,7 +111,7 @@ void setup()
 
     // Add another patch
     IPatch* patch2(concert.getPatch(concert.addPatch()));
-    auto src3(new NoteRgbSource(midiInput,
+    auto src3(new NoteVisualizer(midiInput,
                                 concertInfrastructure.rgbFunctionFactory,
                                 freeRtosTime));
 
@@ -131,11 +131,11 @@ void setup()
     IPatch* patch3(concert.getPatch(concert.addPatch()));
 
     // Red background, white notes, mimic piano
-    auto src4(new EqualRangeRgbSource);
+    auto src4(new SingleColorFill);
     src4->setColor({32, 0, 0});
     patch3->getProcessingChain().insertBlock(src4);
 
-    auto src5(new NoteRgbSource(midiInput,
+    auto src5(new NoteVisualizer(midiInput,
                                 concertInfrastructure.rgbFunctionFactory,
                                 freeRtosTime));
 

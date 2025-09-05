@@ -3,17 +3,17 @@
 #include <gtest/gtest.h>
 
 #include "Json11Helper.h"
-#include "../EqualRangeRgbSource.h"
+#include "../SingleColorFill.h"
 #include "Mock/MockTime.h"
 #include "LoggingEntryPoint.h"
 
 using ::testing::NiceMock;
 
-class EqualRangeRgbSourceTest
+class SingleColorFillTest
     : public ::testing::Test
 {
 public:
-    EqualRangeRgbSourceTest()
+    SingleColorFillTest()
         : time()
         , source()
     {
@@ -21,10 +21,10 @@ public:
     }
 
     NiceMock<MockTime> time;
-    EqualRangeRgbSource source;
+    SingleColorFill source;
 };
 
-TEST_F(EqualRangeRgbSourceTest, executeDifferentColors)
+TEST_F(SingleColorFillTest, executeDifferentColors)
 {
     Processing::TRgbStrip strip(20);
     std::vector<Processing::TRgb> colors({{0, 0, 0}, {255, 255, 255}, {1, 2, 3}});
@@ -40,12 +40,12 @@ TEST_F(EqualRangeRgbSourceTest, executeDifferentColors)
     }
 
 }
-TEST_F(EqualRangeRgbSourceTest, convertFromJson)
+TEST_F(SingleColorFillTest, convertFromJson)
 {
     std::string err;
     Json j = Json::parse(R"(
         {
-            "objectType": "EqualRangeRgbSource",
+            "objectType": "SingleColorFill",
             "r": 10,
             "g": 20,
             "b": 30
@@ -58,7 +58,7 @@ TEST_F(EqualRangeRgbSourceTest, convertFromJson)
     EXPECT_EQ(source.getColor(), Processing::TRgb({10, 20, 30}));
 }
 
-TEST_F(EqualRangeRgbSourceTest, convertFromJsonWithWrongType)
+TEST_F(SingleColorFillTest, convertFromJsonWithWrongType)
 {
     std::string err;
     Json j = Json::parse(R"(
@@ -76,12 +76,12 @@ TEST_F(EqualRangeRgbSourceTest, convertFromJsonWithWrongType)
     EXPECT_EQ(source.getColor(), Processing::TRgb({10, 20, 30}));
 }
 
-TEST_F(EqualRangeRgbSourceTest, convertFromJsonWithMissingColor)
+TEST_F(SingleColorFillTest, convertFromJsonWithMissingColor)
 {
     std::string err;
     Json j = Json::parse(R"(
         {
-            "objectType": "EqualRangeRgbSource",
+            "objectType": "SingleColorFill",
             "r": 10,
             "b": 30
         }
@@ -93,13 +93,13 @@ TEST_F(EqualRangeRgbSourceTest, convertFromJsonWithMissingColor)
     EXPECT_EQ(source.getColor(), Processing::TRgb({10, 0, 30}));
 }
 
-TEST_F(EqualRangeRgbSourceTest, convertToJson)
+TEST_F(SingleColorFillTest, convertToJson)
 {
     source.setColor(Processing::TRgb({40, 50, 60}));
 
     Json::object j = source.convertToJson().object_items();
     EXPECT_EQ(4, j.size());
-    EXPECT_EQ("EqualRangeRgbSource", j.at("objectType").string_value());
+    EXPECT_EQ("SingleColorFill", j.at("objectType").string_value());
     EXPECT_EQ(40, j.at("r").number_value());
     EXPECT_EQ(50, j.at("g").number_value());
     EXPECT_EQ(60, j.at("b").number_value());
