@@ -36,7 +36,7 @@ public:
     Patch(const Patch&) = delete;
     Patch& operator=(const Patch&) = delete;
 
-    // IJsonConvertible implementation
+    // JsonConvertible implementation
     virtual Json convertToJson() const;
     virtual void convertFromJson(const Json& converted);
 
@@ -55,7 +55,7 @@ public:
     virtual void setName(const std::string name);
 
 protected:
-    // IJsonConvertible implementation
+    // JsonConvertible implementation
     std::string getObjectType() const;
 
 private:

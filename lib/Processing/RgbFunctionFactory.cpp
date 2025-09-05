@@ -1,7 +1,7 @@
 #include "RgbFunctionFactory.h"
 #include "PianoDecayRgbFunction.h"
 #include "LinearRgbFunction.h"
-#include "IJsonConvertible.h"
+#include "JsonConvertible.h"
 #include "IRgbFunction.h"
 
 #include "Json11Helper.h"
@@ -13,7 +13,7 @@ std::shared_ptr<IRgbFunction> RgbFunctionFactory::createRgbFunction(const Json& 
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
 
     std::string objectType;
-    if(helper.getItemIfPresent(IJsonConvertible::objectTypeKey, objectType))
+    if(helper.getItemIfPresent(JsonConvertible::objectTypeKey, objectType))
     {
         if(objectType == IRgbFunction::jsonTypeNameLinearRgbFunction)
         {

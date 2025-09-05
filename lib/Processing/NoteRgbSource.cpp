@@ -179,7 +179,7 @@ Json NoteRgbSource::convertToJson() const
     std::lock_guard<std::mutex> lock(mutex);
 
     Json::object json;
-    json[IJsonConvertible::objectTypeKey] = getObjectType();
+    json[JsonConvertible::objectTypeKey] = getObjectType();
     json[usingPedalJsonKey] = usingPedal;
     json[channelJsonKey] = channel;
     if(rgbFunction != nullptr)

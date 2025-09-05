@@ -94,7 +94,7 @@ Json Concert::convertToJson() const
     std::lock_guard<std::mutex> lock(mutex);
 
     Json::object converted;
-    converted[IJsonConvertible::objectTypeKey] = getObjectType();
+    converted[JsonConvertible::objectTypeKey] = getObjectType();
     converted[isListeningToProgramChangeJsonKey] = listeningToProgramChange;
     converted[programChangeChannelJsonKey] = programChangeChannel;
     converted[currentBankJsonKey] = currentBank;

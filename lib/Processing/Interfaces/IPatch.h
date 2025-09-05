@@ -1,4 +1,4 @@
-#include "IJsonConvertible.h"
+#include "JsonConvertible.h"
 #include "ProcessingTypes.h"
 
 // Technically this is not needed. But it's nice if you want to do:
@@ -6,7 +6,7 @@
 #include "IProcessingChain.h"
 
 class IPatch
-    : public IJsonConvertible
+    : public JsonConvertible
 {
 public:
     virtual ~IPatch() = default;
@@ -41,7 +41,7 @@ public:
 
     /**
      * Check if the patch has a valid bank and program number.
-     * 
+     *
      * @return  True if the patch has a valid bank and program number.
      */
     virtual bool hasBankAndProgram() const = 0;
@@ -63,7 +63,7 @@ public:
 
     /**
      * Set the program number.
-     * 
+     *
      * @post Will mark the bank and program number valid.
      */
     virtual void setProgram(uint8_t program) = 0;
@@ -72,7 +72,7 @@ public:
      * Clear the bank and program number.
      */
     virtual void clearBankAndProgram() = 0;
-    
+
     /**
      * Get the name.
      */

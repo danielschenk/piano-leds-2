@@ -5,7 +5,7 @@
 #include <list>
 #include <cstdint>
 
-#include "IJsonConvertible.h"
+#include "JsonConvertible.h"
 #include "ProcessingTypes.h"
 #include "Scheduler.h"
 #include "IMidiInterface.h"
@@ -22,7 +22,7 @@ class IPatch;
  * throughout a gig, like MIDI channels to listen to and the note-to-light mapping.
  */
 class Concert
-    : public IJsonConvertible
+    : public JsonConvertible
     , public IMidiInput::IObserver
 {
 public:
@@ -44,7 +44,7 @@ public:
     Concert(const Concert&) = delete;
     Concert& operator =(const Concert&) = delete;
 
-    // IJsonConvertible implementation
+    // JsonConvertible implementation
     virtual Json convertToJson() const;
     virtual void convertFromJson(const Json& converted);
 
@@ -146,7 +146,7 @@ public:
     virtual void onPitchBendChange(uint8_t channel, uint16_t value);
 
 protected:
-    // IJsonConvertible implementation
+    // JsonConvertible implementation
     std::string getObjectType() const;
 
 private:

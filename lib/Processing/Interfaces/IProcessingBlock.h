@@ -4,10 +4,10 @@
 #include <vector>
 
 #include "ProcessingTypes.h"
-#include "IJsonConvertible.h"
+#include "JsonConvertible.h"
 
 class IProcessingBlock
-    : public IJsonConvertible
+    : public JsonConvertible
 {
 public:
     static constexpr const char* typeNameEqualRangeRgbSource  = "EqualRangeRgbSource";
