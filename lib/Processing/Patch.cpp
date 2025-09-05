@@ -24,7 +24,7 @@ Json Patch::convertToJson() const
     std::lock_guard<std::mutex> lock(mutex);
 
     Json::object converted;
-    converted[IJsonConvertible::objectTypeKey] = getObjectType();
+    converted[JsonConvertible::objectTypeKey] = getObjectType();
 
     // Add items specific for Patch
     converted[hasBankAndProgramJsonKey] = bankAndProgramSet;

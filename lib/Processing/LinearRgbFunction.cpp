@@ -57,7 +57,7 @@ Processing::TLinearConstants LinearRgbFunction::getBlueConstants() const
 Json LinearRgbFunction::convertToJson() const
 {
     Json::object json;
-    json[IJsonConvertible::objectTypeKey] = getObjectType();
+    json[JsonConvertible::objectTypeKey] = getObjectType();
     json[rFactorJsonKey] = redConstants.factor;
     json[gFactorJsonKey] = greenConstants.factor;
     json[bFactorJsonKey] = blueConstants.factor;

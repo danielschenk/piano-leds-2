@@ -26,7 +26,7 @@ IProcessingBlock* ProcessingBlockFactory::createProcessingBlock(const Json& conv
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
 
     std::string objectType;
-    if(helper.getItemIfPresent(IJsonConvertible::objectTypeKey, objectType))
+    if(helper.getItemIfPresent(JsonConvertible::objectTypeKey, objectType))
     {
         if(objectType == IProcessingBlock::typeNameEqualRangeRgbSource)
         {

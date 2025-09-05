@@ -40,7 +40,7 @@ Json EqualRangeRgbSource::convertToJson() const
     std::lock_guard<std::mutex> lock(mutex);
 
     Json::object json;
-    json[IJsonConvertible::objectTypeKey] = getObjectType();
+    json[JsonConvertible::objectTypeKey] = getObjectType();
     json[rJsonKey] = color.r;
     json[gJsonKey] = color.g;
     json[bJsonKey] = color.b;
