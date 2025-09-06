@@ -7,12 +7,8 @@
 class SystemSettingsModel : public Model
 {
 public:
-    /**
-     * Constructor
-     */
     SystemSettingsModel() = default;
 
-    // Prevent implicit copy constructor & assignment operator
     SystemSettingsModel(const SystemSettingsModel &) = delete;
     SystemSettingsModel &operator=(const SystemSettingsModel &) = delete;
 
@@ -22,14 +18,7 @@ public:
     void setWifiAPPassword(std::string wifiStationPassword);
 
 private:
-    /**
-     * Name of the WiFi network when in AP mode
-     */
     std::string wifiAPSsid = "PianoLeds";
-
-    /**
-     * Password of the WiFi network when in AP mode
-     */
     std::string wifiAPPassword = "LedsFlashSomeNotes";
 };
 
