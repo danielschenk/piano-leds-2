@@ -70,6 +70,16 @@ TEST(TRgbTest, multiplication)
     EXPECT_EQ(45, result.b);
 }
 
+TEST(TRgbTest, multiplicationWithOther)
+{
+    TRgb color(10, 20, 40);
+    TRgb result(color * TRgb(128, 64, 32));
+
+    EXPECT_EQ(5, result.r);
+    EXPECT_EQ(5, result.g);
+    EXPECT_EQ(5, result.b);
+}
+
 TEST(TRgbTest, multiplicationWithClipping)
 {
     TRgb color(10, 20, 30);

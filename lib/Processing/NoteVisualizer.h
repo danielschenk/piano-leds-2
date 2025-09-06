@@ -12,6 +12,10 @@
 class IRgbFunction;
 class IRgbFunctionFactory;
 class ITime;
+namespace Processing
+{
+class ColorPicker;
+}
 
 class NoteVisualizer
     : public ProcessingBlock
@@ -40,6 +44,7 @@ public:
     void setUsingPedal(bool usingPedal);
 
     void setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction);
+    void setPressDownColorPicker(std::shared_ptr<Processing::ColorPicker> colorPicker);
 
     // IMidiInput::IObserver implementation
     void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) override;
@@ -68,6 +73,7 @@ private:
     std::array<Processing::TNoteState, IMidiInterface::numNotes> noteStates;
     bool pedalPressed{false};
     std::shared_ptr<IRgbFunction> rgbFunction;
+    std::shared_ptr<Processing::ColorPicker> pressDownColorPicker;
     const ITime& time;
 };
 

@@ -36,6 +36,12 @@ struct TRgb
     TRgb operator*(float factor) const;
 
     /**
+     * Multiply every color using other color as factor (meaning 255=100%).
+     */
+    TRgb operator*(const TRgb& other) const;
+    TRgb& operator *=(const TRgb& other);
+
+    /**
      * Add colors together.
      */
     TRgb operator+(const TRgb& other) const;
@@ -129,6 +135,9 @@ struct TNoteState
     uint8_t pressDownVelocity{0};
     /** The time stamp of the note on event. */
     TTime noteOnTimeStamp{0};
+
+    // TODO temp hack - this ideally shouldn't be tracked here
+    TRgb pressDownColor;
 };
 
 } /* namespace Processing */

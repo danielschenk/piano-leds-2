@@ -19,6 +19,9 @@ Processing::TRgb LinearRgbFunction::calculate(const Processing::TNoteState& note
             greenConstants.factor * noteState.pressDownVelocity + greenConstants.offset,
             blueConstants.factor * noteState.pressDownVelocity + blueConstants.offset
         );
+
+        if (noteState.pressDownColor != Processing::ColorValue::off)
+            output *= noteState.pressDownColor;
     }
 
     return output;

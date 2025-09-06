@@ -5,6 +5,7 @@
 #include "ITime.h"
 #include "Json11Helper.h"
 #include "Logging.h"
+#include "ColorPicker.hpp"
 
 #include <functional>
 
@@ -81,6 +82,8 @@ void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t veloc
                 noteStates[number].noteOnTimeStamp = time.getMilliseconds();
                 noteStates[number].pressed = true;
                 noteStates[number].sounding = true;
+                if (pressDownColorPicker)
+                    noteStates[number].pressDownColor = pressDownColorPicker->pick();
             }
             else
             {
@@ -172,6 +175,12 @@ void NoteVisualizer::setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction)
 {
     std::lock_guard<std::mutex> lock(mutex);
     this->rgbFunction = rgbFunction;
+}
+
+void NoteVisualizer::setPressDownColorPicker(std::shared_ptr<Processing::ColorPicker> colorPicker)
+{
+    std::lock_guard<std::mutex> lock(mutex);
+    pressDownColorPicker = colorPicker;
 }
 
 Json NoteVisualizer::convertToJson() const

@@ -26,6 +26,17 @@ TRgb TRgb::operator*(float factor) const
     return factor * (*this);
 }
 
+TRgb TRgb::operator*(const TRgb& other) const
+{
+    return rgbFromFloat(other.r / 255.0f * r, other.g / 255.0f * g, other.b / 255.0f * b);
+}
+
+TRgb& TRgb::operator*=(const TRgb& other)
+{
+    *this = *this * other;
+    return *this;
+}
+
 TRgb operator*(float factor, const TRgb& color)
 {
     float newR(factor * (float)color.r),
