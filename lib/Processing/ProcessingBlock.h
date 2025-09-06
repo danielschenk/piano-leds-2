@@ -16,8 +16,8 @@ public:
 
     virtual ~ProcessingBlock() = default;
 
-    virtual void activate() = 0;
-    virtual void deactivate() = 0;
+    virtual void activate();
+    virtual void deactivate();
     virtual void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap) = 0;
 
     enum class Mode

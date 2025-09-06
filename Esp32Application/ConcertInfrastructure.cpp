@@ -2,6 +2,7 @@
 #include "Patch.h"
 #include "NoteVisualizer.h"
 #include "SingleColorFill.h"
+#include "HorizontalStretcher.hpp"
 #include "LinearRgbFunction.h"
 #include "PianoDecayRgbFunction.h"
 #include "SequentialColorPicker.hpp"
@@ -72,6 +73,10 @@ Patch* ConcertInfrastructure::addBasicPatch(const Processing::TRgb& color, bool 
     block->setRgbFunction(rgbFunction);
     block->setPressDownColorPicker(pressDownColorPicker);
     patch->getProcessingChain().insertBlock(block);
+
+    // use those skipped leds for double brightness per note
+    auto stretcher = new Processing::HorizontalStretcher;
+    patch->getProcessingChain().insertBlock(stretcher);
 
     concert.addPatch(patch);
 

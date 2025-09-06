@@ -14,7 +14,7 @@ public:
     virtual ~JsonConvertible() = default;
 
     virtual Json convertToJson() const;
-    virtual void convertFromJson(const Json& json) = 0;
+    virtual void convertFromJson(const Json& json);
 
 protected:
     virtual std::string getObjectType() const;
