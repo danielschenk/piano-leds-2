@@ -1,6 +1,7 @@
 #include "ConcertInfrastructure.h"
 #include "Patch.h"
 #include "NoteVisualizer.h"
+#include "SingleColorFill.h"
 #include "LinearRgbFunction.h"
 #include "PianoDecayRgbFunction.h"
 #include "SequentialColorPicker.hpp"
@@ -41,7 +42,14 @@ void ConcertInfrastructure::createLegacyPatches()
         patch->setProgram(program++);
     }
 
-    auto patch = addBasicPatch(white, true, std::make_shared<Processing::SequentialColorPicker>());
+    auto patch = addBasicPatch(white, false);
+    patch->setProgram(52);
+    patch->setName("Peter Gunn Intro");
+    auto fill = new SingleColorFill;
+    fill->setColor(blue * 0.1f);
+    patch->getProcessingChain().insertBlock(fill, 0);
+
+    patch = addBasicPatch(white, true, std::make_shared<Processing::SequentialColorPicker>());
     patch->setProgram(53);
     patch->setName("Multicolor");
 }
