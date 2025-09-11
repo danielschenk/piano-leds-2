@@ -31,7 +31,7 @@ test_results = []
 for node in env['PIOBUILDFILES']:
     test_name = os.path.basename(str(node[0])).rsplit('.')[0]
     test_path = os.path.join(env['BUILD_DIR'], test_name)
-    test_program = env.Program(os.path.join(env['BUILD_DIR'], test_name), node)
+    test_program = env.Program(test_path, node)
 
     test_result = env.Command(test_path + 'Result.xml', test_program, f"{prefix}{os.path.join('.', '$SOURCE')} --gtest_output=xml:$TARGET{suffix}")
     env.AlwaysBuild(test_result)
