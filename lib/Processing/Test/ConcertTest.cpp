@@ -15,7 +15,7 @@ using testing::Expectation;
 using testing::NiceMock;
 using testing::SetArgReferee;
 
-class MockObserver
+class MockConcertObserver
     : public Concert::IObserver
 {
 public:
@@ -104,7 +104,7 @@ TEST_F(ConcertTest, execute)
     MockPatch* mockPatch(new NiceMock<MockPatch>);
     concert->addPatch(mockPatch);
 
-    MockObserver observer;
+    MockConcertObserver observer;
     concert->subscribe(observer);
 
     Processing::TRgbStrip newStripValues({{42, 43, 44}});

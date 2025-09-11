@@ -11,17 +11,11 @@ NetworkTask::NetworkTask(const SystemSettingsModel &systemSettingsModel,
     : BaseTask()
     , systemSettingsModel(systemSettingsModel)
 {
-    systemSettingsModelSubscription = systemSettingsModel.subscribe(
-            [this](){
-                xTaskNotifyGive(getTaskHandle());
-    });
-
     start("network", stackSize, priority);
 }
 
 NetworkTask::~NetworkTask()
 {
-    systemSettingsModel.unsubscribe(systemSettingsModelSubscription);
 }
 
 void NetworkTask::run()

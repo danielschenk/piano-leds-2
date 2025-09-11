@@ -15,7 +15,6 @@ cmake-build-*/
 .pio/
 .pioenvs/
 .piolibdeps/
-build/
 
 # Doxygen output
 Documentation/
