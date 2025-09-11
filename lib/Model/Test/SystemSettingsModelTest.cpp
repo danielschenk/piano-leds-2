@@ -6,8 +6,6 @@ class SystemSettingsModelTest : public testing::Test
 {
 public:
     SystemSettingsModelTest() = default;
-
-    /** The unit under test */
     SystemSettingsModel model;
 };
 
