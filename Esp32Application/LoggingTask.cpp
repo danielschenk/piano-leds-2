@@ -20,7 +20,7 @@ LoggingTask::~LoggingTask()
     vQueueDelete(queue);
 }
 
-void LoggingTask::logMessage(uint64_t time, Logging::TLogLevel level, std::string component,
+void LoggingTask::logMessage(uint64_t time, logging::Level level, std::string component,
                              std::string message)
 {
     QueueEntry entry;
@@ -45,19 +45,19 @@ void LoggingTask::run()
         const char* levelString;
         switch (entry.level)
         {
-            case Logging::LogLevel_Debug:
+            case logging::Level::debug:
                 levelString = "Debug";
                 break;
 
-            case Logging::LogLevel_Info:
+            case logging::Level::info:
                 levelString = "Info";
                 break;
 
-            case Logging::LogLevel_Warning:
+            case logging::Level::warning:
                 levelString = "Warning";
                 break;
 
-            case Logging::LogLevel_Error:
+            case logging::Level::error:
             default:
                 levelString = "Error";
                 break;

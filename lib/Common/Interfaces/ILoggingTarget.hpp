@@ -20,7 +20,7 @@ class ILoggingTarget
      * @param[in]   component   Originating component.
      * @param[in]   message     The log message.
      */
-    virtual void logMessage(uint64_t time, Logging::TLogLevel level, std::string component,
+    virtual void logMessage(uint64_t time, logging::Level level, std::string component,
                             std::string message) = 0;
 
   protected:

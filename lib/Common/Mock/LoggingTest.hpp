@@ -15,9 +15,8 @@ class LoggingTest
   public:
     LoggingTest() : mockLoggingTarget()
     {
-        // Info and debug logs are OK
         EXPECT_CALL(mockLoggingTarget,
-                    logMessage(_, AnyOf(Logging::LogLevel_Info, Logging::LogLevel_Debug), _, _))
+                    logMessage(_, AnyOf(logging::Level::info, logging::Level::debug), _, _))
             .Times(AnyNumber());
 
         LoggingEntryPoint::subscribe(mockLoggingTarget);

@@ -41,7 +41,7 @@ void LoggingEntryPoint::unsubscribe(ILoggingTarget& subscriber)
                         s_subscribers.end());
 }
 
-void LoggingEntryPoint::logMessage(Logging::TLogLevel level, const char* component, const char* fmt,
+void LoggingEntryPoint::logMessage(logging::Level level, const char* component, const char* fmt,
                                    ...)
 {
     assert(s_time != nullptr);

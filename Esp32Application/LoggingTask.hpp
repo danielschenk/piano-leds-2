@@ -35,14 +35,14 @@ class LoggingTask : public ILoggingTarget, public BaseTask
     LoggingTask& operator=(const LoggingTask&) = delete;
 
     // ILoggingTarget implementation
-    void logMessage(uint64_t time, Logging::TLogLevel level, std::string component,
+    void logMessage(uint64_t time, logging::Level level, std::string component,
                     std::string message) override;
 
   private:
     struct QueueEntry
     {
         uint64_t time;
-        Logging::TLogLevel level;
+        logging::Level level;
         std::string* component;
         std::string* message;
     };

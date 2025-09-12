@@ -49,7 +49,7 @@ class LoggingEntryPoint
      * @param[in]   fmt         Format string of the log message.
      * @param[in]   ...         Arguments to use for string formatting.
      */
-    static void logMessage(Logging::TLogLevel level, const char* component, const char* fmt, ...)
+    static void logMessage(logging::Level level, const char* component, const char* fmt, ...)
         __attribute__((format(printf, 3, 4)));
 
     /** Max log message size, excluding file, line and level information. */

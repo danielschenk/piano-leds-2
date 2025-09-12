@@ -21,7 +21,7 @@ class StdLogger : public ILoggingTarget
     virtual ~StdLogger();
 
     // ILoggingTarget implementation
-    virtual void logMessage(uint64_t time, Logging::TLogLevel level, std::string component,
+    virtual void logMessage(uint64_t time, logging::Level level, std::string component,
                             std::string message);
 };
 

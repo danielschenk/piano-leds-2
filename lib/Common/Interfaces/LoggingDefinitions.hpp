@@ -1,15 +1,15 @@
 #ifndef COMMON_INTERFACES_LOGGINGDEFINITIONS_H_
 #define COMMON_INTERFACES_LOGGINGDEFINITIONS_H_
 
-namespace Logging
+namespace logging
 {
 
-enum TLogLevel
+enum class Level
 {
-    LogLevel_Error,
-    LogLevel_Warning,
-    LogLevel_Info,
-    LogLevel_Debug
+    error,
+    warning,
+    info,
+    debug,
 };
 
 }

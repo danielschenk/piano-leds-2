@@ -9,7 +9,7 @@ class MockLoggingTarget : public ILoggingTarget
 {
   public:
     // ILoggingTarget implementation
-    MOCK_METHOD4(logMessage, void(uint64_t time, Logging::TLogLevel level, std::string component,
+    MOCK_METHOD4(logMessage, void(uint64_t time, logging::Level level, std::string component,
                                   std::string message));
 };
 
