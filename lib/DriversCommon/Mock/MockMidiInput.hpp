@@ -3,16 +3,16 @@
 
 #include <gmock/gmock.h>
 
-#include "../Interfaces/IMidiInput.hpp"
+#include "../MidiInput.hpp"
 
-class MockMidiInput : public IMidiInput
+class MockMidiInput : public MidiInput
 {
   public:
-    // IMidiInterface implementation
+    // MidiInterface implementation
     MOCK_CONST_METHOD0(getPortCount, unsigned int());
     MOCK_METHOD1(openPort, void(int number));
 
-    // IMidiInput implementation
+    // MidiInput implementation
     MOCK_METHOD1(subscribe, void(IObserver& observer));
     MOCK_METHOD1(unsubscribe, void(IObserver& observer));
 };

@@ -4,7 +4,7 @@
 
 #define LOGGING_COMPONENT "MidiMessageLogger"
 
-MidiMessageLogger::MidiMessageLogger(IMidiInput& midiInput) : midiInput(midiInput)
+MidiMessageLogger::MidiMessageLogger(MidiInput& midiInput) : midiInput(midiInput)
 {
     midiInput.subscribe(*this);
 }
@@ -19,8 +19,8 @@ void MidiMessageLogger::onNoteChange(uint8_t channel, uint8_t pitch, uint8_t vel
     LOG_DEBUG_PARAMS("%3s chan %2u pitch %3u vel %3u", on ? "ON" : "OFF", channel, pitch, velocity);
 }
 
-void MidiMessageLogger::onControlChange(uint8_t channel,
-                                        IMidiInterface::ControllerNumber controller, uint8_t value)
+void MidiMessageLogger::onControlChange(uint8_t channel, MidiInterface::ControllerNumber controller,
+                                        uint8_t value)
 {
     LOG_DEBUG_PARAMS("CON chan %2u controller %3u val %3u", channel, controller, value);
 }

@@ -6,7 +6,7 @@
 #include "ProcessingChain.hpp"
 #include "SingleColorFill.hpp"
 
-ProcessingBlockFactory::ProcessingBlockFactory(IMidiInput& midiInput,
+ProcessingBlockFactory::ProcessingBlockFactory(MidiInput& midiInput,
                                                const IRgbFunctionFactory& rgbFunctionFactory,
                                                const ITime& time)
     : midiInput(midiInput), rgbFunctionFactory(rgbFunctionFactory), time(time)

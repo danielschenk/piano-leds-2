@@ -183,7 +183,7 @@ TEST_F(NoteVisualizerTest, ignorePedal)
     noteVisualizer.setUsingPedal(false);
 
     observer->onNoteChange(0, 0, 1, true);
-    observer->onControlChange(0, IMidiInterface::DAMPER_PEDAL, 0xff);
+    observer->onControlChange(0, MidiInterface::damperPedal, 0xff);
     observer->onNoteChange(0, 0, 1, false);
 
     noteVisualizer.execute(strip, noteToLightMap);
@@ -197,7 +197,7 @@ TEST_F(NoteVisualizerTest, usePedal)
     observer->onNoteChange(0, 0, 1, true);
     // Press pedal
     // (channel, number, value)
-    observer->onControlChange(0, IMidiInterface::DAMPER_PEDAL, 0xff);
+    observer->onControlChange(0, MidiInterface::damperPedal, 0xff);
     // Press another key
     observer->onNoteChange(0, 2, 1, true);
 
@@ -218,7 +218,7 @@ TEST_F(NoteVisualizerTest, usePedal)
     EXPECT_EQ(expected, strip);
 
     // Release pedal
-    observer->onControlChange(0, IMidiInterface::DAMPER_PEDAL, 0);
+    observer->onControlChange(0, MidiInterface::damperPedal, 0);
 
     // Notes are not sounding anymore
     expected[0] = {0, 0, 0};

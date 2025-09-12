@@ -6,7 +6,7 @@
 #include "ProcessingTypes.hpp"
 #include "RgbFunctionFactory.hpp"
 
-class IMidiInput;
+class MidiInput;
 class ITime;
 class Patch;
 
@@ -20,14 +20,14 @@ namespace application
 
 struct ConcertInfrastructure
 {
-    ConcertInfrastructure(IMidiInput& midiInput, const ITime& time);
+    ConcertInfrastructure(MidiInput& midiInput, const ITime& time);
     void createLegacyPatches();
     Patch* addBasicPatch(const processing::RgbColor& color, bool likePiano,
                          std::shared_ptr<processing::ColorPicker> pressDownColorPicker = nullptr);
     static processing::NoteToLightMap createDefaultOneToOneFullPianoMapping(
         uint16_t skipLedsPerNote = 0);
 
-    IMidiInput& midiInput;
+    MidiInput& midiInput;
     const ITime& time;
 
     RgbFunctionFactory rgbFunctionFactory;

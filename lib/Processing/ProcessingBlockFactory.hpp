@@ -3,7 +3,7 @@
 
 #include "IProcessingBlockFactory.hpp"
 
-class IMidiInput;
+class MidiInput;
 class IRgbFunctionFactory;
 class ITime;
 
@@ -16,7 +16,7 @@ class ProcessingBlockFactory : public IProcessingBlockFactory
     /**
      * Constructor.
      */
-    ProcessingBlockFactory(IMidiInput& midiInput, const IRgbFunctionFactory& rgbFunctionFactory,
+    ProcessingBlockFactory(MidiInput& midiInput, const IRgbFunctionFactory& rgbFunctionFactory,
                            const ITime& time);
 
     // Prevent implicit constructors and assignment operator
@@ -37,7 +37,7 @@ class ProcessingBlockFactory : public IProcessingBlockFactory
 
   private:
     /** Reference to the MIDI input to pass to new blocks. */
-    IMidiInput& midiInput;
+    MidiInput& midiInput;
 
     /** Reference to the RGB function factory to pass to new blocks. */
     const IRgbFunctionFactory& rgbFunctionFactory;

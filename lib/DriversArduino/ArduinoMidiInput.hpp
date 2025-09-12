@@ -33,7 +33,7 @@ class ArduinoMidiInput : public BaseMidiInput
      */
     void run();
 
-    // IMidiInterface implementation
+    // MidiInterface implementation
     virtual unsigned int getPortCount() const;
     virtual void openPort(int number);
 

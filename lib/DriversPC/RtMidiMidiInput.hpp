@@ -25,7 +25,7 @@ class RtMidiMidiInput : public BaseMidiInput
     RtMidiMidiInput(const RtMidiMidiInput &) = delete;
     RtMidiMidiInput &operator=(const RtMidiMidiInput &) = delete;
 
-    // IMidiInterface implementation.
+    // MidiInterface implementation.
     virtual unsigned int getPortCount() const;
     virtual void openPort(int number);
 

@@ -5,7 +5,6 @@
 #define LOGGING_COMPONENT "BaseMidiInput"
 
 BaseMidiInput::BaseMidiInput()
-    : observers(), buildingMessage(false), currentMessage(), observersMutex()
 {
 }
 
@@ -32,8 +31,7 @@ void BaseMidiInput::notifyNoteChange(uint8_t channel, uint8_t pitch, uint8_t vel
     }
 }
 
-void BaseMidiInput::notifyControlChange(uint8_t channel,
-                                        IMidiInterface::ControllerNumber controller,
+void BaseMidiInput::notifyControlChange(uint8_t channel, MidiInterface::ControllerNumber controller,
                                         uint8_t value) const
 {
     std::lock_guard<std::mutex> lock(observersMutex);
@@ -93,9 +91,9 @@ void BaseMidiInput::processMidiByte(uint8_t value)
         uint8_t channel(statusByte & 0x0F);
 
         // Check if a message can be parsed and sent to subscribers.
-        switch (static_cast<IMidiInterface::Status>(status))
+        switch (static_cast<MidiInterface::Status>(status))
         {
-            case NOTE_OFF:
+            case noteOff:
                 if (currentMessage.size() >= 3)
                 {
                     // Channel, pitch, velocity, note off
@@ -104,7 +102,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                 }
                 break;
 
-            case NOTE_ON:
+            case noteOn:
                 if (currentMessage.size() >= 3)
                 {
                     // Channel, pitch, velocity, note on
@@ -113,18 +111,17 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                 }
                 break;
 
-            case CONTROL_CHANGE:
+            case controlChange:
                 if (currentMessage.size() >= 3)
                 {
                     // Channel, controller number, value
-                    notifyControlChange(channel,
-                                        (IMidiInterface::ControllerNumber)currentMessage[1],
+                    notifyControlChange(channel, (MidiInterface::ControllerNumber)currentMessage[1],
                                         currentMessage[2]);
                     buildingMessage = false;
                 }
                 break;
 
-            case PROGRACHANGE:
+            case programChange:
                 if (currentMessage.size() >= 2)
                 {
                     // Channel, number
@@ -133,7 +130,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                 }
                 break;
 
-            case CHANNEL_PRESSURE_CHANGE:
+            case channelPressureChange:
                 if (currentMessage.size() >= 2)
                 {
                     // Channel, value
@@ -142,7 +139,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                 }
                 break;
 
-            case PITCH_BEND_CHANGE:
+            case pitchBendChange:
                 if (currentMessage.size() >= 3)
                 {
                     // Pitch bend value is a 14-bit value.

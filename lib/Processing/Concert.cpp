@@ -9,7 +9,7 @@
 
 #define LOGGING_COMPONENT "Concert"
 
-Concert::Concert(IMidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory)
+Concert::Concert(MidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory)
     : midiInput(midiInput), processingBlockFactory(processingBlockFactory)
 {
     midiInput.subscribe(*this);
@@ -305,11 +305,11 @@ void Concert::onProgramChange(uint8_t channel, uint8_t program)
     scheduler.schedule(taskFn);
 }
 
-void Concert::onControlChange(uint8_t channel, IMidiInterface::ControllerNumber controllerNumber,
+void Concert::onControlChange(uint8_t channel, MidiInterface::ControllerNumber controllerNumber,
                               uint8_t value)
 {
-    if ((controllerNumber != IMidiInterface::BANK_SELECT_MSB) &&
-        (controllerNumber != IMidiInterface::BANK_SELECT_LSB))
+    if ((controllerNumber != MidiInterface::bankSelectMsb) &&
+        (controllerNumber != MidiInterface::bankSelectLsb))
     {
         return;
     }
@@ -323,11 +323,11 @@ void Concert::onControlChange(uint8_t channel, IMidiInterface::ControllerNumber 
             return;
         }
 
-        if (controllerNumber == IMidiInterface::BANK_SELECT_MSB)
+        if (controllerNumber == MidiInterface::bankSelectMsb)
         {
             currentBank = (value << 7) | (currentBank & 0x7f);
         }
-        else if (controllerNumber == IMidiInterface::BANK_SELECT_LSB)
+        else if (controllerNumber == MidiInterface::bankSelectLsb)
         {
             currentBank = (currentBank & 0x7f80) | value;
         }

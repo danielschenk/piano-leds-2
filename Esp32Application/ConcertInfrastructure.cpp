@@ -15,7 +15,7 @@ namespace application
 
 #define LOGGING_COMPONENT "ConcertInfrastructure"
 
-ConcertInfrastructure::ConcertInfrastructure(IMidiInput& midiInput, const ITime& time)
+ConcertInfrastructure::ConcertInfrastructure(MidiInput& midiInput, const ITime& time)
     : midiInput(midiInput),
       time(time),
       processingBlockFactory(midiInput, rgbFunctionFactory, time),

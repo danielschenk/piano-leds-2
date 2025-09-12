@@ -15,7 +15,7 @@ ACTION_P(StoreArg0Address, target)
 }
 
 /**
- * Base fixture for tests of classes which implement @ref IMidiInput::IObserver
+ * Base fixture for tests of classes which implement @ref MidiInput::IObserver
  */
 class MidiInputObserverTest
 {
@@ -27,7 +27,7 @@ class MidiInputObserverTest
     }
 
     NiceMock<MockMidiInput> mockMidiInput;
-    IMidiInput::IObserver* observer;
+    MidiInput::IObserver* observer;
 };
 
 #endif /* MIDIINPUTOBSERVERTEST_H_ */

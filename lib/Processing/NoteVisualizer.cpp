@@ -11,7 +11,7 @@
 
 #define LOGGING_COMPONENT "NoteVisualizer"
 
-NoteVisualizer::NoteVisualizer(IMidiInput& midiInput, const IRgbFunctionFactory& rgbFunctionFactory,
+NoteVisualizer::NoteVisualizer(MidiInput& midiInput, const IRgbFunctionFactory& rgbFunctionFactory,
                                const ITime& time)
     : rgbFunctionFactory(rgbFunctionFactory), midiInput(midiInput), time(time)
 {
@@ -98,7 +98,7 @@ void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t veloc
         });
 }
 
-void NoteVisualizer::onControlChange(uint8_t channel, IMidiInput::ControllerNumber number,
+void NoteVisualizer::onControlChange(uint8_t channel, MidiInput::ControllerNumber number,
                                      uint8_t value)
 {
     std::lock_guard<std::mutex> lock(mutex);
@@ -110,7 +110,7 @@ void NoteVisualizer::onControlChange(uint8_t channel, IMidiInput::ControllerNumb
 
     // Don't cause scheduling overhead when it's an unimportant controller number.
     // Channel check must be scheduled as it uses a member
-    if (number == IMidiInterface::DAMPER_PEDAL)
+    if (number == MidiInterface::damperPedal)
     {
         scheduler.schedule(
             [this, channel, value]()
@@ -123,7 +123,7 @@ void NoteVisualizer::onControlChange(uint8_t channel, IMidiInput::ControllerNumb
                     if (!pedalPressed)
                     {
                         // Stop all notes which are sounding due to pedal only
-                        for (int note = 0; note < IMidiInterface::numNotes; ++note)
+                        for (int note = 0; note < MidiInterface::numNotes; ++note)
                         {
                             if (!noteStates[note].pressed)
                             {

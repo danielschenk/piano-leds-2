@@ -39,8 +39,8 @@ class ConcertTest : public MidiInputObserverTest, public ::testing::Test
 
     void sendBankSelectSequence(uint8_t channel, uint16_t bank)
     {
-        concert->onControlChange(channel, IMidiInterface::BANK_SELECT_LSB, bank & 0x7f);
-        concert->onControlChange(channel, IMidiInterface::BANK_SELECT_MSB, bank >> 7);
+        concert->onControlChange(channel, MidiInterface::bankSelectLsb, bank & 0x7f);
+        concert->onControlChange(channel, MidiInterface::bankSelectMsb, bank >> 7);
     }
 
     // Should not be default and go beyond the byte range, to test LSB and MSB

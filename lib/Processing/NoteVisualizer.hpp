@@ -5,7 +5,7 @@
 #include <memory>
 #include <mutex>
 
-#include "IMidiInput.hpp"
+#include "MidiInput.hpp"
 #include "ProcessingBlock.hpp"
 #include "Scheduler.hpp"
 
@@ -17,10 +17,10 @@ namespace processing
 class ColorPicker;
 }
 
-class NoteVisualizer : public ProcessingBlock, public IMidiInput::IObserver
+class NoteVisualizer : public ProcessingBlock, public MidiInput::IObserver
 {
   public:
-    NoteVisualizer(IMidiInput& midiDriver, const IRgbFunctionFactory& rgbFunctionFactory,
+    NoteVisualizer(MidiInput& midiDriver, const IRgbFunctionFactory& rgbFunctionFactory,
                    const ITime& time);
 
     ~NoteVisualizer() override;
@@ -44,9 +44,9 @@ class NoteVisualizer : public ProcessingBlock, public IMidiInput::IObserver
     void setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction);
     void setPressDownColorPicker(std::shared_ptr<processing::ColorPicker> colorPicker);
 
-    // IMidiInput::IObserver implementation
+    // MidiInput::IObserver implementation
     void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) override;
-    void onControlChange(uint8_t channel, IMidiInput::ControllerNumber controller,
+    void onControlChange(uint8_t channel, MidiInput::ControllerNumber controller,
                          uint8_t value) override;
     void onProgramChange(uint8_t channel, uint8_t program) override;
     void onChannelPressureChange(uint8_t channel, uint8_t value) override;
@@ -65,10 +65,10 @@ class NoteVisualizer : public ProcessingBlock, public IMidiInput::IObserver
     bool active{false};
     bool usingPedal{true};
     const IRgbFunctionFactory& rgbFunctionFactory;
-    IMidiInput& midiInput;
+    MidiInput& midiInput;
     uint8_t channel = 0;
     Scheduler scheduler;
-    std::array<processing::NoteState, IMidiInterface::numNotes> noteStates;
+    std::array<processing::NoteState, MidiInterface::numNotes> noteStates;
     bool pedalPressed{false};
     std::shared_ptr<IRgbFunction> rgbFunction;
     std::shared_ptr<processing::ColorPicker> pressDownColorPicker;

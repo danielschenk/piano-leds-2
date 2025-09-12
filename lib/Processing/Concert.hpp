@@ -5,13 +5,13 @@
 #include <list>
 #include <vector>
 
-#include "IMidiInput.hpp"
-#include "IMidiInterface.hpp"
 #include "JsonConvertible.hpp"
+#include "MidiInput.hpp"
+#include "MidiInterface.hpp"
 #include "ProcessingTypes.hpp"
 #include "Scheduler.hpp"
 
-class IMidiInput;
+class MidiInput;
 class IProcessingBlockFactory;
 class IPatch;
 
@@ -21,7 +21,7 @@ class IPatch;
  * A concert is a collection of patches, together with some settings which are typically constant
  * throughout a gig, like MIDI channels to listen to and the note-to-light mapping.
  */
-class Concert : public JsonConvertible, public IMidiInput::IObserver
+class Concert : public JsonConvertible, public MidiInput::IObserver
 {
   public:
     /**
@@ -30,7 +30,7 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
      * @param[in]   midiInput               Reference to the MIDI input.
      * @param[in]   processingBlockFactory  Reference to the processing block factory.
      */
-    Concert(IMidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory);
+    Concert(MidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory);
 
     /**
      * Destructor.
@@ -136,10 +136,10 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
     void subscribe(IObserver& observer);
     void unsubscribe(IObserver& observer);
 
-    // IMidiInput::IObserver implementation
+    // MidiInput::IObserver implementation
     virtual void onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on);
     virtual void onProgramChange(uint8_t channel, uint8_t program);
-    virtual void onControlChange(uint8_t channel, IMidiInterface::ControllerNumber number,
+    virtual void onControlChange(uint8_t channel, MidiInterface::ControllerNumber number,
                                  uint8_t value);
     virtual void onChannelPressureChange(uint8_t channel, uint8_t value);
     virtual void onPitchBendChange(uint8_t channel, uint16_t value);
@@ -169,7 +169,7 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
     bool listeningToProgramChange{true};
     uint8_t programChangeChannel = 0;
     uint16_t currentBank = 0;
-    IMidiInput& midiInput;
+    MidiInput& midiInput;
     IProcessingBlockFactory& processingBlockFactory;
     Scheduler scheduler;
     std::list<IObserver*> observers;

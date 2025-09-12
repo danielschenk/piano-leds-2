@@ -1,14 +1,14 @@
 #ifndef COMMON_UTILITIES_MIDIMESSAGELOGGER_H_
 #define COMMON_UTILITIES_MIDIMESSAGELOGGER_H_
 
-#include "IMidiInput.hpp"
+#include "MidiInput.hpp"
 
-class IMidiInput;
+class MidiInput;
 
 /**
  * Class which logs a description of incoming MIDI messages.
  */
-class MidiMessageLogger : public IMidiInput::IObserver
+class MidiMessageLogger : public MidiInput::IObserver
 {
   public:
     /**
@@ -16,7 +16,7 @@ class MidiMessageLogger : public IMidiInput::IObserver
      *
      * @param midiInput The MIDI input to use
      */
-    explicit MidiMessageLogger(IMidiInput& midiInput);
+    explicit MidiMessageLogger(MidiInput& midiInput);
 
     /**
      * Destructor.
@@ -28,16 +28,16 @@ class MidiMessageLogger : public IMidiInput::IObserver
     MidiMessageLogger(const MidiMessageLogger&) = delete;
     MidiMessageLogger& operator=(const MidiMessageLogger&) = delete;
 
-    // IMidiInput::IObserver implementation
+    // MidiInput::IObserver implementation
     virtual void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on);
     virtual void onProgramChange(uint8_t channel, uint8_t program);
-    virtual void onControlChange(uint8_t channel, IMidiInterface::ControllerNumber controller,
+    virtual void onControlChange(uint8_t channel, MidiInterface::ControllerNumber controller,
                                  uint8_t value);
     virtual void onChannelPressureChange(uint8_t channel, uint8_t value);
     virtual void onPitchBendChange(uint8_t channel, uint16_t value);
 
   private:
-    IMidiInput& midiInput;
+    MidiInput& midiInput;
 };
 
 #endif /* COMMON_UTILITIES_MIDIMESSAGELOGGER_H_ */
