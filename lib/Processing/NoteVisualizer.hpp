@@ -11,7 +11,7 @@
 
 class IRgbFunction;
 class IRgbFunctionFactory;
-class ITime;
+class MonotonicTime;
 namespace processing
 {
 class ColorPicker;
@@ -21,7 +21,7 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
 {
   public:
     NoteVisualizer(MidiInput& midiDriver, const IRgbFunctionFactory& rgbFunctionFactory,
-                   const ITime& time);
+                   const MonotonicTime& time);
 
     ~NoteVisualizer() override;
 
@@ -72,7 +72,7 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
     bool pedalPressed{false};
     std::shared_ptr<IRgbFunction> rgbFunction;
     std::shared_ptr<processing::ColorPicker> pressDownColorPicker;
-    const ITime& time;
+    const MonotonicTime& time;
 };
 
 #endif /* PROCESSING_NOTEVISUALIZER_H_ */

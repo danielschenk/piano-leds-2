@@ -6,7 +6,7 @@
 #include "../SingleColorFill.hpp"
 #include "Json11Helper.hpp"
 #include "LoggingEntryPoint.hpp"
-#include "Mock/MockTime.hpp"
+#include "Mock/MockMonotonicTime.hpp"
 
 using ::testing::NiceMock;
 
@@ -18,7 +18,7 @@ class SingleColorFillTest : public ::testing::Test
         LoggingEntryPoint::setTime(&time);
     }
 
-    NiceMock<MockTime> time;
+    NiceMock<MockMonotonicTime> time;
     SingleColorFill source;
 };
 

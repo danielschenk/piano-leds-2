@@ -7,8 +7,8 @@
 
 #include "LoggingDefinitions.hpp"
 
-class ILoggingTarget;
-class ITime;
+class LoggingTarget;
+class MonotonicTime;
 
 /**
  * Static class which receives log events and distributes them to subscribers (logging
@@ -27,19 +27,19 @@ class LoggingEntryPoint
      *
      * @param[in]   subscriber  Reference to the subscriber.
      */
-    static void subscribe(ILoggingTarget& subscriber);
+    static void subscribe(LoggingTarget& subscriber);
 
     /**
      * Unsubscribe from logging events.
      *
      * @param[in]   subscriber  Reference to the subscriber.
      */
-    static void unsubscribe(ILoggingTarget& subscriber);
+    static void unsubscribe(LoggingTarget& subscriber);
 
     /**
      * Set the time provider.
      */
-    static void setTime(const ITime* time);
+    static void setTime(const MonotonicTime* time);
 
     /**
      * Log a message.
@@ -57,12 +57,12 @@ class LoggingEntryPoint
 
   private:
     /** The list of subscribers. */
-    static std::vector<ILoggingTarget*> s_subscribers;
+    static std::vector<LoggingTarget*> subscribers;
 
     /** Mutex to protect the list of subscribers. */
-    static std::mutex s_mutex;
+    static std::mutex mutex;
 
-    static const ITime* s_time;
+    static const MonotonicTime* monotonicTime;
 };
 
 #endif /* COMMON_LOGGINGENTRYPOINT_H_ */

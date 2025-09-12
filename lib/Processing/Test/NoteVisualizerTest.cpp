@@ -2,7 +2,7 @@
 #include "../Mock/MockRgbFunctionFactory.hpp"
 #include "../NoteVisualizer.hpp"
 #include "Mock/LoggingTest.hpp"
-#include "Mock/MockTime.hpp"
+#include "Mock/MockMonotonicTime.hpp"
 #include "Test/MidiInputObserverTest.hpp"
 #include "gtest/gtest.h"
 
@@ -84,7 +84,7 @@ class NoteVisualizerTest : public LoggingTest, public MidiInputObserverTest, pub
     }
 
     MockRgbFunctionFactory mockRgbFunctionFactory;
-    NiceMock<MockTime> mockTime;
+    NiceMock<MockMonotonicTime> mockTime;
     NoteVisualizer noteVisualizer;
     processing::RgbStrip strip;
 

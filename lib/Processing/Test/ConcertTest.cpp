@@ -2,7 +2,7 @@
 #include "../Mock/MockPatch.hpp"
 #include "../Mock/MockProcessingBlockFactory.hpp"
 #include "LoggingEntryPoint.hpp"
-#include "Mock/MockTime.hpp"
+#include "Mock/MockMonotonicTime.hpp"
 #include "Test/MidiInputObserverTest.hpp"
 #include "gtest/gtest.h"
 
@@ -48,7 +48,7 @@ class ConcertTest : public MidiInputObserverTest, public ::testing::Test
 
     // Required mocks
     NiceMock<MockProcessingBlockFactory> mockProcessingBlockFactory;
-    NiceMock<MockTime> mockTime;
+    NiceMock<MockMonotonicTime> mockTime;
 
     // Object under test
     Concert* concert;

@@ -16,7 +16,7 @@
 #include "LedTask.hpp"
 #endif
 #include "Board.hpp"
-#include "FreeRtosTime.hpp"
+#include "FreeRtosMonotonicTime.hpp"
 #include "NetworkTask.hpp"
 #include "SystemSettingsModel.hpp"
 
@@ -57,7 +57,7 @@ static void startNetwork();
 
 void setup()
 {
-    static FreeRtosTime freeRtosTime;
+    static FreeRtosMonotonicTime freeRtosTime;
 
     LoggingEntryPoint::setTime(&freeRtosTime);
     Serial.begin(115200, SERIAL_8N1, DEBUG_RX_PIN, DEBUG_TX_PIN);
