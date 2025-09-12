@@ -9,18 +9,18 @@
 #include <string>
 #include <vector>
 
-#include "ILoggingTarget.hpp"
-#include "ITime.hpp"
+#include "LoggingTarget.hpp"
+#include "MonotonicTime.hpp"
 
-std::vector<ILoggingTarget*> LoggingEntryPoint::s_subscribers;
-std::mutex LoggingEntryPoint::s_mutex;
-const ITime* LoggingEntryPoint::s_time(nullptr);
+std::vector<LoggingTarget*> LoggingEntryPoint::subscribers;
+std::mutex LoggingEntryPoint::mutex;
+const MonotonicTime* LoggingEntryPoint::monotonicTime(nullptr);
 
-void LoggingEntryPoint::subscribe(ILoggingTarget& subscriber)
+void LoggingEntryPoint::subscribe(LoggingTarget& subscriber)
 {
-    std::lock_guard<std::mutex> lock(s_mutex);
+    std::lock_guard<std::mutex> lock(mutex);
     bool found(false);
-    for (auto loggingTarget : s_subscribers)
+    for (auto loggingTarget : subscribers)
     {
         if (loggingTarget == &subscriber)
         {
@@ -30,25 +30,25 @@ void LoggingEntryPoint::subscribe(ILoggingTarget& subscriber)
     }
     if (!found)
     {
-        s_subscribers.push_back(&subscriber);
+        subscribers.push_back(&subscriber);
     }
 }
 
-void LoggingEntryPoint::unsubscribe(ILoggingTarget& subscriber)
+void LoggingEntryPoint::unsubscribe(LoggingTarget& subscriber)
 {
-    std::lock_guard<std::mutex> lock(s_mutex);
-    s_subscribers.erase(std::remove(s_subscribers.begin(), s_subscribers.end(), &subscriber),
-                        s_subscribers.end());
+    std::lock_guard<std::mutex> lock(mutex);
+    subscribers.erase(std::remove(subscribers.begin(), subscribers.end(), &subscriber),
+                        subscribers.end());
 }
 
 void LoggingEntryPoint::logMessage(logging::Level level, const char* component, const char* fmt,
                                    ...)
 {
-    assert(s_time != nullptr);
-    uint32_t time(s_time->getMilliseconds());
+    assert(monotonicTime != nullptr);
+    uint32_t time(monotonicTime->getMilliseconds());
 
-    std::lock_guard<std::mutex> lock(s_mutex);
-    if (s_subscribers.size() > 0)
+    std::lock_guard<std::mutex> lock(mutex);
+    if (subscribers.size() > 0)
     {
         std::vector<char> buffer(maxMessageSize);
         va_list args;
@@ -58,7 +58,7 @@ void LoggingEntryPoint::logMessage(logging::Level level, const char* component, 
 
         std::string message(buffer.data());
         std::string componentStr(component);
-        for (auto loggingTarget : s_subscribers)
+        for (auto loggingTarget : subscribers)
         {
             if (loggingTarget != nullptr)
             {
@@ -68,7 +68,7 @@ void LoggingEntryPoint::logMessage(logging::Level level, const char* component, 
     }
 }
 
-void LoggingEntryPoint::setTime(const ITime* time)
+void LoggingEntryPoint::setTime(const MonotonicTime* time)
 {
-    s_time = time;
+    monotonicTime = time;
 }

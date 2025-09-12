@@ -1,13 +1,13 @@
 #ifndef COMMON_UTILITIES_STDLOGGER_H_
 #define COMMON_UTILITIES_STDLOGGER_H_
 
-#include "ILoggingTarget.hpp"
 #include "LoggingEntryPoint.hpp"
+#include "LoggingTarget.hpp"
 
 /**
  * Logging target which logs to std::cout
  */
-class StdLogger : public ILoggingTarget
+class StdLogger : public LoggingTarget
 {
   public:
     /**
@@ -20,7 +20,7 @@ class StdLogger : public ILoggingTarget
      */
     virtual ~StdLogger();
 
-    // ILoggingTarget implementation
+    // LoggingTarget implementation
     virtual void logMessage(uint64_t time, logging::Level level, std::string component,
                             std::string message);
 };

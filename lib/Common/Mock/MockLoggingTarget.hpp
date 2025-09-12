@@ -3,12 +3,12 @@
 
 #include <gmock/gmock.h>
 
-#include "ILoggingTarget.hpp"
+#include "LoggingTarget.hpp"
 
-class MockLoggingTarget : public ILoggingTarget
+class MockLoggingTarget : public LoggingTarget
 {
   public:
-    // ILoggingTarget implementation
+    // LoggingTarget implementation
     MOCK_METHOD4(logMessage, void(uint64_t time, logging::Level level, std::string component,
                                   std::string message));
 };

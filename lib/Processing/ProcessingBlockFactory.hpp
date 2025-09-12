@@ -5,7 +5,7 @@
 
 class MidiInput;
 class IRgbFunctionFactory;
-class ITime;
+class MonotonicTime;
 
 /**
  * Factory for processing blocks.
@@ -17,7 +17,7 @@ class ProcessingBlockFactory : public IProcessingBlockFactory
      * Constructor.
      */
     ProcessingBlockFactory(MidiInput& midiInput, const IRgbFunctionFactory& rgbFunctionFactory,
-                           const ITime& time);
+                           const MonotonicTime& time);
 
     // Prevent implicit constructors and assignment operator
     ProcessingBlockFactory() = delete;
@@ -43,7 +43,7 @@ class ProcessingBlockFactory : public IProcessingBlockFactory
     const IRgbFunctionFactory& rgbFunctionFactory;
 
     /** Time provider to pass to new blocks. */
-    const ITime& time;
+    const MonotonicTime& time;
 };
 
 #endif /* PROCESSING_PROCESSINGBLOCKFACTORY_H_ */

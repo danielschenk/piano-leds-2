@@ -5,14 +5,14 @@
 #include "ColorPicker.hpp"
 #include "IRgbFunction.hpp"
 #include "IRgbFunctionFactory.hpp"
-#include "ITime.hpp"
 #include "Json11Helper.hpp"
 #include "Logging.hpp"
+#include "MonotonicTime.hpp"
 
 #define LOGGING_COMPONENT "NoteVisualizer"
 
 NoteVisualizer::NoteVisualizer(MidiInput& midiInput, const IRgbFunctionFactory& rgbFunctionFactory,
-                               const ITime& time)
+                               const MonotonicTime& time)
     : rgbFunctionFactory(rgbFunctionFactory), midiInput(midiInput), time(time)
 {
     midiInput.subscribe(*this);

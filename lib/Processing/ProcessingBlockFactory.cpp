@@ -8,7 +8,7 @@
 
 ProcessingBlockFactory::ProcessingBlockFactory(MidiInput& midiInput,
                                                const IRgbFunctionFactory& rgbFunctionFactory,
-                                               const ITime& time)
+                                               const MonotonicTime& time)
     : midiInput(midiInput), rgbFunctionFactory(rgbFunctionFactory), time(time)
 {
 }
