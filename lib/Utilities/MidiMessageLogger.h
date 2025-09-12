@@ -8,10 +8,9 @@ class IMidiInput;
 /**
  * Class which logs a description of incoming MIDI messages.
  */
-class MidiMessageLogger
-    : public IMidiInput::IObserver
+class MidiMessageLogger : public IMidiInput::IObserver
 {
-public:
+  public:
     /**
      * Constructor.
      *
@@ -32,11 +31,12 @@ public:
     // IMidiInput::IObserver implementation
     virtual void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on);
     virtual void onProgramChange(uint8_t channel, uint8_t program);
-    virtual void onControlChange(uint8_t channel, IMidiInterface::TControllerNumber controller, uint8_t value);
+    virtual void onControlChange(uint8_t channel, IMidiInterface::TControllerNumber controller,
+                                 uint8_t value);
     virtual void onChannelPressureChange(uint8_t channel, uint8_t value);
     virtual void onPitchBendChange(uint8_t channel, uint16_t value);
 
-private:
+  private:
     IMidiInput& midiInput;
 };
 

@@ -8,10 +8,9 @@ class Concert;
 /**
  * Task which executes all the processing in a @ref Concert.
  */
-class ProcessingTask
-    : public BaseTask
+class ProcessingTask : public BaseTask
 {
-public:
+  public:
     /**
      * Constructor.
      *
@@ -19,20 +18,18 @@ public:
      * @param stackSize Stack size in words
      * @param priority  Priority
      */
-    ProcessingTask(Concert& concert,
-                   uint32_t stackSize,
-                   UBaseType_t priority);
+    ProcessingTask(Concert& concert, uint32_t stackSize, UBaseType_t priority);
 
     /**
      * Destructor.
      */
     ~ProcessingTask() override;
 
-protected:
+  protected:
     // BaseTask implementation
     void run() override;
 
-private:
+  private:
     static constexpr uint32_t runIntervalMs = 10;
     Concert& concert;
     TickType_t lastWakeTime;

@@ -1,8 +1,8 @@
 #ifndef COMMON_UTILITIES_JSON11HELPER_H_
 #define COMMON_UTILITIES_JSON11HELPER_H_
 
-#include <string>
 #include <json11.hpp>
+#include <string>
 // for convenience
 using Json = json11::Json;
 
@@ -15,7 +15,7 @@ using Json = json11::Json;
  */
 class Json11Helper
 {
-public:
+  public:
     /**
      * Constructor.
      *
@@ -28,16 +28,16 @@ public:
 
     virtual ~Json11Helper();
 
-    template<typename T>
+    template <typename T>
     bool getItemIfPresent(std::string key, T& target) const
     {
-        if(!json[key].is_null())
+        if (!json[key].is_null())
         {
             return getItem(key, target);
         }
         else
         {
-            if(logMissingKeys)
+            if (logMissingKeys)
             {
                 LOG_ERROR_PARAMS("%s: Missing JSON key '%s'", user.c_str(), key.c_str());
             }
@@ -49,20 +49,21 @@ public:
     Json11Helper(const Json11Helper&) = delete;
     Json11Helper& operator=(const Json11Helper&) = delete;
 
-private:
+  private:
     template <typename IntegerType>
     bool getInt(std::string key, IntegerType& target) const
     {
         const auto& item = json[key];
 
-        if(item.is_number())
+        if (item.is_number())
         {
             target = static_cast<IntegerType>(item.int_value());
             return true;
         }
         else
         {
-            LOG_ERROR_PARAMS("%s: JSON value with key '%s' not a number", user.c_str(), key.c_str());
+            LOG_ERROR_PARAMS("%s: JSON value with key '%s' not a number", user.c_str(),
+                             key.c_str());
             return false;
         }
     }
@@ -72,14 +73,15 @@ private:
     {
         const auto& item = json[key];
 
-        if(item.is_number())
+        if (item.is_number())
         {
             target = static_cast<FloatType>(item.number_value());
             return true;
         }
         else
         {
-            LOG_ERROR_PARAMS("%s: JSON value with key '%s' not a number", user.c_str(), key.c_str());
+            LOG_ERROR_PARAMS("%s: JSON value with key '%s' not a number", user.c_str(),
+                             key.c_str());
             return false;
         }
     }
@@ -94,9 +96,9 @@ private:
     bool getItem(std::string key, Json::object& target) const;
     bool getItem(std::string key, Json::array& target) const;
 
-    std::string     user;
-    const Json&     json;
-    bool            logMissingKeys;
+    std::string user;
+    const Json& json;
+    bool logMissingKeys;
 };
 
 #undef LOGGING_COMPONENT

@@ -3,26 +3,21 @@
 
 #include <mutex>
 
-#include "NeoPixelBus.h"
 #include "BaseTask.h"
 #include "Concert.h"
+#include "NeoPixelBus.h"
 
-class LedTaskNeoPixel
-    : public BaseTask
-    , public Concert::IObserver
+class LedTaskNeoPixel : public BaseTask, public Concert::IObserver
 {
-public:
-    LedTaskNeoPixel(Concert& concert,
-            int16_t dataPin,
-            uint32_t stackSize,
-            UBaseType_t priority);
+  public:
+    LedTaskNeoPixel(Concert& concert, int16_t dataPin, uint32_t stackSize, UBaseType_t priority);
 
     ~LedTaskNeoPixel() override;
 
     // Concert::IObserver implementation
     void onStripUpdate(const Processing::TRgbStrip& strip) override;
 
-private:
+  private:
     // BaseTask implementation
     void run() override;
 

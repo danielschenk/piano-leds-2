@@ -1,17 +1,16 @@
-#include <list>
-#include <cassert>
-
-#include "Json11Helper.h"
-#include "IProcessingBlockFactory.h"
-
 #include "Concert.h"
+
+#include <cassert>
+#include <list>
+
 #include "IPatch.h"
+#include "IProcessingBlockFactory.h"
+#include "Json11Helper.h"
 
 #define LOGGING_COMPONENT "Concert"
 
 Concert::Concert(IMidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory)
-    : midiInput(midiInput)
-    , processingBlockFactory(processingBlockFactory)
+    : midiInput(midiInput), processingBlockFactory(processingBlockFactory)
 {
     midiInput.subscribe(*this);
 }
@@ -20,7 +19,7 @@ Concert::~Concert()
 {
     midiInput.unsubscribe(*this);
 
-    for(auto patch : patches)
+    for (auto patch : patches)
     {
         delete patch;
     }
@@ -54,7 +53,7 @@ Concert::TPatchPosition Concert::addPatchInternal(IPatch* patch)
 {
     patches.push_back(patch);
 
-    if(patches.size() == 1)
+    if (patches.size() == 1)
     {
         // First patch. Activate it.
         patch->activate();
@@ -68,7 +67,7 @@ IPatch* Concert::getPatch(TPatchPosition position) const
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    if(position >= patches.size())
+    if (position >= patches.size())
     {
         return nullptr;
     }
@@ -80,7 +79,7 @@ bool Concert::removePatch(TPatchPosition position)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    if(position >= patches.size())
+    if (position >= patches.size())
     {
         return false;
     }
@@ -101,7 +100,7 @@ Json Concert::convertToJson() const
     converted[noteToLightMapJsonKey] = Processing::convert(noteToLightMap);
 
     Json::array convertedPatches;
-    for(const IPatch* patch : patches)
+    for (const IPatch* patch : patches)
     {
         convertedPatches.push_back(patch->convertToJson());
     }
@@ -120,23 +119,23 @@ void Concert::convertFromJson(const Json& converted)
     helper.getItemIfPresent(currentBankJsonKey, currentBank);
 
     Json::object convertedNoteToLightMap;
-    if(helper.getItemIfPresent(noteToLightMapJsonKey, convertedNoteToLightMap))
+    if (helper.getItemIfPresent(noteToLightMapJsonKey, convertedNoteToLightMap))
     {
         noteToLightMap = Processing::convert(convertedNoteToLightMap);
         // Make sure all mapped lights fit into the strip
         createMinimumAmountOfLights();
     }
 
-    for(IPatch* patch : patches)
+    for (IPatch* patch : patches)
     {
         delete patch;
     }
     patches.clear();
 
     Json::array convertedPatches;
-    if(helper.getItemIfPresent(patchesJsonKey, convertedPatches))
+    if (helper.getItemIfPresent(patchesJsonKey, convertedPatches))
     {
-        for(const Json& convertedPatch : convertedPatches)
+        for (const Json& convertedPatch : convertedPatches)
         {
             patches.push_back(processingBlockFactory.createPatch(convertedPatch));
         }
@@ -177,9 +176,9 @@ void Concert::setNoteToLightMap(Processing::TNoteToLightMap noteToLightMap)
 void Concert::createMinimumAmountOfLights()
 {
     uint16_t highestLightIndex(0);
-    for(const auto& pair : noteToLightMap)
+    for (const auto& pair : noteToLightMap)
     {
-        if(pair.second > highestLightIndex)
+        if (pair.second > highestLightIndex)
         {
             highestLightIndex = pair.second;
         }
@@ -187,7 +186,7 @@ void Concert::createMinimumAmountOfLights()
 
     size_t minimumAmount(highestLightIndex + 1);
     strip.reserve(minimumAmount);
-    for(unsigned int i(0); i < minimumAmount; ++i)
+    for (unsigned int i(0); i < minimumAmount; ++i)
     {
         strip.push_back(Processing::TRgb());
     }
@@ -234,11 +233,11 @@ void Concert::execute()
 
     std::lock_guard<std::mutex> lock(mutex);
 
-    if(activePatchPosition != invalidPatchPosition)
+    if (activePatchPosition != invalidPatchPosition)
     {
         patches.at(activePatchPosition)->execute(strip, noteToLightMap);
 
-        for(auto observer : observers)
+        for (auto observer : observers)
         {
             observer->onStripUpdate(strip);
         }
@@ -269,28 +268,30 @@ void Concert::onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bo
 
 void Concert::onProgramChange(uint8_t channel, uint8_t program)
 {
-    auto taskFn = [=]() {
+    auto taskFn = [=]()
+    {
         std::lock_guard<std::mutex> lock(mutex);
 
-        if(channel != programChangeChannel)
+        if (channel != programChangeChannel)
         {
             return;
         }
 
-        for(auto patchIt = patches.begin(); patchIt != patches.end(); ++patchIt)
+        for (auto patchIt = patches.begin(); patchIt != patches.end(); ++patchIt)
         {
             IPatch* patch = *patchIt;
-            if(patch->hasBankAndProgram())
+            if (patch->hasBankAndProgram())
             {
-                if(patch->getBank() == currentBank)
+                if (patch->getBank() == currentBank)
                 {
-                    if(patch->getProgram() == program)
+                    if (patch->getProgram() == program)
                     {
                         // Found a patch which matches the received program number and active bank.
-                        if(activePatchPosition != invalidPatchPosition)
+                        if (activePatchPosition != invalidPatchPosition)
                         {
                             IPatch* activePatch(patches.at(activePatchPosition));
-                            LOG_INFO_PARAMS("deactivating patch '%s'", activePatch->getName().c_str());
+                            LOG_INFO_PARAMS("deactivating patch '%s'",
+                                            activePatch->getName().c_str());
                             activePatch->deactivate();
                         }
                         LOG_INFO_PARAMS("activating patch '%s'", patch->getName().c_str());
@@ -304,26 +305,29 @@ void Concert::onProgramChange(uint8_t channel, uint8_t program)
     scheduler.schedule(taskFn);
 }
 
-void Concert::onControlChange(uint8_t channel, IMidiInterface::TControllerNumber controllerNumber, uint8_t value)
+void Concert::onControlChange(uint8_t channel, IMidiInterface::TControllerNumber controllerNumber,
+                              uint8_t value)
 {
-    if((controllerNumber != IMidiInterface::BANK_SELECT_MSB) && (controllerNumber != IMidiInterface::BANK_SELECT_LSB))
+    if ((controllerNumber != IMidiInterface::BANK_SELECT_MSB) &&
+        (controllerNumber != IMidiInterface::BANK_SELECT_LSB))
     {
         return;
     }
 
-    auto taskFn = [=]() {
+    auto taskFn = [=]()
+    {
         std::lock_guard<std::mutex> lock(mutex);
 
-        if(channel != programChangeChannel)
+        if (channel != programChangeChannel)
         {
             return;
         }
 
-        if(controllerNumber == IMidiInterface::BANK_SELECT_MSB)
+        if (controllerNumber == IMidiInterface::BANK_SELECT_MSB)
         {
             currentBank = (value << 7) | (currentBank & 0x7f);
         }
-        else if(controllerNumber == IMidiInterface::BANK_SELECT_LSB)
+        else if (controllerNumber == IMidiInterface::BANK_SELECT_LSB)
         {
             currentBank = (currentBank & 0x7f80) | value;
         }

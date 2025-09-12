@@ -5,10 +5,9 @@
 
 #include "../Interfaces/IMidiInput.h"
 
-class MockMidiInput
-    : public IMidiInput
+class MockMidiInput : public IMidiInput
 {
-public:
+  public:
     // IMidiInterface implementation
     MOCK_CONST_METHOD0(getPortCount, unsigned int());
     MOCK_METHOD1(openPort, void(int number));

@@ -4,19 +4,17 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
 
-#include "ILoggingTarget.h"
 #include "BaseTask.h"
+#include "ILoggingTarget.h"
 
 class Stream;
 
 /**
  * The logging task.
  */
-class LoggingTask
-    : public ILoggingTarget
-    , public BaseTask
+class LoggingTask : public ILoggingTarget, public BaseTask
 {
-public:
+  public:
     /**
      * Constructor.
      *
@@ -24,9 +22,7 @@ public:
      * @param stackSize Stack size in words
      * @param priority  Priority
      */
-    LoggingTask(Stream& serial,
-                uint32_t stackSize,
-                UBaseType_t priority);
+    LoggingTask(Stream& serial, uint32_t stackSize, UBaseType_t priority);
 
     /**
      * Destructor.
@@ -39,9 +35,10 @@ public:
     LoggingTask& operator=(const LoggingTask&) = delete;
 
     // ILoggingTarget implementation
-    void logMessage(uint64_t time, Logging::TLogLevel level, std::string component, std::string message) override;
+    void logMessage(uint64_t time, Logging::TLogLevel level, std::string component,
+                    std::string message) override;
 
-private:
+  private:
     struct QueueEntry
     {
         uint64_t time;

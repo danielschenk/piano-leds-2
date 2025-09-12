@@ -1,11 +1,12 @@
+#include "Patch.h"
+
 #include <Json11Helper.h>
 
-#include "Patch.h"
 #include "IProcessingBlockFactory.h"
 
 Patch::Patch(const IProcessingBlockFactory& processingBlockFactory)
-    : processingChain(processingBlockFactory.createProcessingChain())
-    , processingBlockFactory(processingBlockFactory)
+    : processingChain(processingBlockFactory.createProcessingChain()),
+      processingBlockFactory(processingBlockFactory)
 {
 }
 
@@ -51,7 +52,7 @@ void Patch::convertFromJson(const Json& converted)
 
     // Get processing chain
     Json::object convertedProcessingChain;
-    if(helper.getItemIfPresent(processingChainJsonKey, convertedProcessingChain))
+    if (helper.getItemIfPresent(processingChainJsonKey, convertedProcessingChain))
     {
         processingChain->convertFromJson(convertedProcessingChain);
     }

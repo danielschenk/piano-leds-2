@@ -1,13 +1,14 @@
 #include "ConcertInfrastructure.h"
-#include "Patch.h"
-#include "NoteVisualizer.h"
-#include "SingleColorFill.h"
+
 #include "HorizontalStretcher.hpp"
 #include "LinearRgbFunction.h"
-#include "PianoDecayRgbFunction.h"
-#include "SequentialColorPicker.hpp"
-#include "ProcessingTypes.h"
 #include "Logging.h"
+#include "NoteVisualizer.h"
+#include "Patch.h"
+#include "PianoDecayRgbFunction.h"
+#include "ProcessingTypes.h"
+#include "SequentialColorPicker.hpp"
+#include "SingleColorFill.h"
 
 namespace application
 {
@@ -15,10 +16,10 @@ namespace application
 #define LOGGING_COMPONENT "ConcertInfrastructure"
 
 ConcertInfrastructure::ConcertInfrastructure(IMidiInput& midiInput, const ITime& time)
-    : midiInput(midiInput)
-    , time(time)
-    , processingBlockFactory(midiInput, rgbFunctionFactory, time)
-    , concert(midiInput, processingBlockFactory)
+    : midiInput(midiInput),
+      time(time),
+      processingBlockFactory(midiInput, rgbFunctionFactory, time),
+      concert(midiInput, processingBlockFactory)
 {
     concert.setNoteToLightMap(createDefaultOneToOneFullPianoMapping(1));
     LOG_INFO_PARAMS("strip size: %zd", concert.getStripSize());
@@ -28,8 +29,8 @@ ConcertInfrastructure::ConcertInfrastructure(IMidiInput& midiInput, const ITime&
 void ConcertInfrastructure::createLegacyPatches()
 {
     using namespace Processing::ColorValue;
-    constexpr std::array<Processing::TRgb, 7> colors{red, green, blue, yellow, magenta,
-        cyan, white};
+    constexpr std::array<Processing::TRgb, 7> colors{red,     green, blue, yellow,
+                                                     magenta, cyan,  white};
 
     uint8_t program = 0;
     for (const auto& color : colors)
@@ -55,7 +56,8 @@ void ConcertInfrastructure::createLegacyPatches()
     patch->setName("Multicolor");
 }
 
-Patch* ConcertInfrastructure::addBasicPatch(const Processing::TRgb& color, bool likePiano,
+Patch* ConcertInfrastructure::addBasicPatch(
+    const Processing::TRgb& color, bool likePiano,
     std::shared_ptr<Processing::ColorPicker> pressDownColorPicker)
 {
     auto patch = new Patch(processingBlockFactory);
@@ -83,13 +85,14 @@ Patch* ConcertInfrastructure::addBasicPatch(const Processing::TRgb& color, bool 
     return patch;
 }
 
-Processing::TNoteToLightMap ConcertInfrastructure::createDefaultOneToOneFullPianoMapping(uint16_t skipLedsPerNote)
+Processing::TNoteToLightMap ConcertInfrastructure::createDefaultOneToOneFullPianoMapping(
+    uint16_t skipLedsPerNote)
 {
     Processing::TNoteToLightMap noteToLightMap;
     uint16_t lightNumber = 0;
     constexpr uint8_t noteNumberA0 = 21;
     constexpr uint8_t noteNumberC8 = 108;
-    for(uint8_t noteNumber = noteNumberC8; noteNumber >= noteNumberA0; --noteNumber)
+    for (uint8_t noteNumber = noteNumberC8; noteNumber >= noteNumberA0; --noteNumber)
     {
         noteToLightMap[noteNumber] = lightNumber;
         lightNumber += (1 + skipLedsPerNote);
@@ -98,4 +101,4 @@ Processing::TNoteToLightMap ConcertInfrastructure::createDefaultOneToOneFullPian
     return noteToLightMap;
 }
 
-}
+}  // namespace application

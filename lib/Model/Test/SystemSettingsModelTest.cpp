@@ -1,10 +1,10 @@
-#include "../SystemSettingsModel.h"
-
 #include <gtest/gtest.h>
+
+#include "../SystemSettingsModel.h"
 
 class SystemSettingsModelTest : public testing::Test
 {
-public:
+  public:
     SystemSettingsModelTest() = default;
     SystemSettingsModel model;
 };

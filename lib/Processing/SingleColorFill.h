@@ -1,13 +1,13 @@
 #ifndef PROCESSING_SINGLECOLORFILL_H_
 #define PROCESSING_SINGLECOLORFILL_H_
 
-#include "ProcessingBlock.h"
 #include <mutex>
 
-class SingleColorFill
-    : public ProcessingBlock
+#include "ProcessingBlock.h"
+
+class SingleColorFill : public ProcessingBlock
 {
-public:
+  public:
     SingleColorFill() = default;
 
     SingleColorFill(SingleColorFill&) = delete;
@@ -16,18 +16,19 @@ public:
     // ProcessingBlock implementation.
     virtual void activate();
     virtual void deactivate();
-    virtual void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap);
+    virtual void execute(Processing::TRgbStrip& strip,
+                         const Processing::TNoteToLightMap& noteToLightMap);
     virtual Json convertToJson() const;
     virtual void convertFromJson(const Json& converted);
 
     Processing::TRgb getColor() const;
     void setColor(Processing::TRgb color);
 
-protected:
+  protected:
     // ProcessingBlock implementation
     virtual std::string getObjectType() const;
 
-private:
+  private:
     static constexpr const char* rJsonKey = "r";
     static constexpr const char* gJsonKey = "g";
     static constexpr const char* bJsonKey = "b";

@@ -1,22 +1,19 @@
 #include "NoteVisualizer.h"
 
-#include "IRgbFunctionFactory.h"
+#include <functional>
+
+#include "ColorPicker.hpp"
 #include "IRgbFunction.h"
+#include "IRgbFunctionFactory.h"
 #include "ITime.h"
 #include "Json11Helper.h"
 #include "Logging.h"
-#include "ColorPicker.hpp"
-
-#include <functional>
 
 #define LOGGING_COMPONENT "NoteVisualizer"
 
-NoteVisualizer::NoteVisualizer(IMidiInput& midiInput,
-                             const IRgbFunctionFactory& rgbFunctionFactory,
-                             const ITime& time)
-    : rgbFunctionFactory(rgbFunctionFactory)
-    , midiInput(midiInput)
-    , time(time)
+NoteVisualizer::NoteVisualizer(IMidiInput& midiInput, const IRgbFunctionFactory& rgbFunctionFactory,
+                               const ITime& time)
+    : rgbFunctionFactory(rgbFunctionFactory), midiInput(midiInput), time(time)
 {
     midiInput.subscribe(*this);
 }
@@ -39,7 +36,7 @@ void NoteVisualizer::deactivate()
 
     // Make sure no notes stay active. Handle remaining events first.
     scheduler.executeAll();
-    for(auto& noteState : noteStates)
+    for (auto& noteState : noteStates)
     {
         noteState.pressed = false;
         noteState.sounding = false;
@@ -48,16 +45,18 @@ void NoteVisualizer::deactivate()
     active = false;
 }
 
-void NoteVisualizer::execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap)
+void NoteVisualizer::execute(Processing::TRgbStrip& strip,
+                             const Processing::TNoteToLightMap& noteToLightMap)
 {
     scheduler.executeAll();
 
-    for(auto pair : noteToLightMap)
+    for (auto pair : noteToLightMap)
     {
         // first: note number, second: light number
-        if(rgbFunction != nullptr && pair.second < strip.size())
+        if (rgbFunction != nullptr && pair.second < strip.size())
         {
-            strip[pair.second] = rgbFunction->calculate(noteStates[pair.first], time.getMilliseconds());
+            strip[pair.second] =
+                rgbFunction->calculate(noteStates[pair.first], time.getMilliseconds());
         }
     }
 }
@@ -66,69 +65,74 @@ void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t veloc
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    if(!active)
+    if (!active)
     {
         return;
     }
 
-    scheduler.schedule([this, channel, number, velocity, on]() {
-        std::lock_guard<std::mutex> lock(mutex);
-
-        if(channel == this->channel)
+    scheduler.schedule(
+        [this, channel, number, velocity, on]()
         {
-            if(on)
+            std::lock_guard<std::mutex> lock(mutex);
+
+            if (channel == this->channel)
             {
-                noteStates[number].pressDownVelocity = velocity;
-                noteStates[number].noteOnTimeStamp = time.getMilliseconds();
-                noteStates[number].pressed = true;
-                noteStates[number].sounding = true;
-                if (pressDownColorPicker)
-                    noteStates[number].pressDownColor = pressDownColorPicker->pick();
-            }
-            else
-            {
-                noteStates[number].pressed = false;
-                if(!pedalPressed)
+                if (on)
                 {
-                    noteStates[number].sounding = false;
+                    noteStates[number].pressDownVelocity = velocity;
+                    noteStates[number].noteOnTimeStamp = time.getMilliseconds();
+                    noteStates[number].pressed = true;
+                    noteStates[number].sounding = true;
+                    if (pressDownColorPicker)
+                        noteStates[number].pressDownColor = pressDownColorPicker->pick();
+                }
+                else
+                {
+                    noteStates[number].pressed = false;
+                    if (!pedalPressed)
+                    {
+                        noteStates[number].sounding = false;
+                    }
                 }
             }
-        }
-    });
+        });
 }
 
-void NoteVisualizer::onControlChange(uint8_t channel, IMidiInput::TControllerNumber number, uint8_t value)
+void NoteVisualizer::onControlChange(uint8_t channel, IMidiInput::TControllerNumber number,
+                                     uint8_t value)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    if(!active)
+    if (!active)
     {
         return;
     }
 
     // Don't cause scheduling overhead when it's an unimportant controller number.
     // Channel check must be scheduled as it uses a member
-    if(number == IMidiInterface::DAMPER_PEDAL)
+    if (number == IMidiInterface::DAMPER_PEDAL)
     {
-        scheduler.schedule([this, channel, value]() {
-            std::lock_guard<std::mutex> lock(mutex);
-
-            if(channel == this->channel && usingPedal)
+        scheduler.schedule(
+            [this, channel, value]()
             {
-                pedalPressed = (value >= 64);
-                if(!pedalPressed)
+                std::lock_guard<std::mutex> lock(mutex);
+
+                if (channel == this->channel && usingPedal)
                 {
-                    // Stop all notes which are sounding due to pedal only
-                    for(int note = 0; note < IMidiInterface::numNotes; ++note)
+                    pedalPressed = (value >= 64);
+                    if (!pedalPressed)
                     {
-                        if(!noteStates[note].pressed)
+                        // Stop all notes which are sounding due to pedal only
+                        for (int note = 0; note < IMidiInterface::numNotes; ++note)
                         {
-                            noteStates[note].sounding = false;
+                            if (!noteStates[note].pressed)
+                            {
+                                noteStates[note].sounding = false;
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
     }
 }
 
@@ -191,7 +195,7 @@ Json NoteVisualizer::convertToJson() const
     json[JsonConvertible::objectTypeKey] = getObjectType();
     json[usingPedalJsonKey] = usingPedal;
     json[channelJsonKey] = channel;
-    if(rgbFunction != nullptr)
+    if (rgbFunction != nullptr)
     {
         json[rgbFunctionJsonKey] = rgbFunction->convertToJson();
     }
@@ -208,7 +212,7 @@ void NoteVisualizer::convertFromJson(const Json& converted)
     helper.getItemIfPresent(channelJsonKey, channel);
 
     Json::object convertedRgbFunction;
-    if(helper.getItemIfPresent(rgbFunctionJsonKey, convertedRgbFunction))
+    if (helper.getItemIfPresent(rgbFunctionJsonKey, convertedRgbFunction))
         rgbFunction = rgbFunctionFactory.createRgbFunction(convertedRgbFunction);
 }
 

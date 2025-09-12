@@ -3,18 +3,17 @@
 
 #include <cstdint>
 #include <list>
-#include <vector>
 #include <mutex>
+#include <vector>
 
 #include "IMidiInput.h"
 
 /**
  * Base class for MIDI inputs, implementing message subscription mechanism.
  */
-class BaseMidiInput
-    : public IMidiInput
+class BaseMidiInput : public IMidiInput
 {
-public:
+  public:
     /**
      * Destructor.
      */
@@ -28,7 +27,7 @@ public:
     virtual void subscribe(IObserver& observer);
     virtual void unsubscribe(IObserver& observer);
 
-protected:
+  protected:
     /**
      * Constructor.
      */
@@ -39,7 +38,7 @@ protected:
      */
     void processMidiByte(uint8_t value);
 
-private:
+  private:
     /**
      * Notify observers about a note change.
      *
@@ -56,7 +55,8 @@ private:
      * @param[in]   controller  The number of the controller.
      * @param[in]   value       The value of the controller.
      */
-    void notifyControlChange(uint8_t channel, IMidiInput::TControllerNumber control, uint8_t value) const;
+    void notifyControlChange(uint8_t channel, IMidiInput::TControllerNumber control,
+                             uint8_t value) const;
 
     /**
      * Notify observers about a program change.

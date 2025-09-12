@@ -1,9 +1,9 @@
 #ifndef COMMON_LOGGINGENTRYPOINT_H_
 #define COMMON_LOGGINGENTRYPOINT_H_
 
-#include <vector>
-#include <mutex>
 #include <cstdint>
+#include <mutex>
+#include <vector>
 
 #include "LoggingDefinitions.h"
 
@@ -11,15 +11,16 @@ class ILoggingTarget;
 class ITime;
 
 /**
- * Static class which receives log events and distributes them to subscribers (logging implementations).
+ * Static class which receives log events and distributes them to subscribers (logging
+ * implementations).
  */
 class LoggingEntryPoint
 {
-public:
+  public:
     // Prevent implicit constructor, copy constructor and assignment operator.
     LoggingEntryPoint() = delete;
     LoggingEntryPoint(const LoggingEntryPoint&) = delete;
-    LoggingEntryPoint& operator =(const LoggingEntryPoint&) = delete;
+    LoggingEntryPoint& operator=(const LoggingEntryPoint&) = delete;
 
     /**
      * Subscribe to logging events.
@@ -48,11 +49,13 @@ public:
      * @param[in]   fmt         Format string of the log message.
      * @param[in]   ...         Arguments to use for string formatting.
      */
-    static void logMessage(Logging::TLogLevel level, const char *component, const char *fmt, ...) __attribute__((format (printf, 3, 4)));
+    static void logMessage(Logging::TLogLevel level, const char* component, const char* fmt, ...)
+        __attribute__((format(printf, 3, 4)));
 
     /** Max log message size, excluding file, line and level information. */
     static constexpr unsigned int maxMessageSize = 2048;
-private:
+
+  private:
     /** The list of subscribers. */
     static std::vector<ILoggingTarget*> s_subscribers;
 

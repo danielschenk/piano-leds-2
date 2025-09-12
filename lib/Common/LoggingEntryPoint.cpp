@@ -1,12 +1,14 @@
-#include <vector>
-#include <string>
-#include <mutex>
-#include <cstdarg>
-#include <algorithm>
-#include <cassert>
+#include "LoggingEntryPoint.h"
+
 #include <stdio.h>
 
-#include "LoggingEntryPoint.h"
+#include <algorithm>
+#include <cassert>
+#include <cstdarg>
+#include <mutex>
+#include <string>
+#include <vector>
+
 #include "ILoggingTarget.h"
 #include "ITime.h"
 
@@ -18,15 +20,15 @@ void LoggingEntryPoint::subscribe(ILoggingTarget& subscriber)
 {
     std::lock_guard<std::mutex> lock(s_mutex);
     bool found(false);
-    for(auto loggingTarget : s_subscribers)
+    for (auto loggingTarget : s_subscribers)
     {
-        if(loggingTarget == &subscriber)
+        if (loggingTarget == &subscriber)
         {
             found = true;
             break;
         }
     }
-    if(!found)
+    if (!found)
     {
         s_subscribers.push_back(&subscriber);
     }
@@ -35,16 +37,18 @@ void LoggingEntryPoint::subscribe(ILoggingTarget& subscriber)
 void LoggingEntryPoint::unsubscribe(ILoggingTarget& subscriber)
 {
     std::lock_guard<std::mutex> lock(s_mutex);
-    s_subscribers.erase(std::remove(s_subscribers.begin(), s_subscribers.end(), &subscriber), s_subscribers.end());
+    s_subscribers.erase(std::remove(s_subscribers.begin(), s_subscribers.end(), &subscriber),
+                        s_subscribers.end());
 }
 
-void LoggingEntryPoint::logMessage(Logging::TLogLevel level, const char *component, const char *fmt, ...)
+void LoggingEntryPoint::logMessage(Logging::TLogLevel level, const char* component, const char* fmt,
+                                   ...)
 {
     assert(s_time != nullptr);
     uint32_t time(s_time->getMilliseconds());
 
     std::lock_guard<std::mutex> lock(s_mutex);
-    if(s_subscribers.size() > 0)
+    if (s_subscribers.size() > 0)
     {
         std::vector<char> buffer(maxMessageSize);
         va_list args;
@@ -54,7 +58,7 @@ void LoggingEntryPoint::logMessage(Logging::TLogLevel level, const char *compone
 
         std::string message(buffer.data());
         std::string componentStr(component);
-        for(auto loggingTarget : s_subscribers)
+        for (auto loggingTarget : s_subscribers)
         {
             if (loggingTarget != nullptr)
             {

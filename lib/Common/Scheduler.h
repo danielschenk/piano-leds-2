@@ -2,15 +2,15 @@
 #define COMMON_SCHEDULER_H_
 
 #include <functional>
-#include <queue>
 #include <mutex>
+#include <queue>
 
 /**
  * Scheduler.
  */
 class Scheduler
 {
-public:
+  public:
     /** Type for scheduled tasks. */
     typedef std::function<void()> TTask;
 
@@ -47,7 +47,7 @@ public:
      */
     bool executeAll();
 
-private:
+  private:
     /** The queue of tasks. */
     std::queue<TTask> queue;
 

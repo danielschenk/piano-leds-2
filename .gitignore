@@ -1,5 +1,4 @@
 # IDE project files
-.vscode/
 .idea/
 CMakeLists.txt
 CMakeListsPrivate.txt

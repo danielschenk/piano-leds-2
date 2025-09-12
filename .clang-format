@@ -1,0 +1,9 @@
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 100
+BracketAlignment: Align
+AllowShortFunctionsOnASingleLine: Empty
+BreakBeforeBraces: Allman
+AccessModifierOffset: -2
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false

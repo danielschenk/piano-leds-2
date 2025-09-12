@@ -14,6 +14,4 @@ enum TLogLevel
 
 }
 
-
-
 #endif /* COMMON_INTERFACES_LOGGINGDEFINITIONS_H_ */

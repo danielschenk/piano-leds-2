@@ -1,16 +1,16 @@
 #ifndef PROCESSING_RGBFUNCTIONFACTORY_H_
 #define PROCESSING_RGBFUNCTIONFACTORY_H_
 
-#include "IRgbFunctionFactory.h"
 #include <memory>
+
+#include "IRgbFunctionFactory.h"
 
 /**
  * Factory for RGB functions.
  */
-class RgbFunctionFactory
-    : public IRgbFunctionFactory
+class RgbFunctionFactory : public IRgbFunctionFactory
 {
-public:
+  public:
     RgbFunctionFactory() = default;
 
     RgbFunctionFactory(const RgbFunctionFactory&) = delete;

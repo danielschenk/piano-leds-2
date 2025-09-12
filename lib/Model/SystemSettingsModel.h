@@ -1,12 +1,13 @@
 #ifndef SYSTEMSETTINGSMODEL_H
 #define SYSTEMSETTINGSMODEL_H
 
-#include "Model.h"
 #include <string>
+
+#include "Model.h"
 
 class SystemSettingsModel : public Model
 {
-public:
+  public:
     SystemSettingsModel() = default;
 
     SystemSettingsModel(const SystemSettingsModel &) = delete;
@@ -17,9 +18,9 @@ public:
     std::string getWifiAPPassword() const;
     void setWifiAPPassword(std::string wifiStationPassword);
 
-private:
+  private:
     std::string wifiAPSsid = "PianoLeds";
     std::string wifiAPPassword = "LedsFlashSomeNotes";
 };
 
-#endif // SYSTEMSETTINGSMODEL_H
+#endif  // SYSTEMSETTINGSMODEL_H

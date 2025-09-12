@@ -1,31 +1,30 @@
-#include <functional>
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
+#include <functional>
 
 #include "../Scheduler.h"
 
-using ::testing::StrictMock;
 using ::testing::Expectation;
+using ::testing::StrictMock;
 
 class ITask
 {
     virtual void task() = 0;
 
-protected:
+  protected:
     virtual ~ITask() = default;
 };
 
-class MockTask
-    : public ITask
+class MockTask : public ITask
 {
-public:
+  public:
     MOCK_METHOD0(task, void());
 };
 
-class SchedulerTest
-    : public ::testing::Test
+class SchedulerTest : public ::testing::Test
 {
-public:
+  public:
     Scheduler scheduler;
 };
 
@@ -33,8 +32,7 @@ TEST_F(SchedulerTest, executeOne)
 {
     StrictMock<MockTask> mockTask;
     scheduler.schedule(std::bind(&MockTask::task, &mockTask));
-    EXPECT_CALL(mockTask, task())
-        .Times(1);
+    EXPECT_CALL(mockTask, task()).Times(1);
 
     EXPECT_TRUE(scheduler.executeOne());
     EXPECT_FALSE(scheduler.executeOne());
@@ -46,11 +44,8 @@ TEST_F(SchedulerTest, executeTwo)
     scheduler.schedule(std::bind(&MockTask::task, &mockTask1));
     scheduler.schedule(std::bind(&MockTask::task, &mockTask2));
 
-    Expectation task1call = EXPECT_CALL(mockTask1, task())
-        .Times(1);
-    EXPECT_CALL(mockTask2, task())
-        .Times(1)
-        .After(task1call);
+    Expectation task1call = EXPECT_CALL(mockTask1, task()).Times(1);
+    EXPECT_CALL(mockTask2, task()).Times(1).After(task1call);
 
     EXPECT_TRUE(scheduler.executeOne());
     EXPECT_TRUE(scheduler.executeOne());
@@ -63,11 +58,8 @@ TEST_F(SchedulerTest, executeAll)
     scheduler.schedule(std::bind(&MockTask::task, &mockTask1));
     scheduler.schedule(std::bind(&MockTask::task, &mockTask2));
 
-    Expectation task1call = EXPECT_CALL(mockTask1, task())
-        .Times(1);
-    EXPECT_CALL(mockTask2, task())
-        .Times(1)
-        .After(task1call);
+    Expectation task1call = EXPECT_CALL(mockTask1, task()).Times(1);
+    EXPECT_CALL(mockTask2, task()).Times(1).After(task1call);
 
     EXPECT_TRUE(scheduler.executeAll());
     EXPECT_FALSE(scheduler.executeAll());

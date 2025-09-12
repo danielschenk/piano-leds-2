@@ -1,13 +1,13 @@
 #ifndef PROCESSING_NOTEVISUALIZER_H_
 #define PROCESSING_NOTEVISUALIZER_H_
 
-#include "IMidiInput.h"
-#include "Scheduler.h"
-#include "ProcessingBlock.h"
-
-#include <mutex>
 #include <array>
 #include <memory>
+#include <mutex>
+
+#include "IMidiInput.h"
+#include "ProcessingBlock.h"
+#include "Scheduler.h"
 
 class IRgbFunction;
 class IRgbFunctionFactory;
@@ -17,14 +17,11 @@ namespace Processing
 class ColorPicker;
 }
 
-class NoteVisualizer
-    : public ProcessingBlock
-    , public IMidiInput::IObserver
+class NoteVisualizer : public ProcessingBlock, public IMidiInput::IObserver
 {
-public:
-    NoteVisualizer(IMidiInput& midiDriver,
-                  const IRgbFunctionFactory& rgbFunctionFactory,
-                  const ITime& time);
+  public:
+    NoteVisualizer(IMidiInput& midiDriver, const IRgbFunctionFactory& rgbFunctionFactory,
+                   const ITime& time);
 
     ~NoteVisualizer() override;
 
@@ -34,7 +31,8 @@ public:
     // ProcessingBlock implementation
     void activate() override;
     void deactivate() override;
-    void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap) override;
+    void execute(Processing::TRgbStrip& strip,
+                 const Processing::TNoteToLightMap& noteToLightMap) override;
     Json convertToJson() const override;
     void convertFromJson(const Json& converted) override;
 
@@ -48,20 +46,20 @@ public:
 
     // IMidiInput::IObserver implementation
     void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) override;
-    void onControlChange(uint8_t channel, IMidiInput::TControllerNumber controller, uint8_t value) override;
+    void onControlChange(uint8_t channel, IMidiInput::TControllerNumber controller,
+                         uint8_t value) override;
     void onProgramChange(uint8_t channel, uint8_t program) override;
     void onChannelPressureChange(uint8_t channel, uint8_t value) override;
     void onPitchBendChange(uint8_t channel, uint16_t value) override;
 
-
-protected:
+  protected:
     // ProcessingBlock implementation
     std::string getObjectType() const override;
 
-private:
-    static constexpr const char* usingPedalJsonKey    = "usingPedal";
-    static constexpr const char* channelJsonKey       = "channel";
-    static constexpr const char* rgbFunctionJsonKey   = "rgbFunction";
+  private:
+    static constexpr const char* usingPedalJsonKey = "usingPedal";
+    static constexpr const char* channelJsonKey = "channel";
+    static constexpr const char* rgbFunctionJsonKey = "rgbFunction";
 
     mutable std::mutex mutex;
     bool active{false};

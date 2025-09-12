@@ -1,21 +1,18 @@
 #include <gtest/gtest.h>
 
-#include "../Patch.h"
-#include "../Mock/MockProcessingChain.h"
 #include "../Mock/MockProcessingBlockFactory.h"
+#include "../Mock/MockProcessingChain.h"
+#include "../Patch.h"
 
-using ::testing::Return;
-using ::testing::NiceMock;
 using ::testing::_;
 using ::testing::Invoke;
+using ::testing::NiceMock;
+using ::testing::Return;
 
-class PatchTest
-    : public ::testing::Test
+class PatchTest : public ::testing::Test
 {
-public:
-    PatchTest()
-        : processingBlockFactory()
-        , processingChain(new NiceMock<MockProcessingChain>)
+  public:
+    PatchTest() : processingBlockFactory(), processingChain(new NiceMock<MockProcessingChain>)
     {
         ON_CALL(processingBlockFactory, createProcessingChain())
             .WillByDefault(Return(processingChain));
@@ -54,8 +51,7 @@ TEST_F(PatchTest, convertToJson)
     Json::object mockChainJson;
     mockChainJson["objectType"] = "mockChain";
     mockChainJson["someProperty"] = 42;
-    EXPECT_CALL(*processingChain, convertToJson())
-        .WillOnce(Return(mockChainJson));
+    EXPECT_CALL(*processingChain, convertToJson()).WillOnce(Return(mockChainJson));
 
     Json::object converted = patch->convertToJson().object_items();
     EXPECT_EQ(42, converted.at("bank").number_value());
@@ -115,9 +111,9 @@ TEST_F(PatchTest, execute)
     ASSERT_NE(valueAfterProcessing, strip[0]);
 
     EXPECT_CALL(*processingChain, execute(_, map))
-        .WillOnce(Invoke([valueAfterProcessing](Processing::TRgbStrip& strip, const Processing::TNoteToLightMap&){
-            strip[0] = valueAfterProcessing;
-    }));
+        .WillOnce(Invoke(
+            [valueAfterProcessing](Processing::TRgbStrip& strip, const Processing::TNoteToLightMap&)
+            { strip[0] = valueAfterProcessing; }));
 
     patch->execute(strip, map);
 

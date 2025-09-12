@@ -8,10 +8,9 @@ class Stream;
 /**
  * MIDI input implementation which uses Arduino Serial.
  */
-class ArduinoMidiInput
-    : public BaseMidiInput
+class ArduinoMidiInput : public BaseMidiInput
 {
-public:
+  public:
     /**
      * Constructor.
      *
@@ -38,7 +37,7 @@ public:
     virtual unsigned int getPortCount() const;
     virtual void openPort(int number);
 
-private:
+  private:
     Stream& serial;
 };
 

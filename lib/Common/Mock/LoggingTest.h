@@ -3,21 +3,21 @@
 
 #include <gtest/gtest.h>
 
-#include "MockLoggingTarget.h"
 #include "../LoggingEntryPoint.h"
+#include "MockLoggingTarget.h"
 
-using ::testing::AnyOf;
 using ::testing::_;
 using ::testing::AnyNumber;
+using ::testing::AnyOf;
 
 class LoggingTest
 {
-public:
-    LoggingTest()
-        : mockLoggingTarget()
+  public:
+    LoggingTest() : mockLoggingTarget()
     {
         // Info and debug logs are OK
-        EXPECT_CALL(mockLoggingTarget, logMessage(_, AnyOf(Logging::LogLevel_Info, Logging::LogLevel_Debug), _, _))
+        EXPECT_CALL(mockLoggingTarget,
+                    logMessage(_, AnyOf(Logging::LogLevel_Info, Logging::LogLevel_Debug), _, _))
             .Times(AnyNumber());
 
         LoggingEntryPoint::subscribe(mockLoggingTarget);
@@ -30,6 +30,5 @@ public:
 
     MockLoggingTarget mockLoggingTarget;
 };
-
 
 #endif /* COMMON_MOCK_LOGGINGTEST_H_ */

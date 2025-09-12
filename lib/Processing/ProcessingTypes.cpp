@@ -1,19 +1,18 @@
 #include "ProcessingTypes.h"
-#include "Json11Helper.h"
 
 #include <cstdint>
 #include <cstdio>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
+
+#include "Json11Helper.h"
 
 namespace Processing
 {
 
 bool TRgb::operator==(const TRgb& other) const
 {
-    return (other.r == r) &&
-           (other.g == g) &&
-           (other.b == b);
+    return (other.r == r) && (other.g == g) && (other.b == b);
 }
 
 bool TRgb::operator!=(const TRgb& other) const
@@ -39,9 +38,8 @@ TRgb& TRgb::operator*=(const TRgb& other)
 
 TRgb operator*(float factor, const TRgb& color)
 {
-    float newR(factor * (float)color.r),
-          newG(factor * (float)color.g),
-          newB(factor * (float)color.b);
+    float newR(factor * (float)color.r), newG(factor * (float)color.g),
+        newB(factor * (float)color.b);
 
     return rgbFromFloat(newR, newG, newB);
 }
@@ -50,22 +48,17 @@ TRgb TRgb::operator+(const TRgb& other) const
 {
     uint16_t newR(r + other.r), newG(g + other.g), newB(b + other.b);
 
-    return {
-        static_cast<uint8_t>(newR > UINT8_MAX ? UINT8_MAX : newR),
-        static_cast<uint8_t>(newG > UINT8_MAX ? UINT8_MAX : newG),
-        static_cast<uint8_t>(newB > UINT8_MAX ? UINT8_MAX : newB)
-    };
+    return {static_cast<uint8_t>(newR > UINT8_MAX ? UINT8_MAX : newR),
+            static_cast<uint8_t>(newG > UINT8_MAX ? UINT8_MAX : newG),
+            static_cast<uint8_t>(newB > UINT8_MAX ? UINT8_MAX : newB)};
 }
 
 TRgb TRgb::operator-(const TRgb& other) const
 {
     int16_t newR(r - other.r), newG(g - other.g), newB(b - other.b);
 
-    return {
-        static_cast<uint8_t>(newR < 0 ? 0 : newR),
-        static_cast<uint8_t>(newG < 0 ? 0 : newG),
-        static_cast<uint8_t>(newB < 0 ? 0 : newB)
-    };
+    return {static_cast<uint8_t>(newR < 0 ? 0 : newR), static_cast<uint8_t>(newG < 0 ? 0 : newG),
+            static_cast<uint8_t>(newB < 0 ? 0 : newB)};
 }
 
 TRgb& TRgb::operator+=(const TRgb& other)
@@ -84,10 +77,9 @@ TRgb& TRgb::operator-=(const TRgb& other)
 
 std::ostream& operator<<(std::ostream& os, const TRgb& color)
 {
-    return os << '#' << std::hex
-        << std::setfill('0') << std::setw(2) << static_cast<int>(color.r)
-        << std::setfill('0') << std::setw(2) << static_cast<int>(color.g)
-        << std::setfill('0') << std::setw(2) << static_cast<int>(color.b);
+    return os << '#' << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(color.r)
+              << std::setfill('0') << std::setw(2) << static_cast<int>(color.g) << std::setfill('0')
+              << std::setw(2) << static_cast<int>(color.b);
 }
 
 /**
@@ -95,22 +87,40 @@ std::ostream& operator<<(std::ostream& os, const TRgb& color)
  */
 TRgb rgbFromFloat(float initialR, float initialG, float initialB)
 {
-    if(initialR > UINT8_MAX) {initialR = UINT8_MAX;}
-    if(initialR <         0) {initialR =         0;}
-    if(initialG > UINT8_MAX) {initialG = UINT8_MAX;}
-    if(initialG <         0) {initialG =         0;}
-    if(initialB > UINT8_MAX) {initialB = UINT8_MAX;}
-    if(initialB <         0) {initialB =         0;}
+    if (initialR > UINT8_MAX)
+    {
+        initialR = UINT8_MAX;
+    }
+    if (initialR < 0)
+    {
+        initialR = 0;
+    }
+    if (initialG > UINT8_MAX)
+    {
+        initialG = UINT8_MAX;
+    }
+    if (initialG < 0)
+    {
+        initialG = 0;
+    }
+    if (initialB > UINT8_MAX)
+    {
+        initialB = UINT8_MAX;
+    }
+    if (initialB < 0)
+    {
+        initialB = 0;
+    }
 
     return TRgb((uint8_t)initialR, (uint8_t)initialG, (uint8_t)initialB);
 }
 
-bool TLinearConstants::operator==(const TLinearConstants &other) const
+bool TLinearConstants::operator==(const TLinearConstants& other) const
 {
     return (factor == other.factor) && (offset == other.offset);
 }
 
-bool TLinearConstants::operator!=(const TLinearConstants &other) const
+bool TLinearConstants::operator!=(const TLinearConstants& other) const
 {
     return !(other == *this);
 }
@@ -118,7 +128,7 @@ bool TLinearConstants::operator!=(const TLinearConstants &other) const
 Json convert(const TNoteToLightMap& source)
 {
     Json::object converted;
-    for(const auto& pair : source)
+    for (const auto& pair : source)
     {
         char buf[4];
         snprintf(buf, sizeof(buf), "%u", pair.first);
@@ -133,13 +143,13 @@ TNoteToLightMap convert(const Json& source)
     Json11Helper helper(__PRETTY_FUNCTION__, source, false /* logMissingKeys */);
 
     TNoteToLightMap converted;
-    for(unsigned int noteNumber = 0; noteNumber <= UINT8_MAX; ++noteNumber)
+    for (unsigned int noteNumber = 0; noteNumber <= UINT8_MAX; ++noteNumber)
     {
         char buf[4];
         snprintf(buf, sizeof(buf), "%u", noteNumber);
 
         uint8_t lightNumber;
-        if(helper.getItemIfPresent(std::string(buf), lightNumber))
+        if (helper.getItemIfPresent(std::string(buf), lightNumber))
         {
             converted[noteNumber] = lightNumber;
         }
@@ -148,11 +158,13 @@ TNoteToLightMap convert(const Json& source)
     return converted;
 }
 
-TNoteState::TNoteState(bool pressed, bool sounding, uint8_t pressDownVelocity, TTime noteOnTimeStamp)
-    : pressed(pressed)
-    , sounding(sounding)
-    , pressDownVelocity(pressDownVelocity)
-    , noteOnTimeStamp(noteOnTimeStamp)
-{}
+TNoteState::TNoteState(bool pressed, bool sounding, uint8_t pressDownVelocity,
+                       TTime noteOnTimeStamp)
+    : pressed(pressed),
+      sounding(sounding),
+      pressDownVelocity(pressDownVelocity),
+      noteOnTimeStamp(noteOnTimeStamp)
+{
+}
 
 } /* namespace Processing */

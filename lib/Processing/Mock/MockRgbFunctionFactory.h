@@ -5,13 +5,10 @@
 
 #include "../Interfaces/IRgbFunctionFactory.h"
 
-class MockRgbFunctionFactory
-    : public IRgbFunctionFactory
+class MockRgbFunctionFactory : public IRgbFunctionFactory
 {
-public:
+  public:
     MOCK_CONST_METHOD1(createRgbFunction, std::shared_ptr<IRgbFunction>(const Json& converted));
 };
-
-
 
 #endif /* PROCESSING_MOCK_MOCKRGBFUNCTIONFACTORY_H_ */

@@ -15,4 +15,4 @@ TRgb SequentialColorPicker::pick()
     return color;
 }
 
-}
+}  // namespace Processing

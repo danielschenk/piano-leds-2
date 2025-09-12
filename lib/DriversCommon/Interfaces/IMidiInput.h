@@ -5,16 +5,15 @@
 
 #include "IMidiInterface.h"
 
-class IMidiInput
-    : public IMidiInterface
+class IMidiInput : public IMidiInterface
 {
-public:
+  public:
     /**
      * Interface to implement by MIDI input observers.
      */
     class IObserver
     {
-    public:
+      public:
         /**
          * Called when a note on/off message is received.
          *
@@ -32,7 +31,8 @@ public:
          * @param controller    Controller number
          * @param value         New value of the changed control
          */
-        virtual void onControlChange(uint8_t channel, TControllerNumber controller, uint8_t value) = 0;
+        virtual void onControlChange(uint8_t channel, TControllerNumber controller,
+                                     uint8_t value) = 0;
 
         /**
          * Called when a program change message is received.
@@ -58,7 +58,7 @@ public:
          */
         virtual void onPitchBendChange(uint8_t channel, uint16_t value) = 0;
 
-    protected:
+      protected:
         /**
          * Destructor.
          */
@@ -79,13 +79,11 @@ public:
      */
     virtual void unsubscribe(IObserver& observer) = 0;
 
-protected:
+  protected:
     /**
      * Destructor.
      */
     virtual ~IMidiInput() = default;
 };
-
-
 
 #endif /* SOURCE_DRIVERS_INCLUDE_IMIDIINPUT_H_ */

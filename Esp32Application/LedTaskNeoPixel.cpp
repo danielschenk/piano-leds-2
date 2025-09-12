@@ -1,14 +1,10 @@
-#include <algorithm>
-
 #include "LedTaskNeoPixel.h"
 
+#include <algorithm>
 
-LedTaskNeoPixel::LedTaskNeoPixel(Concert& concert,
-                 int16_t dataPin,
-                 uint32_t stackSize,
-                 UBaseType_t priority)
-    : strip(concert.getStripSize(), dataPin)
-    , concert(concert)
+LedTaskNeoPixel::LedTaskNeoPixel(Concert& concert, int16_t dataPin, uint32_t stackSize,
+                                 UBaseType_t priority)
+    : strip(concert.getStripSize(), dataPin), concert(concert)
 {
     strip.Begin();
     start("led", stackSize, priority);
@@ -44,10 +40,9 @@ void LedTaskNeoPixel::run()
         // A strip update was received, update the colors in the driver.
         std::lock_guard<std::mutex> lock(mutex);
 
-        for(unsigned int ledNumber(0); ledNumber < pendingValues.size(); ++ledNumber)
+        for (unsigned int ledNumber(0); ledNumber < pendingValues.size(); ++ledNumber)
         {
-            if(ledNumber >= strip.PixelCount())
-                break;
+            if (ledNumber >= strip.PixelCount()) break;
 
             auto& color(pendingValues[ledNumber]);
             strip.SetPixelColor(ledNumber, RgbColor{color.r, color.g, color.b});

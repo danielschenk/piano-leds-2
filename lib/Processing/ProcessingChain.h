@@ -1,8 +1,8 @@
 #ifndef PROCESSING_PROCESSINGCHAIN_H_
 #define PROCESSING_PROCESSINGCHAIN_H_
 
-#include <mutex>
 #include <list>
+#include <mutex>
 
 #include "IProcessingChain.h"
 
@@ -11,10 +11,9 @@ class IProcessingBlockFactory;
 /**
  * A processing chain which can hold multiple processing blocks connected in series.
  */
-class ProcessingChain
-    : public IProcessingChain
+class ProcessingChain : public IProcessingChain
 {
-public:
+  public:
     explicit ProcessingChain(const IProcessingBlockFactory& processingBlockFactory);
     ~ProcessingChain() override;
 
@@ -24,17 +23,18 @@ public:
     // IProcessingChain implementation
     void activate() override;
     void deactivate() override;
-    void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap) override;
+    void execute(Processing::TRgbStrip& strip,
+                 const Processing::TNoteToLightMap& noteToLightMap) override;
     void insertBlock(ProcessingBlock* block, unsigned int index) override;
     void insertBlock(ProcessingBlock* block) override;
     Json convertToJson() const override;
     void convertFromJson(const Json& converted) override;
 
-protected:
+  protected:
     // ProcessingBlock implementation
     std::string getObjectType() const override;
 
-private:
+  private:
     static constexpr const char* processingChainJsonKey = "processingChain";
 
     mutable std::mutex mutex;

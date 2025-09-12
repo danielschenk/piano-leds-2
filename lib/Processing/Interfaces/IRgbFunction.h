@@ -7,10 +7,9 @@
 /**
  * Interface for RGB functions.
  */
-class IRgbFunction
-    : public JsonConvertible
+class IRgbFunction : public JsonConvertible
 {
-public:
+  public:
     static constexpr const char* jsonTypeNameLinearRgbFunction = "LinearRgbFunction";
     static constexpr const char* jsonTypeNamePianoDecayRgbFunction = "PianoDecayRgbFunction";
 
@@ -22,7 +21,8 @@ public:
      *
      * @return  The output color.
      */
-    virtual Processing::TRgb calculate(const Processing::TNoteState& noteState, Processing::TTime currentTime) const = 0;
+    virtual Processing::TRgb calculate(const Processing::TNoteState& noteState,
+                                       Processing::TTime currentTime) const = 0;
 };
 
 #endif /* PROCESSING_IRGBFUNCTION_H_ */

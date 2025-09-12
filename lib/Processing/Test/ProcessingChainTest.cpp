@@ -1,27 +1,24 @@
-#include <string>
-#include <vector>
+#include <Mock/LoggingTest.h>
 #include <gtest/gtest.h>
 
-#include <Mock/LoggingTest.h>
+#include <string>
+#include <vector>
 
+#include "../ProcessingBlock.h"
 #include "ProcessingBlockContainerTest.h"
 #include "ProcessingChain.h"
 #include "ProcessingTypes.h"
-#include "../ProcessingBlock.h"
 
 #define LOGGING_COMPONENT "ProcessingChain"
 
-using ::testing::Return;
-using ::testing::HasSubstr;
 using ::testing::ElementsAre;
+using ::testing::HasSubstr;
+using ::testing::Return;
 
-class ProcessingChainTest
-    : public ProcessingBlockContainerTest
-    , public ::testing::Test
+class ProcessingChainTest : public ProcessingBlockContainerTest, public ::testing::Test
 {
-public:
-    ProcessingChainTest()
-        : processingChain(processingBlockFactory)
+  public:
+    ProcessingChainTest() : processingChain(processingBlockFactory)
     {
         processingChain.activate();
         map[0] = 0;
@@ -36,9 +33,9 @@ public:
 TEST_F(ProcessingChainTest, empty)
 {
     auto testStrip = Processing::TRgbStrip(stripSize);
-    testStrip[0] = { 1, 0, 0 };
-    testStrip[1] = { 0, 1, 0 };
-    testStrip[2] = { 0, 0, 1 };
+    testStrip[0] = {1, 0, 0};
+    testStrip[1] = {0, 1, 0};
+    testStrip[2] = {0, 0, 1};
 
     processingChain.execute(testStrip, Processing::TNoteToLightMap());
     // strip is still zero
@@ -51,9 +48,9 @@ TEST_F(ProcessingChainTest, insertOne)
     redSource = nullptr;
 
     auto reference = Processing::TRgbStrip(stripSize);
-    reference[0] = { 10, 0, 0 };
-    reference[1] = { 10, 0, 0 };
-    reference[2] = { 10, 0, 0 };
+    reference[0] = {10, 0, 0};
+    reference[1] = {10, 0, 0};
+    reference[2] = {10, 0, 0};
 
     processingChain.execute(strip, Processing::TNoteToLightMap());
     EXPECT_EQ(reference, strip);
@@ -67,9 +64,9 @@ TEST_F(ProcessingChainTest, insertTwo)
     valueDoubler = nullptr;
 
     auto reference = Processing::TRgbStrip(stripSize);
-    reference[0] = { 20, 0, 0 };
-    reference[1] = { 20, 0, 0 };
-    reference[2] = { 20, 0, 0 };
+    reference[0] = {20, 0, 0};
+    reference[1] = {20, 0, 0};
+    reference[2] = {20, 0, 0};
 
     processingChain.execute(strip, Processing::TNoteToLightMap());
     EXPECT_EQ(reference, strip);
@@ -78,14 +75,13 @@ TEST_F(ProcessingChainTest, insertTwo)
 TEST_F(ProcessingChainTest, convertToJson)
 {
     Json::array mockBlocksJson;
-    for(unsigned int i = 0; i < 3; ++i)
+    for (unsigned int i = 0; i < 3; ++i)
     {
         TMockBlock* mockBlock = new TMockBlock;
         ASSERT_NE(nullptr, mockBlock);
 
         Json mockJson = createMockBlockJson(i);
-        EXPECT_CALL(*mockBlock, convertToJson())
-            .WillOnce(Return(mockJson));
+        EXPECT_CALL(*mockBlock, convertToJson()).WillOnce(Return(mockJson));
         mockBlocksJson.push_back(mockJson);
 
         processingChain.insertBlock(mockBlock);
@@ -106,7 +102,7 @@ TEST_F(ProcessingChainTest, convertFromJson)
     valueDoubler = nullptr;
 
     Json::array mockBlocksJson;
-    for(unsigned int i = 0; i < mockBlocks.size(); ++i)
+    for (unsigned int i = 0; i < mockBlocks.size(); ++i)
     {
         Json mockJson = createMockBlockJson(i);
         mockBlocksJson.push_back(mockJson);
@@ -128,7 +124,7 @@ TEST_F(ProcessingChainTest, convertFromJson)
 
 TEST_F(ProcessingChainTest, activate)
 {
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         TMockBlock* block = new TMockBlock;
         processingChain.insertBlock(block);
@@ -141,7 +137,7 @@ TEST_F(ProcessingChainTest, activate)
 
 TEST_F(ProcessingChainTest, deactivate)
 {
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         TMockBlock* block = new TMockBlock;
         processingChain.insertBlock(block);
@@ -154,7 +150,7 @@ TEST_F(ProcessingChainTest, deactivate)
 
 TEST_F(ProcessingChainTest, activateOnInsert)
 {
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         TMockBlock* block = new TMockBlock;
         EXPECT_CALL(*block, activate());
@@ -167,7 +163,7 @@ TEST_F(ProcessingChainTest, deactivateOnInsert)
 {
     processingChain.deactivate();
 
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         TMockBlock* block = new TMockBlock;
         EXPECT_CALL(*block, deactivate());
@@ -176,10 +172,9 @@ TEST_F(ProcessingChainTest, deactivateOnInsert)
     }
 }
 
-class FakeAdditiveBlock
-    : public ProcessingBlock
+class FakeAdditiveBlock : public ProcessingBlock
 {
-public:
+  public:
     FakeAdditiveBlock(const Processing::TRgb& color) : color(color) {}
 
     void activate() override {}
@@ -189,17 +184,22 @@ public:
         strip[0] = color;
     }
 
-    Json convertToJson() const override { return Json(); };
+    Json convertToJson() const override
+    {
+        return Json();
+    };
     void convertFromJson(const Json& converted) override {};
-    std::string getObjectType() const override { return ""; }
+    std::string getObjectType() const override
+    {
+        return "";
+    }
 
     Processing::TRgb color;
 };
 
-class FakeOverwritingBlock
-    : public FakeAdditiveBlock
+class FakeOverwritingBlock : public FakeAdditiveBlock
 {
-public:
+  public:
     using FakeAdditiveBlock::FakeAdditiveBlock;
     Mode mode() const override
     {

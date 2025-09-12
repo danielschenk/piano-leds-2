@@ -3,8 +3,8 @@
 
 #include "Concert.h"
 #include "ProcessingBlockFactory.h"
-#include "RgbFunctionFactory.h"
 #include "ProcessingTypes.h"
+#include "RgbFunctionFactory.h"
 
 class IMidiInput;
 class ITime;
@@ -22,8 +22,10 @@ struct ConcertInfrastructure
 {
     ConcertInfrastructure(IMidiInput& midiInput, const ITime& time);
     void createLegacyPatches();
-    Patch* addBasicPatch(const Processing::TRgb& color, bool likePiano, std::shared_ptr<Processing::ColorPicker> pressDownColorPicker = nullptr);
-    static Processing::TNoteToLightMap createDefaultOneToOneFullPianoMapping(uint16_t skipLedsPerNote = 0);
+    Patch* addBasicPatch(const Processing::TRgb& color, bool likePiano,
+                         std::shared_ptr<Processing::ColorPicker> pressDownColorPicker = nullptr);
+    static Processing::TNoteToLightMap createDefaultOneToOneFullPianoMapping(
+        uint16_t skipLedsPerNote = 0);
 
     IMidiInput& midiInput;
     const ITime& time;
@@ -33,6 +35,6 @@ struct ConcertInfrastructure
     Concert concert;
 };
 
-}
+}  // namespace application
 
 #endif

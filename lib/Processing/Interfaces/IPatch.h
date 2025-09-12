@@ -5,10 +5,9 @@
 // getProcessingChain().someMethod();
 #include "IProcessingChain.h"
 
-class IPatch
-    : public JsonConvertible
+class IPatch : public JsonConvertible
 {
-public:
+  public:
     virtual ~IPatch() = default;
 
     /**
@@ -37,7 +36,8 @@ public:
      * @param   [in/out]    strip           The strip to operate on.
      * @param   [in/out]    noteToLightMap  To map from note number to light number.
      */
-    virtual void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap) = 0;
+    virtual void execute(Processing::TRgbStrip& strip,
+                         const Processing::TNoteToLightMap& noteToLightMap) = 0;
 
     /**
      * Check if the patch has a valid bank and program number.

@@ -8,7 +8,7 @@
  */
 class FreeRtosTime : public ITime
 {
-public:
+  public:
     FreeRtosTime() = default;
     ~FreeRtosTime() override = default;
 

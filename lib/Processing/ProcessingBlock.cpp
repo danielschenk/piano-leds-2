@@ -1,12 +1,8 @@
 #include "ProcessingBlock.h"
 
-void ProcessingBlock::activate()
-{
-}
+void ProcessingBlock::activate() {}
 
-void ProcessingBlock::deactivate()
-{
-}
+void ProcessingBlock::deactivate() {}
 
 ProcessingBlock::Mode ProcessingBlock::mode() const
 {

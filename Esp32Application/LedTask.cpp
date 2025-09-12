@@ -1,18 +1,12 @@
-#include <algorithm>
-
 #include "LedTask.h"
 
+#include <algorithm>
 
-LedTask::LedTask(Concert& concert,
-                 int16_t dataPin,
-                 int16_t clockPin,
-                 uint32_t stackSize,
+LedTask::LedTask(Concert& concert, int16_t dataPin, int16_t clockPin, uint32_t stackSize,
                  UBaseType_t priority)
-    : pendingValues()
-    , strip(concert.getStripSize())
-    , concert(concert)
+    : pendingValues(), strip(concert.getStripSize()), concert(concert)
 {
-    if((dataPin > -1) && (clockPin > -1))
+    if ((dataPin > -1) && (clockPin > -1))
     {
         strip.updatePins(static_cast<uint8_t>(dataPin), static_cast<uint8_t>(clockPin));
     }
@@ -55,9 +49,9 @@ void LedTask::run()
         // A strip update was received, update the colors in the driver.
         std::lock_guard<std::mutex> lock(mutex);
 
-        for(unsigned int ledNumber(0); ledNumber < pendingValues.size(); ++ledNumber)
+        for (unsigned int ledNumber(0); ledNumber < pendingValues.size(); ++ledNumber)
         {
-            if(ledNumber >= strip.numPixels())
+            if (ledNumber >= strip.numPixels())
             {
                 break;
             }

@@ -1,0 +1,7 @@
+{
+    "[cpp]":{
+        "editor.tabSize": 4,
+        "editor.formatOnSave": true,
+        "editor.rulers": [100]
+    }
+}

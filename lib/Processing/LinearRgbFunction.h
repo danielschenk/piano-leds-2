@@ -7,10 +7,9 @@
 /**
  * Function which describes a time invariant linear relation between note state and RGB output.
  */
-class LinearRgbFunction
-    : public IRgbFunction
+class LinearRgbFunction : public IRgbFunction
 {
-public:
+  public:
     LinearRgbFunction() = default;
     explicit LinearRgbFunction(const Processing::TRgb& color);
 
@@ -23,19 +22,20 @@ public:
     Processing::TLinearConstants getBlueConstants() const;
 
     // IRgbFunction implementation
-    Processing::TRgb calculate(const Processing::TNoteState& noteState, Processing::TTime currentTime) const override;
+    Processing::TRgb calculate(const Processing::TNoteState& noteState,
+                               Processing::TTime currentTime) const override;
     Json convertToJson() const override;
     void convertFromJson(const Json& converted) override;
 
-protected:
+  protected:
     // IRgbFunction implementation
     std::string getObjectType() const override;
 
-private:
+  private:
     /**
      * The constants.
-     * The defaults are chosen with the maximum MIDI velocity in mind (127), which will result in a value of
-     * 255 (maximum LED value for most drivers).
+     * The defaults are chosen with the maximum MIDI velocity in mind (127), which will result in a
+     * value of 255 (maximum LED value for most drivers).
      */
     Processing::TLinearConstants redConstants = {2, 1};
     Processing::TLinearConstants greenConstants = {2, 1};

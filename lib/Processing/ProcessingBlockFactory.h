@@ -1,8 +1,8 @@
 #ifndef PROCESSING_PROCESSINGBLOCKFACTORY_H_
 #define PROCESSING_PROCESSINGBLOCKFACTORY_H_
 
-#include "ProcessingTypes.h"
 #include "IProcessingBlockFactory.h"
+#include "ProcessingTypes.h"
 
 class IMidiInput;
 class IRgbFunctionFactory;
@@ -11,15 +11,13 @@ class ITime;
 /**
  * Factory for processing blocks.
  */
-class ProcessingBlockFactory
-    : public IProcessingBlockFactory
+class ProcessingBlockFactory : public IProcessingBlockFactory
 {
-public:
+  public:
     /**
      * Constructor.
      */
-    ProcessingBlockFactory(IMidiInput& midiInput,
-                           const IRgbFunctionFactory& rgbFunctionFactory,
+    ProcessingBlockFactory(IMidiInput& midiInput, const IRgbFunctionFactory& rgbFunctionFactory,
                            const ITime& time);
 
     // Prevent implicit constructors and assignment operator
@@ -38,7 +36,7 @@ public:
     virtual IPatch* createPatch(const Json& converted) const;
     virtual IProcessingChain* createProcessingChain() const;
 
-private:
+  private:
     /** Reference to the MIDI input to pass to new blocks. */
     IMidiInput& midiInput;
 

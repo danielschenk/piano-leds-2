@@ -1,19 +1,17 @@
 #include "SingleColorFill.h"
+
 #include "Json11Helper.h"
 
-void SingleColorFill::activate()
-{
-}
+void SingleColorFill::activate() {}
 
-void SingleColorFill::deactivate()
-{
-}
+void SingleColorFill::deactivate() {}
 
-void SingleColorFill::execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap)
+void SingleColorFill::execute(Processing::TRgbStrip& strip,
+                              const Processing::TNoteToLightMap& noteToLightMap)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    for(auto& it : strip)
+    for (auto& it : strip)
     {
         it.r = color.r;
         it.g = color.g;
@@ -60,5 +58,5 @@ void SingleColorFill::convertFromJson(const Json& converted)
 
 std::string SingleColorFill::getObjectType() const
 {
-     return ProcessingBlock::typeNameSingleColorFill;
+    return ProcessingBlock::typeNameSingleColorFill;
 }

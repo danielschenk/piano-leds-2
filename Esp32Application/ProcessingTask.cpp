@@ -1,19 +1,14 @@
-#include "Concert.h"
 #include "ProcessingTask.h"
 
-ProcessingTask::ProcessingTask(Concert& concert,
-                               uint32_t stackSize,
-                               UBaseType_t priority)
-    : BaseTask()
-    , concert(concert)
-    , lastWakeTime(xTaskGetTickCount())
+#include "Concert.h"
+
+ProcessingTask::ProcessingTask(Concert& concert, uint32_t stackSize, UBaseType_t priority)
+    : BaseTask(), concert(concert), lastWakeTime(xTaskGetTickCount())
 {
     start("processing", stackSize, priority);
 }
 
-ProcessingTask::~ProcessingTask()
-{
-}
+ProcessingTask::~ProcessingTask() {}
 
 void ProcessingTask::run()
 {

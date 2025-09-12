@@ -3,22 +3,22 @@
 
 #include <vector>
 
-#include "ProcessingTypes.h"
 #include "JsonConvertible.h"
+#include "ProcessingTypes.h"
 
-class ProcessingBlock
-    : public JsonConvertible
+class ProcessingBlock : public JsonConvertible
 {
-public:
-    static constexpr const char* typeNameSingleColorFill  = "SingleColorFill";
-    static constexpr const char* typeNameNoteVisualizer        = "NoteVisualizer";
-    static constexpr const char* typeNameProcessingChain      = "ProcessingChain";
+  public:
+    static constexpr const char* typeNameSingleColorFill = "SingleColorFill";
+    static constexpr const char* typeNameNoteVisualizer = "NoteVisualizer";
+    static constexpr const char* typeNameProcessingChain = "ProcessingChain";
 
     virtual ~ProcessingBlock() = default;
 
     virtual void activate();
     virtual void deactivate();
-    virtual void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap) = 0;
+    virtual void execute(Processing::TRgbStrip& strip,
+                         const Processing::TNoteToLightMap& noteToLightMap) = 0;
 
     enum class Mode
     {

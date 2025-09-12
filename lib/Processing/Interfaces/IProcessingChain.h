@@ -6,10 +6,9 @@
 /**
  * Interface for processing chains.
  */
-class IProcessingChain
-    : public ProcessingBlock
+class IProcessingChain : public ProcessingBlock
 {
-public:
+  public:
     virtual ~IProcessingChain() = default;
 
     /**
@@ -27,7 +26,5 @@ public:
      */
     virtual void insertBlock(ProcessingBlock* block) = 0;
 };
-
-
 
 #endif /* PROCESSING_INTERFACES_IPROCESSINGCHAIN_H_ */

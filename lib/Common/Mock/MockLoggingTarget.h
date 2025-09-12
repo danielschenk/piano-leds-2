@@ -5,14 +5,12 @@
 
 #include "ILoggingTarget.h"
 
-class MockLoggingTarget
-    : public ILoggingTarget
+class MockLoggingTarget : public ILoggingTarget
 {
-public:
+  public:
     // ILoggingTarget implementation
-    MOCK_METHOD4(logMessage, void(uint64_t time, Logging::TLogLevel level, std::string component, std::string message));
+    MOCK_METHOD4(logMessage, void(uint64_t time, Logging::TLogLevel level, std::string component,
+                                  std::string message));
 };
-
-
 
 #endif /* COMMON_MOCK_MOCKLOGGINGTARGET_H_ */

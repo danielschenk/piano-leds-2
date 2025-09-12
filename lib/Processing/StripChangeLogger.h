@@ -10,7 +10,7 @@
  */
 class StripChangeLogger : public Concert::IObserver
 {
-public:
+  public:
     explicit StripChangeLogger(Concert& concert);
 
     StripChangeLogger() = delete;
@@ -22,7 +22,7 @@ public:
     // Concert::IObserver implementation
     void onStripUpdate(const Processing::TRgbStrip& strip) override;
 
-private:
+  private:
     Concert& concert;
     Processing::TRgbStrip previous;
     mutable std::mutex mutex;

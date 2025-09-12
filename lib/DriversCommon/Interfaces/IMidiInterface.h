@@ -8,7 +8,7 @@
  */
 class IMidiInterface
 {
-public:
+  public:
     /** Status type. */
     enum TStatus : uint8_t
     {
@@ -33,14 +33,12 @@ public:
     static constexpr unsigned int maxNoteNumber = 255;
     static constexpr unsigned int numVelocities = 256;
     static constexpr unsigned int maxVelocity = 255;
-    static constexpr uint16_t     pitchBendCenter = 0x2000;
+    static constexpr uint16_t pitchBendCenter = 0x2000;
 
     /**
      * Destructor.
      */
-    virtual ~IMidiInterface()
-    {
-    };
+    virtual ~IMidiInterface() {};
 
     /**
      * Get number of available ports.
@@ -56,7 +54,5 @@ public:
      */
     virtual void openPort(int number) = 0;
 };
-
-
 
 #endif /* DRIVERS_INTERFACES_IMIDIINTERFACE_H_ */

@@ -1,4 +1,5 @@
 #include "LinearRgbFunction.h"
+
 #include "Json11Helper.h"
 
 LinearRgbFunction::LinearRgbFunction(const Processing::TRgb& color)
@@ -8,17 +9,17 @@ LinearRgbFunction::LinearRgbFunction(const Processing::TRgb& color)
     blueConstants = {2.0f * color.b / 255.0f, 0};
 }
 
-Processing::TRgb LinearRgbFunction::calculate(const Processing::TNoteState& noteState, Processing::TTime currentTime) const
+Processing::TRgb LinearRgbFunction::calculate(const Processing::TNoteState& noteState,
+                                              Processing::TTime currentTime) const
 {
     Processing::TRgb output;
 
-    if(noteState.sounding)
+    if (noteState.sounding)
     {
         output = Processing::rgbFromFloat(
             redConstants.factor * noteState.pressDownVelocity + redConstants.offset,
             greenConstants.factor * noteState.pressDownVelocity + greenConstants.offset,
-            blueConstants.factor * noteState.pressDownVelocity + blueConstants.offset
-        );
+            blueConstants.factor * noteState.pressDownVelocity + blueConstants.offset);
 
         if (noteState.pressDownColor != Processing::ColorValue::off)
             output *= noteState.pressDownColor;

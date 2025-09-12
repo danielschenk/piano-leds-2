@@ -2,6 +2,4 @@
 
 #include <utility>
 
-void Model::notifyObservers() const
-{
-}
+void Model::notifyObservers() const {}

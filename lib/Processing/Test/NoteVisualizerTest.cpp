@@ -1,27 +1,25 @@
-#include "../NoteVisualizer.h"
 #include "../Mock/MockRgbFunction.h"
 #include "../Mock/MockRgbFunctionFactory.h"
-
-#include "gtest/gtest.h"
-#include "Test/MidiInputObserverTest.h"
+#include "../NoteVisualizer.h"
 #include "Mock/LoggingTest.h"
 #include "Mock/MockTime.h"
-
+#include "Test/MidiInputObserverTest.h"
+#include "gtest/gtest.h"
 
 using ::testing::_;
-using ::testing::SaveArg;
-using ::testing::Return;
-using ::testing::HasSubstr;
-using ::testing::Each;
-using ::testing::InSequence;
 using ::testing::AnyNumber;
+using ::testing::Each;
+using ::testing::HasSubstr;
+using ::testing::InSequence;
+using ::testing::Return;
+using ::testing::SaveArg;
 
 #define LOGGING_COMPONENT "NoteVisualizer"
 
 ACTION(ReturnFullWhiteWhenSounding)
 {
     Processing::TRgb output;
-    if(arg0.sounding)
+    if (arg0.sounding)
     {
         output.r = 0xff;
         output.g = 0xff;
@@ -34,7 +32,7 @@ ACTION(ReturnFullWhiteWhenSounding)
 ACTION(ReturnMinimalWhiteWhenSounding)
 {
     Processing::TRgb output;
-    if(arg0.sounding)
+    if (arg0.sounding)
     {
         output.r = 0x01;
         output.g = 0x01;
@@ -44,17 +42,14 @@ ACTION(ReturnMinimalWhiteWhenSounding)
     return output;
 }
 
-class NoteVisualizerTest
-    : public LoggingTest
-    , public MidiInputObserverTest
-    , public ::testing::Test
+class NoteVisualizerTest : public LoggingTest, public MidiInputObserverTest, public ::testing::Test
 {
-public:
+  public:
     static constexpr size_t stripSize = 10;
 
     NoteVisualizerTest()
-        : strip(stripSize)
-        , exampleJson(R"(
+        : strip(stripSize),
+          exampleJson(R"(
              {
                  "objectType": "NoteVisualizer",
                  "channel": 6,
@@ -63,10 +58,10 @@ public:
                      "objectType": "MockRgbFunction",
                      "someParameter": 42
                  }
-             })")
-        , noteVisualizer(mockMidiInput, mockRgbFunctionFactory, mockTime)
+             })"),
+          noteVisualizer(mockMidiInput, mockRgbFunctionFactory, mockTime)
     {
-        for(int i = 0; i < stripSize; ++i)
+        for (int i = 0; i < stripSize; ++i)
         {
             // Default: simple 1-to-1 mapping
             noteToLightMap[i] = i;
@@ -80,7 +75,7 @@ public:
 
     void resetStrip()
     {
-        for(auto& color : strip)
+        for (auto& color : strip)
         {
             color.r = 0;
             color.g = 0;
@@ -102,7 +97,7 @@ TEST_F(NoteVisualizerTest, noNotesSounding)
 {
     strip[0] = {4, 5, 6};
     strip[6] = {7, 8, 9};
-    strip[stripSize-1] = {11, 12, 13};
+    strip[stripSize - 1] = {11, 12, 13};
 
     noteVisualizer.execute(strip, noteToLightMap);
 
@@ -237,7 +232,7 @@ TEST_F(NoteVisualizerTest, usePedal)
 ACTION(ReturnBlueWhenNoteSoundingOtherwiseRed)
 {
     Processing::TRgb output;
-    if(arg0.sounding)
+    if (arg0.sounding)
     {
         output.b = 1;
     }
@@ -290,8 +285,7 @@ TEST_F(NoteVisualizerTest, timePassedToRgbFunction)
         InSequence dummy;
         EXPECT_CALL(*mockRgbFunction, calculate(_, 42));
         EXPECT_CALL(*mockRgbFunction, calculate(_, 43));
-        EXPECT_CALL(*mockRgbFunction, calculate(_, 44))
-            .Times(AnyNumber());
+        EXPECT_CALL(*mockRgbFunction, calculate(_, 44)).Times(AnyNumber());
         noteVisualizer.setRgbFunction(mockRgbFunction);
 
         noteVisualizer.execute(strip, noteToLightMap);
@@ -340,10 +334,8 @@ TEST_F(NoteVisualizerTest, deleteRgbFunction)
     auto mock2 = std::make_shared<MockRgbFunction>();
 
     // Need to set an action, to make Google Test throw an error in case of a leaked mock.
-    ON_CALL(*mock1, calculate(_, _))
-        .WillByDefault(Return(Processing::TRgb()));
-    ON_CALL(*mock2, calculate(_, _))
-        .WillByDefault(Return(Processing::TRgb()));
+    ON_CALL(*mock1, calculate(_, _)).WillByDefault(Return(Processing::TRgb()));
+    ON_CALL(*mock2, calculate(_, _)).WillByDefault(Return(Processing::TRgb()));
 
     noteVisualizer.setRgbFunction(mock1);
     noteVisualizer.setRgbFunction(mock2);
@@ -357,8 +349,7 @@ TEST_F(NoteVisualizerTest, convertToJson)
     Json::object mockRgbFunctionJson;
     mockRgbFunctionJson["objectType"] = "MockRgbFunction";
     mockRgbFunctionJson["someParameter"] = 42;
-    EXPECT_CALL(*mockRgbFunction, convertToJson())
-        .WillOnce(Return(mockRgbFunctionJson));
+    EXPECT_CALL(*mockRgbFunction, convertToJson()).WillOnce(Return(mockRgbFunctionJson));
 
     // Set some non-default values
     noteVisualizer.setRgbFunction(mockRgbFunction);
@@ -369,7 +360,8 @@ TEST_F(NoteVisualizerTest, convertToJson)
     EXPECT_EQ("NoteVisualizer", j.at("objectType").string_value());
     EXPECT_EQ(6, j.at("channel").int_value());
     EXPECT_EQ(false, j.at("usingPedal").bool_value());
-    EXPECT_EQ("MockRgbFunction", j.at("rgbFunction").object_items().at("objectType").string_value());
+    EXPECT_EQ("MockRgbFunction",
+              j.at("rgbFunction").object_items().at("objectType").string_value());
     EXPECT_EQ(42, j.at("rgbFunction").object_items().at("someParameter").int_value());
 }
 

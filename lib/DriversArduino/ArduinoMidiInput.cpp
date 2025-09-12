@@ -1,16 +1,12 @@
-#include <Stream.h>
-
 #include "ArduinoMidiInput.h"
 
+#include <Stream.h>
 
-ArduinoMidiInput::ArduinoMidiInput(Stream& serial)
-    : serial(serial)
-{
-}
+ArduinoMidiInput::ArduinoMidiInput(Stream& serial) : serial(serial) {}
 
 void ArduinoMidiInput::run()
 {
-    while(serial.available())
+    while (serial.available())
     {
         processMidiByte(static_cast<uint8_t>(serial.read()));
     }

@@ -1,14 +1,12 @@
+#include "MidiTask.h"
+
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
-#include "MidiTask.h"
 #include "ArduinoMidiInput.h"
 
-MidiTask::MidiTask(ArduinoMidiInput& midiInput,
-                   uint32_t stackSize,
-                   UBaseType_t priority)
-    : BaseTask()
-    , midiInput(midiInput)
+MidiTask::MidiTask(ArduinoMidiInput& midiInput, uint32_t stackSize, UBaseType_t priority)
+    : BaseTask(), midiInput(midiInput)
 {
     start("midi", stackSize, priority);
 }

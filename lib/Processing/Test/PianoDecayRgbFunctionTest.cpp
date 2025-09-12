@@ -1,21 +1,18 @@
+#include <vector>
+
 #include "PianoDecayRgbFunction.h"
 #include "gtest/gtest.h"
 
-#include <vector>
-
 class PianoDecayRgbFunctionTest : public testing::Test
 {
-public:
+  public:
     struct TTruthTableEntry
     {
         Processing::TTime time;
         Processing::TRgb result;
     };
 
-    PianoDecayRgbFunctionTest()
-        : function()
-    {
-    }
+    PianoDecayRgbFunctionTest() : function() {}
 
     // Unit under test
     PianoDecayRgbFunction function;
@@ -24,11 +21,8 @@ public:
 TEST_F(PianoDecayRgbFunctionTest, decay)
 {
     std::vector<TTruthTableEntry> truthTable = {
-            {0, {200, 100, 100}},
-            {600, {150, 75, 75}},
-            {1200, {100, 50, 50}},
-            {8100, {50, 25, 25}},
-            {15000, {0, 0, 0}},
+        {0, {200, 100, 100}}, {600, {150, 75, 75}}, {1200, {100, 50, 50}},
+        {8100, {50, 25, 25}}, {15000, {0, 0, 0}},
     };
 
     const Processing::TNoteState noteState(true, true, 100, 0);
@@ -37,7 +31,7 @@ TEST_F(PianoDecayRgbFunctionTest, decay)
     function.setGreenConstants({1, 0});
     function.setBlueConstants({1, 0});
 
-    for(const auto& entry : truthTable)
+    for (const auto& entry : truthTable)
     {
         EXPECT_EQ(entry.result, function.calculate(noteState, entry.time))
             << "(time " << entry.time << ")";

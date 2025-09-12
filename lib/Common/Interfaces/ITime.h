@@ -5,13 +5,13 @@
 
 class ITime
 {
-public:
+  public:
     /**
      * Get the monotonic time in milliseconds.
      */
     virtual uint32_t getMilliseconds() const = 0;
 
-protected:
+  protected:
     virtual ~ITime() = default;
 };
 

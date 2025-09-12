@@ -3,26 +3,20 @@
 #define LOGGING_COMPONENT "Json11Helper"
 
 Json11Helper::Json11Helper(std::string user, const Json& json, bool logMissingKeys)
-    : user(user)
-    , json(json)
-    , logMissingKeys(logMissingKeys)
+    : user(user), json(json), logMissingKeys(logMissingKeys)
 {
 }
 
 Json11Helper::Json11Helper(const char* user, const Json& json, bool logMissingKeys)
-    : user(user)
-    , json(json)
-    , logMissingKeys(logMissingKeys)
+    : user(user), json(json), logMissingKeys(logMissingKeys)
 {
-    if(!json.is_object())
+    if (!json.is_object())
     {
         LOG_ERROR_PARAMS("%s: Passed object not a JSON object", this->user.c_str());
     }
 }
 
-Json11Helper::~Json11Helper()
-{
-}
+Json11Helper::~Json11Helper() {}
 
 bool Json11Helper::getItem(std::string key, int& target) const
 {
@@ -53,7 +47,7 @@ bool Json11Helper::getItem(std::string key, bool& target) const
 {
     const auto& item = json[key];
 
-    if(item.is_bool())
+    if (item.is_bool())
     {
         target = item.bool_value();
         return true;
@@ -69,7 +63,7 @@ bool Json11Helper::getItem(std::string key, std::string& target) const
 {
     const auto& item = json[key];
 
-    if(item.is_string())
+    if (item.is_string())
     {
         target = item.string_value();
         return true;
@@ -85,7 +79,7 @@ bool Json11Helper::getItem(std::string key, Json::object& target) const
 {
     const auto& item = json[key];
 
-    if(item.is_object())
+    if (item.is_object())
     {
         target = item.object_items();
         return true;
@@ -101,7 +95,7 @@ bool Json11Helper::getItem(std::string key, Json::array& target) const
 {
     const auto& item = json[key];
 
-    if(item.is_array())
+    if (item.is_array())
     {
         target = item.array_items();
         return true;

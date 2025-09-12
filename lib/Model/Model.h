@@ -5,15 +5,15 @@
 
 class Model
 {
-public:
+  public:
     Model() = default;
     virtual ~Model() = default;
 
     Model(const Model&) = delete;
     Model& operator=(const Model&) = delete;
 
-protected:
-    template<typename T>
+  protected:
+    template <typename T>
     void set(T& member, T value)
     {
         {
@@ -24,17 +24,16 @@ protected:
         notifyObservers();
     }
 
-    template<typename T>
+    template <typename T>
     T get(const T& member) const
     {
         std::lock_guard<std::mutex> lock(mutex);
         return member;
     }
 
-private:
+  private:
     void notifyObservers() const;
     mutable std::mutex mutex;
 };
 
-
-#endif //MODEL_H
+#endif  // MODEL_H

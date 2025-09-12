@@ -6,8 +6,8 @@ using Json = json11::Json;
 
 #include <cstdint>
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace Processing
 {
@@ -15,12 +15,7 @@ namespace Processing
 /** Type for single RGB color. */
 struct TRgb
 {
-    constexpr TRgb(uint8_t r, uint8_t g, uint8_t b)
-        : r(r)
-        , g(g)
-        , b(b)
-    {
-    }
+    constexpr TRgb(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b) {}
 
     constexpr TRgb() = default;
 
@@ -39,7 +34,7 @@ struct TRgb
      * Multiply every color using other color as factor (meaning 255=100%).
      */
     TRgb operator*(const TRgb& other) const;
-    TRgb& operator *=(const TRgb& other);
+    TRgb& operator*=(const TRgb& other);
 
     /**
      * Add colors together.
@@ -76,15 +71,15 @@ struct TRgb
 
 namespace ColorValue
 {
-    constexpr TRgb off{};
-    constexpr TRgb red{0xff, 0x00, 0x00};
-    constexpr TRgb green{0x00, 0xff, 0x00};
-    constexpr TRgb blue{0x00, 0x00, 0xff};
-    constexpr TRgb yellow{0xff, 0xff, 0x00};
-    constexpr TRgb magenta{0xff, 0x00, 0xff};
-    constexpr TRgb cyan{0x00, 0xff, 0xff};
-    constexpr TRgb white{0xff, 0xff, 0xff};
-}
+constexpr TRgb off{};
+constexpr TRgb red{0xff, 0x00, 0x00};
+constexpr TRgb green{0x00, 0xff, 0x00};
+constexpr TRgb blue{0x00, 0x00, 0xff};
+constexpr TRgb yellow{0xff, 0xff, 0x00};
+constexpr TRgb magenta{0xff, 0x00, 0xff};
+constexpr TRgb cyan{0x00, 0xff, 0xff};
+constexpr TRgb white{0xff, 0xff, 0xff};
+}  // namespace ColorValue
 
 /**
  * Multiply every color by a single factor.
@@ -127,9 +122,11 @@ struct TNoteState
     TNoteState(bool pressed, bool sounding, uint8_t pressDownVelocity, TTime noteOnTimeStamp);
     TNoteState(const TNoteState&) = default;
 
-    /** Indicates if the note is pressed (true if an on event was received last, false if an off event was received last). */
+    /** Indicates if the note is pressed (true if an on event was received last, false if an off
+     * event was received last). */
     bool pressed{false};
-    /** Indicates if the note is sounding (either because it's pressed or the damper pedal is pressed). */
+    /** Indicates if the note is sounding (either because it's pressed or the damper pedal is
+     * pressed). */
     bool sounding{false};
     /** The press down velocity. */
     uint8_t pressDownVelocity{0};
@@ -141,6 +138,5 @@ struct TNoteState
 };
 
 } /* namespace Processing */
-
 
 #endif /* PROCESSING_INTERFACES_PROCESSINGTYPES_H_ */

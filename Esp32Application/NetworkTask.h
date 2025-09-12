@@ -1,15 +1,16 @@
 #ifndef NETWORKTASK_H
 #define NETWORKTASK_H
 
-#include "BaseTask.h"
 #include <WiFi.h>
 #include <freertos/FreeRTOS.h>
 
+#include "BaseTask.h"
+
 class SystemSettingsModel;
 
-class NetworkTask: public BaseTask
+class NetworkTask : public BaseTask
 {
-public:
+  public:
     /**
      * Constructor.
      *
@@ -17,8 +18,7 @@ public:
      * @param stackSize             The stack size to use for the task, in words
      * @param priority              The priority to use for the task
      */
-    NetworkTask(const SystemSettingsModel& systemSettingsModel,
-                uint32_t stackSize,
+    NetworkTask(const SystemSettingsModel& systemSettingsModel, uint32_t stackSize,
                 UBaseType_t priority);
 
     /**
@@ -31,7 +31,7 @@ public:
     NetworkTask(const NetworkTask&) = delete;
     NetworkTask& operator=(const NetworkTask&) = delete;
 
-private:
+  private:
     // BaseTask implementation
     void run() override;
 
@@ -39,5 +39,4 @@ private:
     unsigned int systemSettingsModelSubscription;
 };
 
-
-#endif //NETWORKTASK_H
+#endif  // NETWORKTASK_H

@@ -1,36 +1,29 @@
-#include "gtest/gtest.h"
-#include "Test/MidiInputObserverTest.h"
-
 #include "../Concert.h"
-#include "../Mock/MockProcessingBlockFactory.h"
 #include "../Mock/MockPatch.h"
-#include "Mock/MockTime.h"
+#include "../Mock/MockProcessingBlockFactory.h"
 #include "LoggingEntryPoint.h"
+#include "Mock/MockTime.h"
+#include "Test/MidiInputObserverTest.h"
+#include "gtest/gtest.h"
 
 using testing::_;
-using testing::SaveArg;
-using testing::Return;
-using testing::ReturnNew;
 using testing::Expectation;
 using testing::NiceMock;
+using testing::Return;
+using testing::ReturnNew;
+using testing::SaveArg;
 using testing::SetArgReferee;
 
-class MockConcertObserver
-    : public Concert::IObserver
+class MockConcertObserver : public Concert::IObserver
 {
-public:
+  public:
     MOCK_METHOD1(onStripUpdate, void(const Processing::TRgbStrip& strip));
 };
 
-class ConcertTest
-    : public MidiInputObserverTest
-    , public ::testing::Test
+class ConcertTest : public MidiInputObserverTest, public ::testing::Test
 {
-public:
-    ConcertTest()
-        : MidiInputObserverTest()
-        , mockProcessingBlockFactory()
-        , mockTime()
+  public:
+    ConcertTest() : MidiInputObserverTest(), mockProcessingBlockFactory(), mockTime()
     {
         LoggingEntryPoint::setTime(&mockTime);
         concert = new Concert(mockMidiInput, mockProcessingBlockFactory);
@@ -58,7 +51,7 @@ public:
     NiceMock<MockTime> mockTime;
 
     // Object under test
-    Concert*  concert;
+    Concert* concert;
 };
 
 const uint16_t ConcertTest::testBankNumber = 129;
@@ -111,8 +104,7 @@ TEST_F(ConcertTest, execute)
 
     // The mock patch should be executed, and given the configured note to light map.
     // Let the mock patch set some values on the strip during its execute
-    EXPECT_CALL(*mockPatch, execute(_, map))
-        .WillOnce(SetArgReferee<0>(newStripValues));
+    EXPECT_CALL(*mockPatch, execute(_, map)).WillOnce(SetArgReferee<0>(newStripValues));
 
     // The new strip values should be notified
     EXPECT_CALL(observer, onStripUpdate(newStripValues));
@@ -129,8 +121,7 @@ TEST_F(ConcertTest, executeWithMultiplePatches)
     concert->addPatch(mockPatch2);
 
     EXPECT_CALL(*mockPatch, execute(_, _));
-    EXPECT_CALL(*mockPatch2, execute(_, _))
-        .Times(0);
+    EXPECT_CALL(*mockPatch2, execute(_, _)).Times(0);
 
     concert->execute();
 }
@@ -154,12 +145,9 @@ TEST_F(ConcertTest, patchChangeOnProgramChange)
 
     auto mockPatch(new NiceMock<MockPatch>);
     auto mockPatch2(new NiceMock<MockPatch>);
-    ON_CALL(*mockPatch2, getBank())
-        .WillByDefault(Return(testBankNumber));
-    ON_CALL(*mockPatch2, getProgram())
-        .WillByDefault(Return(program));
-    ON_CALL(*mockPatch2, hasBankAndProgram())
-        .WillByDefault(Return(true));
+    ON_CALL(*mockPatch2, getBank()).WillByDefault(Return(testBankNumber));
+    ON_CALL(*mockPatch2, getProgram()).WillByDefault(Return(program));
+    ON_CALL(*mockPatch2, hasBankAndProgram()).WillByDefault(Return(true));
 
     concert->addPatch(mockPatch);
     concert->addPatch(mockPatch2);
@@ -186,12 +174,10 @@ TEST_F(ConcertTest, addPatch)
 TEST_F(ConcertTest, getPatch)
 {
     auto mockPatch(new NiceMock<MockPatch>);
-    ON_CALL(*mockPatch, getName())
-        .WillByDefault(Return("first"));
+    ON_CALL(*mockPatch, getName()).WillByDefault(Return("first"));
 
     auto mockPatch2(new NiceMock<MockPatch>);
-    ON_CALL(*mockPatch2, getName())
-        .WillByDefault(Return("second"));
+    ON_CALL(*mockPatch2, getName()).WillByDefault(Return("second"));
 
     concert->addPatch(mockPatch);
     concert->addPatch(mockPatch2);
@@ -236,10 +222,8 @@ TEST_F(ConcertTest, convertToJson)
         .WillOnce(Return(mockPatch))
         .WillOnce(Return(mockPatch2));
 
-    EXPECT_CALL(*mockPatch, convertToJson())
-        .WillOnce(Return(mockPatchJson));
-    EXPECT_CALL(*mockPatch2, convertToJson())
-        .WillOnce(Return(mockPatch2Json));
+    EXPECT_CALL(*mockPatch, convertToJson()).WillOnce(Return(mockPatchJson));
+    EXPECT_CALL(*mockPatch2, convertToJson()).WillOnce(Return(mockPatch2Json));
 
     // This will use the mock factory to create the patch instances.
     concert->addPatch();
@@ -280,18 +264,15 @@ TEST_F(ConcertTest, convertFromJson)
                     }
                 ]
             })",
-            err,
-            json11::STANDARD));
+                       err, json11::STANDARD));
 
     NiceMock<MockPatch>* convertedPatch1 = new NiceMock<MockPatch>();
     NiceMock<MockPatch>* convertedPatch2 = new NiceMock<MockPatch>();
 
     std::string name1("Purple Rain");
     std::string name2("Simply Red");
-    ON_CALL(*convertedPatch1, getName())
-        .WillByDefault(Return(name1));
-    ON_CALL(*convertedPatch2, getName())
-        .WillByDefault(Return(name2));
+    ON_CALL(*convertedPatch1, getName()).WillByDefault(Return(name1));
+    ON_CALL(*convertedPatch2, getName()).WillByDefault(Return(name2));
 
     // Re-create the sub-objects of the above test input,
     // so we can verify that they are passed to the factory in order.
@@ -303,7 +284,7 @@ TEST_F(ConcertTest, convertFromJson)
     mockPatch2Json["someParameter"] = 43;
 
     Expectation first = EXPECT_CALL(mockProcessingBlockFactory, createPatch(Json(mockPatch1Json)))
-        .WillOnce(Return(convertedPatch1));
+                            .WillOnce(Return(convertedPatch1));
     EXPECT_CALL(mockProcessingBlockFactory, createPatch(Json(mockPatch2Json)))
         .After(first)
         .WillOnce(Return(convertedPatch2));

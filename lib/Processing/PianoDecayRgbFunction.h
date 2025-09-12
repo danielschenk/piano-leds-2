@@ -1,29 +1,30 @@
 #ifndef LIB_PROCESSING_PIANODECAYRGBFUNCTION_H_
 #define LIB_PROCESSING_PIANODECAYRGBFUNCTION_H_
 
-#include "LinearRgbFunction.h"
-
 #include <stdint.h>
+
+#include "LinearRgbFunction.h"
 
 /**
  * RGB function which slowly dims sounding notes to visually mimic the sound of piano strings.
  */
 class PianoDecayRgbFunction : public LinearRgbFunction
 {
-public:
+  public:
     using LinearRgbFunction::LinearRgbFunction;
 
     PianoDecayRgbFunction(const PianoDecayRgbFunction&) = delete;
     PianoDecayRgbFunction& operator=(const PianoDecayRgbFunction&) = delete;
 
     // IRgbFunction implementation
-    Processing::TRgb calculate(const Processing::TNoteState& noteState, Processing::TTime currentTime) const override;
+    Processing::TRgb calculate(const Processing::TNoteState& noteState,
+                               Processing::TTime currentTime) const override;
 
-protected:
+  protected:
     // IRgbFunction implementation
     std::string getObjectType() const override;
 
-private:
+  private:
     static constexpr uint32_t fastDecayDurationMs = 1200;
     static constexpr float fastDecayFactor = 0.5f;
 

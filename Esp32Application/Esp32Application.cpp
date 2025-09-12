@@ -1,27 +1,24 @@
 #include "ArduinoMidiInput.h"
-#include "LoggingTask.h"
-#include "Logging.h"
-#include "MidiMessageLogger.h"
-
-#include "MidiTask.h"
-
 #include "ConcertInfrastructure.h"
 #include "IPatch.h"
-#include "SingleColorFill.h"
-#include "NoteVisualizer.h"
 #include "LinearRgbFunction.h"
+#include "Logging.h"
+#include "LoggingTask.h"
+#include "MidiMessageLogger.h"
+#include "MidiTask.h"
+#include "NoteVisualizer.h"
 #include "PianoDecayRgbFunction.h"
 #include "ProcessingTask.h"
+#include "SingleColorFill.h"
 #if PIANOLEDS_NEOPIXEL
 #include "LedTaskNeoPixel.h"
 #else
 #include "LedTask.h"
 #endif
-#include "SystemSettingsModel.h"
-#include "NetworkTask.h"
-
 #include "Board.h"
 #include "FreeRtosTime.h"
+#include "NetworkTask.h"
+#include "SystemSettingsModel.h"
 
 #define LOGGING_COMPONENT "Esp32Application"
 
@@ -96,9 +93,8 @@ void setup()
     patch->getProcessingChain().insertBlock(src1);
 
     // Full white for any sounding key
-    auto src2(new NoteVisualizer(midiInput,
-                                concertInfrastructure.rgbFunctionFactory,
-                                freeRtosTime));
+    auto src2(
+        new NoteVisualizer(midiInput, concertInfrastructure.rgbFunctionFactory, freeRtosTime));
     auto rgbFunction(std::make_shared<LinearRgbFunction>());
     const Processing::TLinearConstants fullWhite({255, 0});
     rgbFunction->setRedConstants(fullWhite);
@@ -111,9 +107,8 @@ void setup()
 
     // Add another patch
     IPatch* patch2(concert.getPatch(concert.addPatch()));
-    auto src3(new NoteVisualizer(midiInput,
-                                concertInfrastructure.rgbFunctionFactory,
-                                freeRtosTime));
+    auto src3(
+        new NoteVisualizer(midiInput, concertInfrastructure.rgbFunctionFactory, freeRtosTime));
 
     // Sounding notes become blue, intensity is the velocity of the note multiplied by 2
     rgbFunction = std::make_shared<LinearRgbFunction>();
@@ -135,9 +130,8 @@ void setup()
     src4->setColor({32, 0, 0});
     patch3->getProcessingChain().insertBlock(src4);
 
-    auto src5(new NoteVisualizer(midiInput,
-                                concertInfrastructure.rgbFunctionFactory,
-                                freeRtosTime));
+    auto src5(
+        new NoteVisualizer(midiInput, concertInfrastructure.rgbFunctionFactory, freeRtosTime));
 
     auto fnc(std::make_shared<PianoDecayRgbFunction>());
     src5->setRgbFunction(fnc);
@@ -150,15 +144,13 @@ void setup()
     static ProcessingTask processingTask(concert, defaultStackSize, PRIORITY_CRITICAL);
 
 #if PIANOLEDS_NEOPIXEL
-    static LedTaskNeoPixel ledTask(concert, LED_DATA_PIN, defaultStackSize,
-        PRIORITY_CRITICAL);
+    static LedTaskNeoPixel ledTask(concert, LED_DATA_PIN, defaultStackSize, PRIORITY_CRITICAL);
 #else
     static LedTask ledTask(concert, LED_DATA_PIN, LED_CLOCK_PIN, defaultStackSize,
-        PRIORITY_CRITICAL);
+                           PRIORITY_CRITICAL);
 #endif
 
-    if (false)
-        startNetwork();
+    if (false) startNetwork();
 
     LOG_INFO("initialization done");
 }
@@ -179,7 +171,7 @@ void loop()
     // Blink to indicate we're alive.
     digitalWrite(RUN_LED_PIN, !digitalRead(RUN_LED_PIN));
 
-    if((s_loopCount % (5 * 60)) == 0)
+    if ((s_loopCount % (5 * 60)) == 0)
     {
         LOG_INFO_PARAMS("free heap: %u", ESP.getFreeHeap());
     }

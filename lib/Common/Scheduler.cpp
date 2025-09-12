@@ -1,14 +1,8 @@
 #include "Scheduler.h"
 
-Scheduler::Scheduler()
-    : queue()
-    , mutex()
-{
-}
+Scheduler::Scheduler() : queue(), mutex() {}
 
-Scheduler::~Scheduler()
-{
-}
+Scheduler::~Scheduler() {}
 
 void Scheduler::schedule(Scheduler::TTask task)
 {
@@ -21,7 +15,7 @@ bool Scheduler::executeOne()
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    if(!queue.empty())
+    if (!queue.empty())
     {
         // Call the task at the front of the queue
         queue.front()();
@@ -40,7 +34,7 @@ bool Scheduler::executeAll()
     std::lock_guard<std::mutex> lock(mutex);
 
     bool executed = false;
-    while(!queue.empty())
+    while (!queue.empty())
     {
         // Call the task at the front of the queue
         queue.front()();

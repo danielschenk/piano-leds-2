@@ -5,10 +5,9 @@
 
 #include "../ProcessingBlock.h"
 
-class MockProcessingBlock
-    : public ProcessingBlock
+class MockProcessingBlock : public ProcessingBlock
 {
-public:
+  public:
     MockProcessingBlock()
     {
         ON_CALL(*this, mode()).WillByDefault(::testing::Return(Mode::additive));
@@ -17,12 +16,13 @@ public:
     // ProcessingBlock implementation
     MOCK_METHOD0(activate, void());
     MOCK_METHOD0(deactivate, void());
-    MOCK_METHOD2(execute, void(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap));
+    MOCK_METHOD2(execute, void(Processing::TRgbStrip& strip,
+                               const Processing::TNoteToLightMap& noteToLightMap));
     MOCK_CONST_METHOD0(convertToJson, Json());
     MOCK_METHOD1(convertFromJson, void(const Json& converted));
     MOCK_CONST_METHOD0(mode, Mode());
 
-protected:
+  protected:
     MOCK_CONST_METHOD0(getObjectType, std::string());
 };
 

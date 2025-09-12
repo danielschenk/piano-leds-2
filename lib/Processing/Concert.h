@@ -1,15 +1,15 @@
 #ifndef PROCESSING_CONCERT_H_
 #define PROCESSING_CONCERT_H_
 
-#include <vector>
-#include <list>
 #include <cstdint>
+#include <list>
+#include <vector>
 
+#include "IMidiInput.h"
+#include "IMidiInterface.h"
 #include "JsonConvertible.h"
 #include "ProcessingTypes.h"
 #include "Scheduler.h"
-#include "IMidiInterface.h"
-#include "IMidiInput.h"
 
 class IMidiInput;
 class IProcessingBlockFactory;
@@ -21,11 +21,9 @@ class IPatch;
  * A concert is a collection of patches, together with some settings which are typically constant
  * throughout a gig, like MIDI channels to listen to and the note-to-light mapping.
  */
-class Concert
-    : public JsonConvertible
-    , public IMidiInput::IObserver
+class Concert : public JsonConvertible, public IMidiInput::IObserver
 {
-public:
+  public:
     /**
      * Constructor.
      *
@@ -42,7 +40,7 @@ public:
     // Prevent implicit constructor, copy constructor and assignment operator.
     Concert() = delete;
     Concert(const Concert&) = delete;
-    Concert& operator =(const Concert&) = delete;
+    Concert& operator=(const Concert&) = delete;
 
     // JsonConvertible implementation
     virtual Json convertToJson() const;
@@ -128,10 +126,10 @@ public:
      */
     class IObserver
     {
-    public:
+      public:
         virtual void onStripUpdate(const Processing::TRgbStrip& strip) = 0;
 
-    protected:
+      protected:
         virtual ~IObserver() = default;
     };
 
@@ -141,21 +139,22 @@ public:
     // IMidiInput::IObserver implementation
     virtual void onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on);
     virtual void onProgramChange(uint8_t channel, uint8_t program);
-    virtual void onControlChange(uint8_t channel, IMidiInterface::TControllerNumber number, uint8_t value);
+    virtual void onControlChange(uint8_t channel, IMidiInterface::TControllerNumber number,
+                                 uint8_t value);
     virtual void onChannelPressureChange(uint8_t channel, uint8_t value);
     virtual void onPitchBendChange(uint8_t channel, uint16_t value);
 
-protected:
+  protected:
     // JsonConvertible implementation
     std::string getObjectType() const;
 
-private:
-    static constexpr const char* typeName                             = "Concert";
-    static constexpr const char* isListeningToProgramChangeJsonKey    = "isListeningToProgramChange";
-    static constexpr const char* noteToLightMapJsonKey                = "noteToLightMap";
-    static constexpr const char* programChangeChannelJsonKey          = "programChangeChannel";
-    static constexpr const char* currentBankJsonKey                   = "currentBank";
-    static constexpr const char* patchesJsonKey                       = "patches";
+  private:
+    static constexpr const char* typeName = "Concert";
+    static constexpr const char* isListeningToProgramChangeJsonKey = "isListeningToProgramChange";
+    static constexpr const char* noteToLightMapJsonKey = "noteToLightMap";
+    static constexpr const char* programChangeChannelJsonKey = "programChangeChannel";
+    static constexpr const char* currentBankJsonKey = "currentBank";
+    static constexpr const char* patchesJsonKey = "patches";
 
     typedef std::vector<IPatch*> TPatches;
 

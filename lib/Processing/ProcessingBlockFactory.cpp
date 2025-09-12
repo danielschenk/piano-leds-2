@@ -1,23 +1,20 @@
+#include "ProcessingBlockFactory.h"
+
 #include <Json11Helper.h>
 
-#include "ProcessingBlockFactory.h"
 #include "NoteVisualizer.h"
-#include "SingleColorFill.h"
-#include "ProcessingChain.h"
 #include "Patch.h"
+#include "ProcessingChain.h"
+#include "SingleColorFill.h"
 
 ProcessingBlockFactory::ProcessingBlockFactory(IMidiInput& midiInput,
                                                const IRgbFunctionFactory& rgbFunctionFactory,
                                                const ITime& time)
-    : midiInput(midiInput)
-    , rgbFunctionFactory(rgbFunctionFactory)
-    , time(time)
+    : midiInput(midiInput), rgbFunctionFactory(rgbFunctionFactory), time(time)
 {
 }
 
-ProcessingBlockFactory::~ProcessingBlockFactory()
-{
-}
+ProcessingBlockFactory::~ProcessingBlockFactory() {}
 
 ProcessingBlock* ProcessingBlockFactory::createProcessingBlock(const Json& converted) const
 {
@@ -26,23 +23,23 @@ ProcessingBlock* ProcessingBlockFactory::createProcessingBlock(const Json& conve
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
 
     std::string objectType;
-    if(helper.getItemIfPresent(JsonConvertible::objectTypeKey, objectType))
+    if (helper.getItemIfPresent(JsonConvertible::objectTypeKey, objectType))
     {
-        if(objectType == ProcessingBlock::typeNameSingleColorFill)
+        if (objectType == ProcessingBlock::typeNameSingleColorFill)
         {
             processingBlock = new SingleColorFill();
         }
-        else if(objectType == ProcessingBlock::typeNameNoteVisualizer)
+        else if (objectType == ProcessingBlock::typeNameNoteVisualizer)
         {
             processingBlock = new NoteVisualizer(midiInput, rgbFunctionFactory, time);
         }
-        else if(objectType == ProcessingBlock::typeNameProcessingChain)
+        else if (objectType == ProcessingBlock::typeNameProcessingChain)
         {
             // A processing chain needs the factory to construct its children
             processingBlock = new ProcessingChain(*this);
         }
 
-        if(processingBlock != nullptr)
+        if (processingBlock != nullptr)
         {
             processingBlock->convertFromJson(converted);
         }
@@ -61,7 +58,7 @@ IPatch* ProcessingBlockFactory::createPatch(const Json& converted) const
 {
     IPatch* patch = createPatch();
 
-    if(patch != nullptr)
+    if (patch != nullptr)
     {
         patch->convertFromJson(converted);
     }

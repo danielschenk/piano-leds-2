@@ -8,10 +8,10 @@ namespace Processing
 
 class ColorPicker
 {
-public:
+  public:
     virtual TRgb pick() = 0;
 };
 
-}
+}  // namespace Processing
 
 #endif

@@ -1,14 +1,13 @@
-#include <string>
+#include "StripChangeLogger.h"
+
 #include <cstdio>
+#include <string>
 
 #include "Logging.h"
-#include "StripChangeLogger.h"
 
 #define LOGGING_COMPONENT "StripChangeLogger"
 
-StripChangeLogger::StripChangeLogger(Concert& concert)
-    : concert(concert)
-    , previous()
+StripChangeLogger::StripChangeLogger(Concert& concert) : concert(concert), previous()
 {
     concert.subscribe(*this);
 }
@@ -25,23 +24,22 @@ void StripChangeLogger::onStripUpdate(const Processing::TRgbStrip& strip)
     {
         std::lock_guard<std::mutex> lock(mutex);
 
-        if(strip != previous)
+        if (strip != previous)
         {
             previous = strip;
             log = true;
         }
     }
 
-    if(log)
+    if (log)
     {
         std::string msg("Strip update:\r\n");
         uint16_t ledNumber(0);
-        for(auto led : strip)
+        for (auto led : strip)
         {
             // Fits: nnn: rrr ggg bbb[CR][LF][NUL]
             char buf[19];
-            snprintf(buf, sizeof(buf), "%3u: %3u %3u %3u\r\n",
-                     ledNumber, led.r, led.g, led.b);
+            snprintf(buf, sizeof(buf), "%3u: %3u %3u %3u\r\n", ledNumber, led.r, led.g, led.b);
             msg.append(buf);
             ++ledNumber;
         }

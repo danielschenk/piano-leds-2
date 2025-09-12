@@ -3,6 +3,7 @@
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+
 #include <atomic>
 
 /**
@@ -10,7 +11,7 @@
  */
 class BaseTask
 {
-public:
+  public:
     BaseTask(const BaseTask&) = delete;
     BaseTask& operator=(const BaseTask&) = delete;
 
@@ -18,7 +19,7 @@ public:
 
     void terminate();
 
-protected:
+  protected:
     BaseTask() = default;
 
     /**
@@ -28,13 +29,11 @@ protected:
      * @param stackSize Stack size in words
      * @param priority  Priority
      */
-    void start(const char* name,
-               uint32_t stackSize,
-               UBaseType_t priority);
+    void start(const char* name, uint32_t stackSize, UBaseType_t priority);
 
     TaskHandle_t getTaskHandle() const;
 
-private:
+  private:
     /**
      * Run function of the task. Is repeatedly executed until termination.
      */
@@ -48,7 +47,7 @@ private:
     static void taskFunction(void* pvParameters);
 
     TaskHandle_t taskHandle = nullptr;
-    std::atomic<bool> terminating {false};
+    std::atomic<bool> terminating{false};
 };
 
 #endif /* ESP32APPLICATION_BASETASK_H_ */

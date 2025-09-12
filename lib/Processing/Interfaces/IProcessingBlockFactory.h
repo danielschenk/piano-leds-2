@@ -11,7 +11,7 @@ class IProcessingChain;
 
 class IProcessingBlockFactory
 {
-public:
+  public:
     virtual ~IProcessingBlockFactory() = default;
 
     virtual ProcessingBlock* createProcessingBlock(const Json& converted) const = 0;

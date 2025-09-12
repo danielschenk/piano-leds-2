@@ -1,12 +1,12 @@
-#include <Logging.h>
-#include <Json11Helper.h>
-
 #include "ProcessingChain.h"
 
-#include "ProcessingBlock.h"
-#include "IProcessingBlockFactory.h"
+#include <Json11Helper.h>
+#include <Logging.h>
 
 #include <algorithm>
+
+#include "IProcessingBlockFactory.h"
+#include "ProcessingBlock.h"
 
 #define LOGGING_COMPONENT "ProcessingChain"
 
@@ -24,7 +24,7 @@ void ProcessingChain::insertBlock(ProcessingBlock* block, unsigned int index)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    if(index > processingChain.size())
+    if (index > processingChain.size())
     {
         index = processingChain.size();
     }
@@ -49,7 +49,7 @@ Json ProcessingChain::convertToJson() const
     converted[ProcessingBlock::objectTypeKey] = getObjectType();
 
     Json::array convertedChain;
-    for(auto processingBlock : processingChain)
+    for (auto processingBlock : processingChain)
     {
         convertedChain.push_back(processingBlock->convertToJson());
     }
@@ -66,16 +66,18 @@ void ProcessingChain::convertFromJson(const Json& converted)
 
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
     Json::array convertedChain;
-    if(helper.getItemIfPresent(processingChainJsonKey, convertedChain))
+    if (helper.getItemIfPresent(processingChainJsonKey, convertedChain))
     {
-        for(auto convertedBlock : convertedChain)
+        for (auto convertedBlock : convertedChain)
         {
             processingChain.push_back(processingBlockFactory.createProcessingBlock(convertedBlock));
         }
     }
     else
     {
-        LOG_ERROR("convertFromJson: JSON does not contain list of processing blocks. Chain will stay empty.");
+        LOG_ERROR(
+            "convertFromJson: JSON does not contain list of processing blocks. Chain will stay "
+            "empty.");
     }
 
     updateAllBlockStates();
@@ -90,7 +92,7 @@ void ProcessingChain::activate()
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    for(auto processingBlock : processingChain)
+    for (auto processingBlock : processingChain)
     {
         processingBlock->activate();
     }
@@ -102,7 +104,7 @@ void ProcessingChain::deactivate()
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    for(auto processingBlock : processingChain)
+    for (auto processingBlock : processingChain)
     {
         processingBlock->deactivate();
     }
@@ -110,24 +112,26 @@ void ProcessingChain::deactivate()
     active = false;
 }
 
-void ProcessingChain::execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap)
+void ProcessingChain::execute(Processing::TRgbStrip& strip,
+                              const Processing::TNoteToLightMap& noteToLightMap)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
     std::fill(strip.begin(), strip.end(), Processing::ColorValue::off);
 
-    for(auto processingBlock : processingChain)
+    for (auto processingBlock : processingChain)
     {
         auto mode = processingBlock->mode();
         if (mode == ProcessingBlock::Mode::additive)
         {
             intermediateStrip.resize(strip.size());
-            std::fill(intermediateStrip.begin(), intermediateStrip.end(), Processing::ColorValue::off);
+            std::fill(intermediateStrip.begin(), intermediateStrip.end(),
+                      Processing::ColorValue::off);
 
             processingBlock->execute(intermediateStrip, noteToLightMap);
 
-            std::transform(strip.begin(), strip.end(),
-                intermediateStrip.begin(), strip.begin(), std::plus<Processing::TRgb>());
+            std::transform(strip.begin(), strip.end(), intermediateStrip.begin(), strip.begin(),
+                           std::plus<Processing::TRgb>());
         }
         else if (mode == ProcessingBlock::Mode::overwriting)
         {
@@ -138,7 +142,7 @@ void ProcessingChain::execute(Processing::TRgbStrip& strip, const Processing::TN
 
 void ProcessingChain::deleteProcessingBlocks()
 {
-    for(auto processingBlock : processingChain)
+    for (auto processingBlock : processingChain)
     {
         delete processingBlock;
     }
@@ -147,16 +151,16 @@ void ProcessingChain::deleteProcessingBlocks()
 
 void ProcessingChain::updateAllBlockStates()
 {
-    if(active)
+    if (active)
     {
-        for(auto processingBlock : processingChain)
+        for (auto processingBlock : processingChain)
         {
             processingBlock->activate();
         }
     }
     else
     {
-        for(auto processingBlock : processingChain)
+        for (auto processingBlock : processingChain)
         {
             processingBlock->deactivate();
         }

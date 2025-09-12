@@ -6,15 +6,14 @@
 namespace Processing
 {
 
-class HorizontalStretcher
-    : public ProcessingBlock
+class HorizontalStretcher : public ProcessingBlock
 {
-public:
+  public:
     HorizontalStretcher() = default;
     void execute(TRgbStrip& strip, const TNoteToLightMap& noteToLightMap) override;
     Mode mode() const override;
 };
 
-}
+}  // namespace Processing
 
 #endif

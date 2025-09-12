@@ -1,21 +1,19 @@
-#include <vector>
-#include <string>
 #include <gtest/gtest.h>
 
-#include "Json11Helper.h"
+#include <string>
+#include <vector>
+
 #include "../SingleColorFill.h"
-#include "Mock/MockTime.h"
+#include "Json11Helper.h"
 #include "LoggingEntryPoint.h"
+#include "Mock/MockTime.h"
 
 using ::testing::NiceMock;
 
-class SingleColorFillTest
-    : public ::testing::Test
+class SingleColorFillTest : public ::testing::Test
 {
-public:
-    SingleColorFillTest()
-        : time()
-        , source()
+  public:
+    SingleColorFillTest() : time(), source()
     {
         LoggingEntryPoint::setTime(&time);
     }
@@ -29,16 +27,15 @@ TEST_F(SingleColorFillTest, executeDifferentColors)
     Processing::TRgbStrip strip(20);
     std::vector<Processing::TRgb> colors({{0, 0, 0}, {255, 255, 255}, {1, 2, 3}});
 
-    for(const auto& colorIt : colors)
+    for (const auto& colorIt : colors)
     {
         source.setColor(colorIt);
         source.execute(strip, Processing::TNoteToLightMap());
-        for(const auto& outputIt : strip)
+        for (const auto& outputIt : strip)
         {
             EXPECT_EQ(outputIt, colorIt);
         }
     }
-
 }
 TEST_F(SingleColorFillTest, convertFromJson)
 {
@@ -51,8 +48,7 @@ TEST_F(SingleColorFillTest, convertFromJson)
             "b": 30
         }
         )",
-        err,
-        json11::STANDARD);
+                         err, json11::STANDARD);
 
     source.convertFromJson(j);
     EXPECT_EQ(source.getColor(), Processing::TRgb({10, 20, 30}));
@@ -69,8 +65,7 @@ TEST_F(SingleColorFillTest, convertFromJsonWithWrongType)
             "b": 30
         }
         )",
-        err,
-        json11::STANDARD);
+                         err, json11::STANDARD);
 
     source.convertFromJson(j);
     EXPECT_EQ(source.getColor(), Processing::TRgb({10, 20, 30}));
@@ -86,8 +81,7 @@ TEST_F(SingleColorFillTest, convertFromJsonWithMissingColor)
             "b": 30
         }
         )",
-        err,
-        json11::STANDARD);
+                         err, json11::STANDARD);
 
     source.convertFromJson(j);
     EXPECT_EQ(source.getColor(), Processing::TRgb({10, 0, 30}));

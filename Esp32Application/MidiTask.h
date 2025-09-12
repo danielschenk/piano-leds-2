@@ -8,9 +8,9 @@ class ArduinoMidiInput;
 /**
  * FreeRTOS task processing incoming MIDI bytes.
  */
-class MidiTask: public BaseTask
+class MidiTask : public BaseTask
 {
-public:
+  public:
     /**
      * Constructor.
      *
@@ -18,9 +18,7 @@ public:
      * @param stackSize     Stack size in words
      * @param priority      Priority
      */
-    MidiTask(ArduinoMidiInput& midiInput,
-             uint32_t stackSize,
-             UBaseType_t priority);
+    MidiTask(ArduinoMidiInput& midiInput, uint32_t stackSize, UBaseType_t priority);
 
     /**
      * Destructor.
@@ -37,7 +35,7 @@ public:
      */
     void wake();
 
-private:
+  private:
     void run() override;
 
     ArduinoMidiInput& midiInput;
