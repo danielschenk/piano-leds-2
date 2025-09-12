@@ -26,7 +26,7 @@ LedTask::~LedTask()
     concert.unsubscribe(*this);
 }
 
-void LedTask::onStripUpdate(const Processing::TRgbStrip& strip)
+void LedTask::onStripUpdate(const processing::RgbStrip& strip)
 {
     {
         std::lock_guard<std::mutex> lock(mutex);

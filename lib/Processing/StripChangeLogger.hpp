@@ -20,11 +20,11 @@ class StripChangeLogger : public Concert::IObserver
     virtual ~StripChangeLogger();
 
     // Concert::IObserver implementation
-    void onStripUpdate(const Processing::TRgbStrip& strip) override;
+    void onStripUpdate(const processing::RgbStrip& strip) override;
 
   private:
     Concert& concert;
-    Processing::TRgbStrip previous;
+    processing::RgbStrip previous;
     mutable std::mutex mutex;
 };
 

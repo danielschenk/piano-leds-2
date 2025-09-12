@@ -2,58 +2,58 @@
 
 #include "Json11Helper.hpp"
 
-LinearRgbFunction::LinearRgbFunction(const Processing::TRgb& color)
+LinearRgbFunction::LinearRgbFunction(const processing::RgbColor& color)
 {
     redConstants = {2.0f * color.r / 255.0f, 0};
     greenConstants = {2.0f * color.g / 255.0f, 0};
     blueConstants = {2.0f * color.b / 255.0f, 0};
 }
 
-Processing::TRgb LinearRgbFunction::calculate(const Processing::TNoteState& noteState,
-                                              Processing::TTime currentTime) const
+processing::RgbColor LinearRgbFunction::calculate(const processing::TNoteState& noteState,
+                                                  processing::TTime currentTime) const
 {
-    Processing::TRgb output;
+    processing::RgbColor output;
 
     if (noteState.sounding)
     {
-        output = Processing::rgbFromFloat(
+        output = processing::RgbColor(
             redConstants.factor * noteState.pressDownVelocity + redConstants.offset,
             greenConstants.factor * noteState.pressDownVelocity + greenConstants.offset,
             blueConstants.factor * noteState.pressDownVelocity + blueConstants.offset);
 
-        if (noteState.pressDownColor != Processing::ColorValue::off)
+        if (noteState.pressDownColor != processing::color_constants::off)
             output *= noteState.pressDownColor;
     }
 
     return output;
 }
 
-void LinearRgbFunction::setRedConstants(Processing::TLinearConstants redConstants)
+void LinearRgbFunction::setRedConstants(processing::TLinearConstants redConstants)
 {
     this->redConstants = redConstants;
 }
 
-void LinearRgbFunction::setGreenConstants(Processing::TLinearConstants greenConstants)
+void LinearRgbFunction::setGreenConstants(processing::TLinearConstants greenConstants)
 {
     this->greenConstants = greenConstants;
 }
 
-void LinearRgbFunction::setBlueConstants(Processing::TLinearConstants blueConstants)
+void LinearRgbFunction::setBlueConstants(processing::TLinearConstants blueConstants)
 {
     this->blueConstants = blueConstants;
 }
 
-Processing::TLinearConstants LinearRgbFunction::getRedConstants() const
+processing::TLinearConstants LinearRgbFunction::getRedConstants() const
 {
     return redConstants;
 }
 
-Processing::TLinearConstants LinearRgbFunction::getGreenConstants() const
+processing::TLinearConstants LinearRgbFunction::getGreenConstants() const
 {
     return greenConstants;
 }
 
-Processing::TLinearConstants LinearRgbFunction::getBlueConstants() const
+processing::TLinearConstants LinearRgbFunction::getBlueConstants() const
 {
     return blueConstants;
 }

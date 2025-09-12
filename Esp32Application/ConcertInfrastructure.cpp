@@ -1,12 +1,12 @@
 #include "ConcertInfrastructure.hpp"
 
+#include "Color.hpp"
 #include "HorizontalStretcher.hpp"
 #include "LinearRgbFunction.hpp"
 #include "Logging.hpp"
 #include "NoteVisualizer.hpp"
 #include "Patch.hpp"
 #include "PianoDecayRgbFunction.hpp"
-#include "ProcessingTypes.hpp"
 #include "SequentialColorPicker.hpp"
 #include "SingleColorFill.hpp"
 
@@ -28,9 +28,9 @@ ConcertInfrastructure::ConcertInfrastructure(IMidiInput& midiInput, const ITime&
 
 void ConcertInfrastructure::createLegacyPatches()
 {
-    using namespace Processing::ColorValue;
-    constexpr std::array<Processing::TRgb, 7> colors{red,     green, blue, yellow,
-                                                     magenta, cyan,  white};
+    using namespace processing::color_constants;
+    constexpr std::array<processing::RgbColor, 7> colors{red,     green, blue, yellow,
+                                                         magenta, cyan,  white};
 
     uint8_t program = 0;
     for (const auto& color : colors)
@@ -51,14 +51,14 @@ void ConcertInfrastructure::createLegacyPatches()
     fill->setColor(blue * 0.1f);
     patch->getProcessingChain().insertBlock(fill, 0);
 
-    patch = addBasicPatch(white, true, std::make_shared<Processing::SequentialColorPicker>());
+    patch = addBasicPatch(white, true, std::make_shared<processing::SequentialColorPicker>());
     patch->setProgram(53);
     patch->setName("Multicolor");
 }
 
 Patch* ConcertInfrastructure::addBasicPatch(
-    const Processing::TRgb& color, bool likePiano,
-    std::shared_ptr<Processing::ColorPicker> pressDownColorPicker)
+    const processing::RgbColor& color, bool likePiano,
+    std::shared_ptr<processing::ColorPicker> pressDownColorPicker)
 {
     auto patch = new Patch(processingBlockFactory);
     auto block = new NoteVisualizer(midiInput, rgbFunctionFactory, time);
@@ -77,7 +77,7 @@ Patch* ConcertInfrastructure::addBasicPatch(
     patch->getProcessingChain().insertBlock(block);
 
     // use those skipped leds for double brightness per note
-    auto stretcher = new Processing::HorizontalStretcher;
+    auto stretcher = new processing::HorizontalStretcher;
     patch->getProcessingChain().insertBlock(stretcher);
 
     concert.addPatch(patch);
@@ -85,10 +85,10 @@ Patch* ConcertInfrastructure::addBasicPatch(
     return patch;
 }
 
-Processing::TNoteToLightMap ConcertInfrastructure::createDefaultOneToOneFullPianoMapping(
+processing::TNoteToLightMap ConcertInfrastructure::createDefaultOneToOneFullPianoMapping(
     uint16_t skipLedsPerNote)
 {
-    Processing::TNoteToLightMap noteToLightMap;
+    processing::TNoteToLightMap noteToLightMap;
     uint16_t lightNumber = 0;
     constexpr uint8_t noteNumberA0 = 21;
     constexpr uint8_t noteNumberC8 = 108;

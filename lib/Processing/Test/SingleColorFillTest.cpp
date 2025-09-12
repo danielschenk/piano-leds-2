@@ -24,13 +24,13 @@ class SingleColorFillTest : public ::testing::Test
 
 TEST_F(SingleColorFillTest, executeDifferentColors)
 {
-    Processing::TRgbStrip strip(20);
-    std::vector<Processing::TRgb> colors({{0, 0, 0}, {255, 255, 255}, {1, 2, 3}});
+    processing::RgbStrip strip(20);
+    std::vector<processing::RgbColor> colors({{0, 0, 0}, {255, 255, 255}, {1, 2, 3}});
 
     for (const auto& colorIt : colors)
     {
         source.setColor(colorIt);
-        source.execute(strip, Processing::TNoteToLightMap());
+        source.execute(strip, processing::TNoteToLightMap());
         for (const auto& outputIt : strip)
         {
             EXPECT_EQ(outputIt, colorIt);
@@ -51,7 +51,7 @@ TEST_F(SingleColorFillTest, convertFromJson)
                          err, json11::STANDARD);
 
     source.convertFromJson(j);
-    EXPECT_EQ(source.getColor(), Processing::TRgb({10, 20, 30}));
+    EXPECT_EQ(source.getColor(), processing::RgbColor({10, 20, 30}));
 }
 
 TEST_F(SingleColorFillTest, convertFromJsonWithWrongType)
@@ -68,7 +68,7 @@ TEST_F(SingleColorFillTest, convertFromJsonWithWrongType)
                          err, json11::STANDARD);
 
     source.convertFromJson(j);
-    EXPECT_EQ(source.getColor(), Processing::TRgb({10, 20, 30}));
+    EXPECT_EQ(source.getColor(), processing::RgbColor({10, 20, 30}));
 }
 
 TEST_F(SingleColorFillTest, convertFromJsonWithMissingColor)
@@ -84,12 +84,12 @@ TEST_F(SingleColorFillTest, convertFromJsonWithMissingColor)
                          err, json11::STANDARD);
 
     source.convertFromJson(j);
-    EXPECT_EQ(source.getColor(), Processing::TRgb({10, 0, 30}));
+    EXPECT_EQ(source.getColor(), processing::RgbColor({10, 0, 30}));
 }
 
 TEST_F(SingleColorFillTest, convertToJson)
 {
-    source.setColor(Processing::TRgb({40, 50, 60}));
+    source.setColor(processing::RgbColor({40, 50, 60}));
 
     Json::object j = source.convertToJson().object_items();
     EXPECT_EQ(4, j.size());

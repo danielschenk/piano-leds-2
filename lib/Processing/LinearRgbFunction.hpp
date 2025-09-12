@@ -11,19 +11,19 @@ class LinearRgbFunction : public IRgbFunction
 {
   public:
     LinearRgbFunction() = default;
-    explicit LinearRgbFunction(const Processing::TRgb& color);
+    explicit LinearRgbFunction(const processing::RgbColor& color);
 
-    void setRedConstants(Processing::TLinearConstants redConstants);
-    void setGreenConstants(Processing::TLinearConstants greenConstants);
-    void setBlueConstants(Processing::TLinearConstants blueConstants);
+    void setRedConstants(processing::TLinearConstants redConstants);
+    void setGreenConstants(processing::TLinearConstants greenConstants);
+    void setBlueConstants(processing::TLinearConstants blueConstants);
 
-    Processing::TLinearConstants getRedConstants() const;
-    Processing::TLinearConstants getGreenConstants() const;
-    Processing::TLinearConstants getBlueConstants() const;
+    processing::TLinearConstants getRedConstants() const;
+    processing::TLinearConstants getGreenConstants() const;
+    processing::TLinearConstants getBlueConstants() const;
 
     // IRgbFunction implementation
-    Processing::TRgb calculate(const Processing::TNoteState& noteState,
-                               Processing::TTime currentTime) const override;
+    processing::RgbColor calculate(const processing::TNoteState& noteState,
+                                   processing::TTime currentTime) const override;
     Json convertToJson() const override;
     void convertFromJson(const Json& converted) override;
 
@@ -37,9 +37,9 @@ class LinearRgbFunction : public IRgbFunction
      * The defaults are chosen with the maximum MIDI velocity in mind (127), which will result in a
      * value of 255 (maximum LED value for most drivers).
      */
-    Processing::TLinearConstants redConstants = {2, 1};
-    Processing::TLinearConstants greenConstants = {2, 1};
-    Processing::TLinearConstants blueConstants = {2, 1};
+    processing::TLinearConstants redConstants = {2, 1};
+    processing::TLinearConstants greenConstants = {2, 1};
+    processing::TLinearConstants blueConstants = {2, 1};
 
     static constexpr const char* rFactorJsonKey = "rFactor";
     static constexpr const char* gFactorJsonKey = "gFactor";

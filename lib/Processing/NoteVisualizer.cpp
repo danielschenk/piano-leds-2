@@ -45,8 +45,8 @@ void NoteVisualizer::deactivate()
     active = false;
 }
 
-void NoteVisualizer::execute(Processing::TRgbStrip& strip,
-                             const Processing::TNoteToLightMap& noteToLightMap)
+void NoteVisualizer::execute(processing::RgbStrip& strip,
+                             const processing::TNoteToLightMap& noteToLightMap)
 {
     scheduler.executeAll();
 
@@ -181,7 +181,7 @@ void NoteVisualizer::setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction)
     this->rgbFunction = rgbFunction;
 }
 
-void NoteVisualizer::setPressDownColorPicker(std::shared_ptr<Processing::ColorPicker> colorPicker)
+void NoteVisualizer::setPressDownColorPicker(std::shared_ptr<processing::ColorPicker> colorPicker)
 {
     std::lock_guard<std::mutex> lock(mutex);
     pressDownColorPicker = colorPicker;

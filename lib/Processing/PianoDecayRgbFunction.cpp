@@ -2,11 +2,11 @@
 
 #include <json11.hpp>
 
-Processing::TRgb PianoDecayRgbFunction::calculate(const Processing::TNoteState& noteState,
-                                                  Processing::TTime currentTime) const
+processing::RgbColor PianoDecayRgbFunction::calculate(const processing::TNoteState& noteState,
+                                                      processing::TTime currentTime) const
 {
     auto startColor(LinearRgbFunction::calculate(noteState, currentTime));
-    if (startColor == Processing::TRgb{0, 0, 0})
+    if (startColor == processing::RgbColor{0, 0, 0})
         return startColor;
 
     uint32_t soundingTime(currentTime - noteState.noteOnTimeStamp);

@@ -5,20 +5,20 @@
 
 #include "ColorPicker.hpp"
 
-namespace Processing
+namespace processing
 {
 
 class SequentialColorPicker : public ColorPicker
 {
   public:
     SequentialColorPicker() = default;
-    TRgb pick();
+    RgbColor pick();
 
   private:
-    static const std::array<TRgb, 6> sequence;
+    static const std::array<RgbColor, 6> sequence;
     decltype(sequence)::const_iterator currentColor{sequence.cbegin()};
 };
 
-}  // namespace Processing
+}  // namespace processing
 
 #endif

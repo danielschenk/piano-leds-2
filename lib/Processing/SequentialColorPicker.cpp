@@ -1,13 +1,14 @@
 #include "SequentialColorPicker.hpp"
 
-namespace Processing
+namespace processing
 {
 
-using namespace ColorValue;
+using namespace color_constants;
 
-const std::array<TRgb, 6> SequentialColorPicker::sequence{red, green, blue, yellow, magenta, cyan};
+const std::array<RgbColor, 6> SequentialColorPicker::sequence{red,    green,   blue,
+                                                              yellow, magenta, cyan};
 
-TRgb SequentialColorPicker::pick()
+RgbColor SequentialColorPicker::pick()
 {
     auto color = *currentColor;
     if (++currentColor >= sequence.cend())
@@ -15,4 +16,4 @@ TRgb SequentialColorPicker::pick()
     return color;
 }
 
-}  // namespace Processing
+}  // namespace processing

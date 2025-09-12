@@ -13,19 +13,19 @@ using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::Unused;
 
-static void addRed(Processing::TRgbStrip& strip, Unused)
+static void addRed(processing::RgbStrip& strip, Unused)
 {
     for (auto& led : strip)
         led.r = 10;
 }
 
-static void addGreen(Processing::TRgbStrip& strip, Unused)
+static void addGreen(processing::RgbStrip& strip, Unused)
 {
     for (auto& led : strip)
         led.g = 10;
 }
 
-static void doubleValue(Processing::TRgbStrip& strip, Unused)
+static void doubleValue(processing::RgbStrip& strip, Unused)
 {
     for (auto& led : strip)
     {
@@ -84,7 +84,7 @@ class ProcessingBlockContainerTest : public LoggingTest
     TMockBlock* greenSource;
     TMockBlock* valueDoubler;
 
-    Processing::TRgbStrip strip;
+    processing::RgbStrip strip;
 
     MockProcessingBlockFactory processingBlockFactory;
 };

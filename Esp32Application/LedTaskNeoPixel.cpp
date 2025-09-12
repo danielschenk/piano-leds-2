@@ -17,7 +17,7 @@ LedTaskNeoPixel::~LedTaskNeoPixel()
     concert.unsubscribe(*this);
 }
 
-void LedTaskNeoPixel::onStripUpdate(const Processing::TRgbStrip& strip)
+void LedTaskNeoPixel::onStripUpdate(const processing::RgbStrip& strip)
 {
     {
         std::lock_guard<std::mutex> lock(mutex);

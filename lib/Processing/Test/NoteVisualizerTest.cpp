@@ -18,7 +18,7 @@ using ::testing::SaveArg;
 
 ACTION(ReturnFullWhiteWhenSounding)
 {
-    Processing::TRgb output;
+    processing::RgbColor output;
     if (arg0.sounding)
     {
         output.r = 0xff;
@@ -31,7 +31,7 @@ ACTION(ReturnFullWhiteWhenSounding)
 
 ACTION(ReturnMinimalWhiteWhenSounding)
 {
-    Processing::TRgb output;
+    processing::RgbColor output;
     if (arg0.sounding)
     {
         output.r = 0x01;
@@ -86,9 +86,9 @@ class NoteVisualizerTest : public LoggingTest, public MidiInputObserverTest, pub
     MockRgbFunctionFactory mockRgbFunctionFactory;
     NiceMock<MockTime> mockTime;
     NoteVisualizer noteVisualizer;
-    Processing::TRgbStrip strip;
+    processing::RgbStrip strip;
 
-    Processing::TNoteToLightMap noteToLightMap;
+    processing::TNoteToLightMap noteToLightMap;
 
     std::string exampleJson;
 };
@@ -101,7 +101,7 @@ TEST_F(NoteVisualizerTest, noNotesSounding)
 
     noteVisualizer.execute(strip, noteToLightMap);
 
-    EXPECT_THAT(strip, Each(Processing::TRgb({0, 0, 0})));
+    EXPECT_THAT(strip, Each(processing::RgbColor({0, 0, 0})));
 }
 
 TEST_F(NoteVisualizerTest, noteOn)
@@ -113,7 +113,7 @@ TEST_F(NoteVisualizerTest, noteOn)
     noteVisualizer.execute(strip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto expected = Processing::TRgbStrip(stripSize);
+    auto expected = processing::RgbStrip(stripSize);
     expected[0] = {0xff, 0xff, 0xff};
     expected[5] = {0xff, 0xff, 0xff};
 
@@ -126,7 +126,7 @@ TEST_F(NoteVisualizerTest, noteOnOverwritesAlreadyEnabledLed)
     ON_CALL(*rgbFunction, calculate(_, _)).WillByDefault(ReturnMinimalWhiteWhenSounding());
     noteVisualizer.setRgbFunction(rgbFunction);
 
-    std::fill(strip.begin(), strip.end(), Processing::TRgb{0xff, 0xff, 0xff});
+    std::fill(strip.begin(), strip.end(), processing::RgbColor{0xff, 0xff, 0xff});
 
     // (channel, number, velocity, on/off)
     observer->onNoteChange(0, 0, 1, true);
@@ -134,7 +134,7 @@ TEST_F(NoteVisualizerTest, noteOnOverwritesAlreadyEnabledLed)
 
     noteVisualizer.execute(strip, noteToLightMap);
 
-    Processing::TRgbStrip expected(strip);
+    processing::RgbStrip expected(strip);
     expected[0] = {0x01, 0x01, 0x01};
     expected[5] = {0x01, 0x01, 0x01};
 
@@ -150,7 +150,7 @@ TEST_F(NoteVisualizerTest, deactivateDisablesAllNotes)
 
     noteVisualizer.execute(strip, noteToLightMap);
 
-    EXPECT_THAT(strip, Each(Processing::TRgb({0, 0, 0})));
+    EXPECT_THAT(strip, Each(processing::RgbColor({0, 0, 0})));
 }
 
 TEST_F(NoteVisualizerTest, noteOff)
@@ -164,7 +164,7 @@ TEST_F(NoteVisualizerTest, noteOff)
     noteVisualizer.execute(strip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto expected = Processing::TRgbStrip(stripSize);
+    auto expected = processing::RgbStrip(stripSize);
     expected[5] = {0xff, 0xff, 0xff};
 
     EXPECT_EQ(expected, strip);
@@ -175,7 +175,7 @@ TEST_F(NoteVisualizerTest, ignoreOtherChannel)
     observer->onNoteChange(1, 0, 1, true);
 
     noteVisualizer.execute(strip, noteToLightMap);
-    EXPECT_THAT(strip, Each(Processing::TRgb({0, 0, 0})));
+    EXPECT_THAT(strip, Each(processing::RgbColor({0, 0, 0})));
 }
 
 TEST_F(NoteVisualizerTest, ignorePedal)
@@ -187,7 +187,7 @@ TEST_F(NoteVisualizerTest, ignorePedal)
     observer->onNoteChange(0, 0, 1, false);
 
     noteVisualizer.execute(strip, noteToLightMap);
-    EXPECT_THAT(strip, Each(Processing::TRgb({0, 0, 0})));
+    EXPECT_THAT(strip, Each(processing::RgbColor({0, 0, 0})));
 }
 
 TEST_F(NoteVisualizerTest, usePedal)
@@ -201,7 +201,7 @@ TEST_F(NoteVisualizerTest, usePedal)
     // Press another key
     observer->onNoteChange(0, 2, 1, true);
 
-    auto expected = Processing::TRgbStrip(stripSize);
+    auto expected = processing::RgbStrip(stripSize);
     // Both notes are still sounding
     expected[0] = {0xff, 0xff, 0xff};
     expected[2] = {0xff, 0xff, 0xff};
@@ -231,7 +231,7 @@ TEST_F(NoteVisualizerTest, usePedal)
 /** Action definition for mock RGB function. */
 ACTION(ReturnBlueWhenNoteSoundingOtherwiseRed)
 {
-    Processing::TRgb output;
+    processing::RgbColor output;
     if (arg0.sounding)
     {
         output.b = 1;
@@ -257,7 +257,7 @@ TEST_F(NoteVisualizerTest, otherRgbFunction)
 
     noteVisualizer.execute(strip, noteToLightMap);
 
-    auto expected = Processing::TRgbStrip(stripSize);
+    auto expected = processing::RgbStrip(stripSize);
     expected[0] = {0, 0, 1};
     expected[1] = {1, 0, 0};
     expected[2] = {1, 0, 0};
@@ -305,7 +305,7 @@ TEST_F(NoteVisualizerTest, otherNoteToLightMap)
     noteVisualizer.execute(strip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto expected = Processing::TRgbStrip(stripSize);
+    auto expected = processing::RgbStrip(stripSize);
     expected[9] = {0xff, 0xff, 0xff};
     expected[8] = {0xff, 0xff, 0xff};
 
@@ -318,11 +318,11 @@ TEST_F(NoteVisualizerTest, doNotWriteOutsideStrip)
     observer->onNoteChange(0, 0, 1, true);
     observer->onNoteChange(0, 9, 6, true);
 
-    auto shorterStrip = Processing::TRgbStrip(5);
+    auto shorterStrip = processing::RgbStrip(5);
     noteVisualizer.execute(shorterStrip, noteToLightMap);
 
     // Default: white, factor 255, so any velocity >0 will cause full on
-    auto expected = Processing::TRgbStrip(5);
+    auto expected = processing::RgbStrip(5);
     expected[0] = {0xff, 0xff, 0xff};
 
     EXPECT_EQ(expected, shorterStrip);
@@ -334,8 +334,8 @@ TEST_F(NoteVisualizerTest, deleteRgbFunction)
     auto mock2 = std::make_shared<MockRgbFunction>();
 
     // Need to set an action, to make Google Test throw an error in case of a leaked mock.
-    ON_CALL(*mock1, calculate(_, _)).WillByDefault(Return(Processing::TRgb()));
-    ON_CALL(*mock2, calculate(_, _)).WillByDefault(Return(Processing::TRgb()));
+    ON_CALL(*mock1, calculate(_, _)).WillByDefault(Return(processing::RgbColor()));
+    ON_CALL(*mock2, calculate(_, _)).WillByDefault(Return(processing::RgbColor()));
 
     noteVisualizer.setRgbFunction(mock1);
     noteVisualizer.setRgbFunction(mock2);
@@ -376,7 +376,7 @@ TEST_F(NoteVisualizerTest, convertFromJson)
     auto mockRgbFunction = std::make_shared<MockRgbFunction>();
     ASSERT_NE(nullptr, mockRgbFunction);
     EXPECT_CALL(*mockRgbFunction, calculate(_, _))
-        .WillRepeatedly(Return(Processing::TRgb(1, 2, 3)));
+        .WillRepeatedly(Return(processing::RgbColor(1, 2, 3)));
 
     EXPECT_CALL(mockRgbFunctionFactory, createRgbFunction(Json(mockRgbFunctionJson)))
         .WillOnce(Return(mockRgbFunction));
@@ -385,11 +385,11 @@ TEST_F(NoteVisualizerTest, convertFromJson)
     EXPECT_EQ(6, noteVisualizer.getChannel());
     EXPECT_EQ(false, noteVisualizer.isUsingPedal());
 
-    Processing::TRgbStrip expected(3);
+    processing::RgbStrip expected(3);
     expected[0] = {1, 2, 3};
     expected[1] = {1, 2, 3};
     expected[2] = {1, 2, 3};
-    Processing::TRgbStrip testStrip(3);
+    processing::RgbStrip testStrip(3);
     noteVisualizer.execute(testStrip, noteToLightMap);
     EXPECT_EQ(expected, testStrip);
 }

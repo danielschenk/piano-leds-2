@@ -17,7 +17,7 @@ using testing::SetArgReferee;
 class MockConcertObserver : public Concert::IObserver
 {
   public:
-    MOCK_METHOD1(onStripUpdate, void(const Processing::TRgbStrip& strip));
+    MOCK_METHOD1(onStripUpdate, void(const processing::RgbStrip& strip));
 };
 
 class ConcertTest : public MidiInputObserverTest, public ::testing::Test
@@ -90,7 +90,7 @@ TEST_F(ConcertTest, bankSelectFromOtherChannelIgnored)
 
 TEST_F(ConcertTest, execute)
 {
-    Processing::TNoteToLightMap map;
+    processing::TNoteToLightMap map;
     map[42] = 42;
     concert->setNoteToLightMap(map);
 
@@ -100,7 +100,7 @@ TEST_F(ConcertTest, execute)
     MockConcertObserver observer;
     concert->subscribe(observer);
 
-    Processing::TRgbStrip newStripValues({{42, 43, 44}});
+    processing::RgbStrip newStripValues({{42, 43, 44}});
 
     // The mock patch should be executed, and given the configured note to light map.
     // Let the mock patch set some values on the strip during its execute
@@ -188,7 +188,7 @@ TEST_F(ConcertTest, getPatch)
 
 TEST_F(ConcertTest, updateStripSize)
 {
-    Processing::TNoteToLightMap map;
+    processing::TNoteToLightMap map;
     map[0] = 42;
     map[1] = 6;
     map[2] = 7;
@@ -204,7 +204,7 @@ TEST_F(ConcertTest, convertToJson)
     concert->setCurrentBank(2);
     concert->setProgramChangeChannel(3);
 
-    Processing::TNoteToLightMap map({{1, 10}, {2, 20}});
+    processing::TNoteToLightMap map({{1, 10}, {2, 20}});
     concert->setNoteToLightMap(map);
 
     Json::object mockPatchJson, mockPatch2Json;
@@ -233,7 +233,7 @@ TEST_F(ConcertTest, convertToJson)
     EXPECT_EQ(true, converted.at("isListeningToProgramChange").bool_value());
     EXPECT_EQ(2, converted.at("currentBank").number_value());
     EXPECT_EQ(3, converted.at("programChangeChannel").number_value());
-    EXPECT_EQ(Processing::convert(map), converted.at("noteToLightMap").object_items());
+    EXPECT_EQ(processing::convert(map), converted.at("noteToLightMap").object_items());
 
     Json::array patches = converted.at("patches").array_items();
     EXPECT_EQ(2, patches.size());
@@ -298,7 +298,7 @@ TEST_F(ConcertTest, convertFromJson)
     EXPECT_EQ(name1, concert->getPatch(0)->getName());
     EXPECT_EQ(name2, concert->getPatch(1)->getName());
 
-    Processing::TNoteToLightMap expectedMap;
+    processing::TNoteToLightMap expectedMap;
     expectedMap[1] = 10;
     expectedMap[2] = 20;
     EXPECT_EQ(expectedMap, concert->getNoteToLightMap());

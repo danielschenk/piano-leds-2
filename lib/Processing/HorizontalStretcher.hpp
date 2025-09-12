@@ -3,17 +3,17 @@
 
 #include "ProcessingBlock.hpp"
 
-namespace Processing
+namespace processing
 {
 
 class HorizontalStretcher : public ProcessingBlock
 {
   public:
     HorizontalStretcher() = default;
-    void execute(TRgbStrip& strip, const TNoteToLightMap& noteToLightMap) override;
+    void execute(RgbStrip& strip, const TNoteToLightMap& noteToLightMap) override;
     Mode mode() const override;
 };
 
-}  // namespace Processing
+}  // namespace processing
 
 #endif

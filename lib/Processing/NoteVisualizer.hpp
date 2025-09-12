@@ -12,7 +12,7 @@
 class IRgbFunction;
 class IRgbFunctionFactory;
 class ITime;
-namespace Processing
+namespace processing
 {
 class ColorPicker;
 }
@@ -31,8 +31,8 @@ class NoteVisualizer : public ProcessingBlock, public IMidiInput::IObserver
     // ProcessingBlock implementation
     void activate() override;
     void deactivate() override;
-    void execute(Processing::TRgbStrip& strip,
-                 const Processing::TNoteToLightMap& noteToLightMap) override;
+    void execute(processing::RgbStrip& strip,
+                 const processing::TNoteToLightMap& noteToLightMap) override;
     Json convertToJson() const override;
     void convertFromJson(const Json& converted) override;
 
@@ -42,7 +42,7 @@ class NoteVisualizer : public ProcessingBlock, public IMidiInput::IObserver
     void setUsingPedal(bool usingPedal);
 
     void setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction);
-    void setPressDownColorPicker(std::shared_ptr<Processing::ColorPicker> colorPicker);
+    void setPressDownColorPicker(std::shared_ptr<processing::ColorPicker> colorPicker);
 
     // IMidiInput::IObserver implementation
     void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) override;
@@ -68,10 +68,10 @@ class NoteVisualizer : public ProcessingBlock, public IMidiInput::IObserver
     IMidiInput& midiInput;
     uint8_t channel = 0;
     Scheduler scheduler;
-    std::array<Processing::TNoteState, IMidiInterface::numNotes> noteStates;
+    std::array<processing::TNoteState, IMidiInterface::numNotes> noteStates;
     bool pedalPressed{false};
     std::shared_ptr<IRgbFunction> rgbFunction;
-    std::shared_ptr<Processing::ColorPicker> pressDownColorPicker;
+    std::shared_ptr<processing::ColorPicker> pressDownColorPicker;
     const ITime& time;
 };
 

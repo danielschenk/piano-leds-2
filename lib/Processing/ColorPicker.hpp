@@ -1,17 +1,17 @@
 #ifndef PROCESSING_COLORPICKER_HPP
 #define PROCESSING_COLORPICKER_HPP
 
-#include "ProcessingTypes.hpp"
+#include "Color.hpp"
 
-namespace Processing
+namespace processing
 {
 
 class ColorPicker
 {
   public:
-    virtual TRgb pick() = 0;
+    virtual RgbColor pick() = 0;
 };
 
-}  // namespace Processing
+}  // namespace processing
 
 #endif

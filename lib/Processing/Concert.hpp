@@ -111,8 +111,8 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
 
     bool isListeningToProgramChange() const;
     void setListeningToProgramChange(bool listeningToProgramChange);
-    Processing::TNoteToLightMap getNoteToLightMap() const;
-    void setNoteToLightMap(Processing::TNoteToLightMap noteToLightMap);
+    processing::TNoteToLightMap getNoteToLightMap() const;
+    void setNoteToLightMap(processing::TNoteToLightMap noteToLightMap);
     size_t getStripSize() const;
     uint8_t getProgramChangeChannel() const;
     void setProgramChangeChannel(uint8_t programChangeChannel);
@@ -127,7 +127,7 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
     class IObserver
     {
       public:
-        virtual void onStripUpdate(const Processing::TRgbStrip& strip) = 0;
+        virtual void onStripUpdate(const processing::RgbStrip& strip) = 0;
 
       protected:
         virtual ~IObserver() = default;
@@ -161,9 +161,9 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
     TPatchPosition addPatchInternal(IPatch* patch);
     void createMinimumAmountOfLights();
 
-    Processing::TNoteToLightMap noteToLightMap;
+    processing::TNoteToLightMap noteToLightMap;
 
-    Processing::TRgbStrip strip;
+    processing::RgbStrip strip;
     TPatches patches;
     TPatchPosition activePatchPosition = invalidPatchPosition;
     bool listeningToProgramChange{true};

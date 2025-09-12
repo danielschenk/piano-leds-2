@@ -10,7 +10,7 @@ class IMidiInput;
 class ITime;
 class Patch;
 
-namespace Processing
+namespace processing
 {
 class ColorPicker;
 }
@@ -22,9 +22,9 @@ struct ConcertInfrastructure
 {
     ConcertInfrastructure(IMidiInput& midiInput, const ITime& time);
     void createLegacyPatches();
-    Patch* addBasicPatch(const Processing::TRgb& color, bool likePiano,
-                         std::shared_ptr<Processing::ColorPicker> pressDownColorPicker = nullptr);
-    static Processing::TNoteToLightMap createDefaultOneToOneFullPianoMapping(
+    Patch* addBasicPatch(const processing::RgbColor& color, bool likePiano,
+                         std::shared_ptr<processing::ColorPicker> pressDownColorPicker = nullptr);
+    static processing::TNoteToLightMap createDefaultOneToOneFullPianoMapping(
         uint16_t skipLedsPerNote = 0);
 
     IMidiInput& midiInput;

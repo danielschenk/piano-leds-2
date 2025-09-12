@@ -89,14 +89,14 @@ void setup()
 
     // Add constant blue background
     auto src1(new SingleColorFill);
-    src1->setColor(Processing::TRgb({0, 0, 32}));
+    src1->setColor(processing::RgbColor({0, 0, 32}));
     patch->getProcessingChain().insertBlock(src1);
 
     // Full white for any sounding key
     auto src2(
         new NoteVisualizer(midiInput, concertInfrastructure.rgbFunctionFactory, freeRtosTime));
     auto rgbFunction(std::make_shared<LinearRgbFunction>());
-    const Processing::TLinearConstants fullWhite({255, 0});
+    const processing::TLinearConstants fullWhite({255, 0});
     rgbFunction->setRedConstants(fullWhite);
     rgbFunction->setGreenConstants(fullWhite);
     rgbFunction->setBlueConstants(fullWhite);

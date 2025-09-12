@@ -111,12 +111,12 @@ void ProcessingChain::deactivate()
     active = false;
 }
 
-void ProcessingChain::execute(Processing::TRgbStrip& strip,
-                              const Processing::TNoteToLightMap& noteToLightMap)
+void ProcessingChain::execute(processing::RgbStrip& strip,
+                              const processing::TNoteToLightMap& noteToLightMap)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    std::fill(strip.begin(), strip.end(), Processing::ColorValue::off);
+    std::fill(strip.begin(), strip.end(), processing::color_constants::off);
 
     for (auto processingBlock : processingChain)
     {
@@ -125,12 +125,12 @@ void ProcessingChain::execute(Processing::TRgbStrip& strip,
         {
             intermediateStrip.resize(strip.size());
             std::fill(intermediateStrip.begin(), intermediateStrip.end(),
-                      Processing::ColorValue::off);
+                      processing::color_constants::off);
 
             processingBlock->execute(intermediateStrip, noteToLightMap);
 
             std::transform(strip.begin(), strip.end(), intermediateStrip.begin(), strip.begin(),
-                           std::plus<Processing::TRgb>());
+                           std::plus<processing::RgbColor>());
         }
         else if (mode == ProcessingBlock::Mode::overwriting)
         {

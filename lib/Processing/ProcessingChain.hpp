@@ -23,8 +23,8 @@ class ProcessingChain : public IProcessingChain
     // IProcessingChain implementation
     void activate() override;
     void deactivate() override;
-    void execute(Processing::TRgbStrip& strip,
-                 const Processing::TNoteToLightMap& noteToLightMap) override;
+    void execute(processing::RgbStrip& strip,
+                 const processing::TNoteToLightMap& noteToLightMap) override;
     void insertBlock(ProcessingBlock* block, unsigned int index) override;
     void insertBlock(ProcessingBlock* block) override;
     Json convertToJson() const override;
@@ -42,7 +42,7 @@ class ProcessingChain : public IProcessingChain
     const IProcessingBlockFactory& processingBlockFactory;
     bool active{false};
     std::vector<ProcessingBlock*> processingChain;
-    Processing::TRgbStrip intermediateStrip;
+    processing::RgbStrip intermediateStrip;
 
     void deleteProcessingBlocks();
 

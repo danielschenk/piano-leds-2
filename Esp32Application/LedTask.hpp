@@ -20,7 +20,7 @@ class LedTask : public BaseTask, public Concert::IObserver
     ~LedTask() override;
 
     // Concert::IObserver implementation
-    void onStripUpdate(const Processing::TRgbStrip& strip) override;
+    void onStripUpdate(const processing::RgbStrip& strip) override;
 
   private:
     // BaseTask implementation
@@ -28,7 +28,7 @@ class LedTask : public BaseTask, public Concert::IObserver
 
     static constexpr TickType_t autoRefreshInterval = 100;
 
-    Processing::TRgbStrip pendingValues;
+    processing::RgbStrip pendingValues;
     Adafruit_WS2801 strip;
     mutable std::mutex mutex;
     Concert& concert;

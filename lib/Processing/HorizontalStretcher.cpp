@@ -1,9 +1,9 @@
 #include "HorizontalStretcher.hpp"
 
-namespace Processing
+namespace processing
 {
 
-void HorizontalStretcher::execute(TRgbStrip& strip, const TNoteToLightMap& noteToLightMap)
+void HorizontalStretcher::execute(RgbStrip& strip, const TNoteToLightMap& noteToLightMap)
 {
     for (size_t ledIdx = 0; (ledIdx + 1) < strip.size(); ledIdx += 2)
         strip[ledIdx + 1] = strip[ledIdx];
@@ -14,4 +14,4 @@ HorizontalStretcher::Mode HorizontalStretcher::mode() const
     return Mode::overwriting;
 }
 
-}  // namespace Processing
+}  // namespace processing

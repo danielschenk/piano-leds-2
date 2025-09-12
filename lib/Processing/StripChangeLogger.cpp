@@ -17,7 +17,7 @@ StripChangeLogger::~StripChangeLogger()
     concert.unsubscribe(*this);
 }
 
-void StripChangeLogger::onStripUpdate(const Processing::TRgbStrip& strip)
+void StripChangeLogger::onStripUpdate(const processing::RgbStrip& strip)
 {
     bool log(false);
 

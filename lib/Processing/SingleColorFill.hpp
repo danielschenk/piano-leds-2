@@ -16,13 +16,13 @@ class SingleColorFill : public ProcessingBlock
     // ProcessingBlock implementation.
     virtual void activate();
     virtual void deactivate();
-    virtual void execute(Processing::TRgbStrip& strip,
-                         const Processing::TNoteToLightMap& noteToLightMap);
+    virtual void execute(processing::RgbStrip& strip,
+                         const processing::TNoteToLightMap& noteToLightMap);
     virtual Json convertToJson() const;
     virtual void convertFromJson(const Json& converted);
 
-    Processing::TRgb getColor() const;
-    void setColor(Processing::TRgb color);
+    processing::RgbColor getColor() const;
+    void setColor(processing::RgbColor color);
 
   protected:
     // ProcessingBlock implementation
@@ -36,7 +36,7 @@ class SingleColorFill : public ProcessingBlock
     mutable std::mutex mutex;
 
     /** Output color. */
-    Processing::TRgb color;
+    processing::RgbColor color;
 };
 
 #endif /* PROCESSING_SINGLECOLORFILL_H_ */

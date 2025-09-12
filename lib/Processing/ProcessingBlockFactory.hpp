@@ -2,7 +2,6 @@
 #define PROCESSING_PROCESSINGBLOCKFACTORY_H_
 
 #include "IProcessingBlockFactory.hpp"
-#include "ProcessingTypes.hpp"
 
 class IMidiInput;
 class IRgbFunctionFactory;

@@ -15,7 +15,7 @@ class LedTaskNeoPixel : public BaseTask, public Concert::IObserver
     ~LedTaskNeoPixel() override;
 
     // Concert::IObserver implementation
-    void onStripUpdate(const Processing::TRgbStrip& strip) override;
+    void onStripUpdate(const processing::RgbStrip& strip) override;
 
   private:
     // BaseTask implementation
@@ -23,7 +23,7 @@ class LedTaskNeoPixel : public BaseTask, public Concert::IObserver
 
     static constexpr TickType_t autoRefreshInterval = 100;
 
-    Processing::TRgbStrip pendingValues;
+    processing::RgbStrip pendingValues;
     NeoPixelBus<NeoGrbFeature, NeoEsp32Rmt0Ws2812xMethod> strip;
     mutable std::mutex mutex;
     Concert& concert;

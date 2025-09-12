@@ -78,7 +78,7 @@ void Patch::deactivate()
     processingChain->deactivate();
 }
 
-void Patch::execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap& noteToLightMap)
+void Patch::execute(processing::RgbStrip& strip, const processing::TNoteToLightMap& noteToLightMap)
 {
     processingChain->execute(strip, noteToLightMap);
 }

@@ -27,17 +27,17 @@ class ProcessingChainTest : public ProcessingBlockContainerTest, public ::testin
     }
 
     ProcessingChain processingChain;
-    Processing::TNoteToLightMap map;
+    processing::TNoteToLightMap map;
 };
 
 TEST_F(ProcessingChainTest, empty)
 {
-    auto testStrip = Processing::TRgbStrip(stripSize);
+    auto testStrip = processing::RgbStrip(stripSize);
     testStrip[0] = {1, 0, 0};
     testStrip[1] = {0, 1, 0};
     testStrip[2] = {0, 0, 1};
 
-    processingChain.execute(testStrip, Processing::TNoteToLightMap());
+    processingChain.execute(testStrip, processing::TNoteToLightMap());
     // strip is still zero
     EXPECT_EQ(strip, testStrip);
 }
@@ -47,12 +47,12 @@ TEST_F(ProcessingChainTest, insertOne)
     processingChain.insertBlock(redSource);
     redSource = nullptr;
 
-    auto reference = Processing::TRgbStrip(stripSize);
+    auto reference = processing::RgbStrip(stripSize);
     reference[0] = {10, 0, 0};
     reference[1] = {10, 0, 0};
     reference[2] = {10, 0, 0};
 
-    processingChain.execute(strip, Processing::TNoteToLightMap());
+    processingChain.execute(strip, processing::TNoteToLightMap());
     EXPECT_EQ(reference, strip);
 }
 
@@ -63,12 +63,12 @@ TEST_F(ProcessingChainTest, insertTwo)
     processingChain.insertBlock(valueDoubler);
     valueDoubler = nullptr;
 
-    auto reference = Processing::TRgbStrip(stripSize);
+    auto reference = processing::RgbStrip(stripSize);
     reference[0] = {20, 0, 0};
     reference[1] = {20, 0, 0};
     reference[2] = {20, 0, 0};
 
-    processingChain.execute(strip, Processing::TNoteToLightMap());
+    processingChain.execute(strip, processing::TNoteToLightMap());
     EXPECT_EQ(reference, strip);
 }
 
@@ -113,12 +113,12 @@ TEST_F(ProcessingChainTest, convertFromJson)
     j["processingChain"] = mockBlocksJson;
     processingChain.convertFromJson(Json(j));
 
-    Processing::TRgbStrip reference(3);
+    processing::RgbStrip reference(3);
     reference[0] = {0, 20, 0};
     reference[1] = {0, 20, 0};
     reference[2] = {0, 20, 0};
-    Processing::TRgbStrip testStrip(3);
-    processingChain.execute(testStrip, Processing::TNoteToLightMap());
+    processing::RgbStrip testStrip(3);
+    processingChain.execute(testStrip, processing::TNoteToLightMap());
     EXPECT_EQ(reference, testStrip);
 }
 
@@ -175,11 +175,11 @@ TEST_F(ProcessingChainTest, deactivateOnInsert)
 class FakeAdditiveBlock : public ProcessingBlock
 {
   public:
-    FakeAdditiveBlock(const Processing::TRgb& color) : color(color) {}
+    FakeAdditiveBlock(const processing::RgbColor& color) : color(color) {}
 
     void activate() override {}
     void deactivate() override {}
-    void execute(Processing::TRgbStrip& strip, const Processing::TNoteToLightMap&) override
+    void execute(processing::RgbStrip& strip, const processing::TNoteToLightMap&) override
     {
         strip[0] = color;
     }
@@ -194,7 +194,7 @@ class FakeAdditiveBlock : public ProcessingBlock
         return "";
     }
 
-    Processing::TRgb color;
+    processing::RgbColor color;
 };
 
 class FakeOverwritingBlock : public FakeAdditiveBlock
@@ -209,7 +209,7 @@ class FakeOverwritingBlock : public FakeAdditiveBlock
 
 TEST_F(ProcessingChainTest, additive)
 {
-    using namespace Processing::ColorValue;
+    using namespace processing::color_constants;
     processingChain.insertBlock(new FakeAdditiveBlock(red));
     processingChain.insertBlock(new FakeAdditiveBlock(green));
 
@@ -219,7 +219,7 @@ TEST_F(ProcessingChainTest, additive)
 
 TEST_F(ProcessingChainTest, overwriting)
 {
-    using namespace Processing::ColorValue;
+    using namespace processing::color_constants;
     processingChain.insertBlock(new FakeAdditiveBlock(red));
     processingChain.insertBlock(new FakeOverwritingBlock(green));
 
@@ -229,7 +229,7 @@ TEST_F(ProcessingChainTest, overwriting)
 
 TEST_F(ProcessingChainTest, additiveAndOverwriting)
 {
-    using namespace Processing::ColorValue;
+    using namespace processing::color_constants;
     processingChain.insertBlock(new FakeAdditiveBlock(red));
     processingChain.insertBlock(new FakeOverwritingBlock(green));
     processingChain.insertBlock(new FakeAdditiveBlock(blue));
@@ -240,9 +240,9 @@ TEST_F(ProcessingChainTest, additiveAndOverwriting)
 
 TEST_F(ProcessingChainTest, doNotAccumulateIntoNextCycle)
 {
-    processingChain.insertBlock(new FakeAdditiveBlock(Processing::TRgb{1, 0, 0}));
+    processingChain.insertBlock(new FakeAdditiveBlock(processing::RgbColor{1, 0, 0}));
 
     processingChain.execute(strip, map);
     processingChain.execute(strip, map);
-    EXPECT_EQ(strip[0], Processing::TRgb(1, 0, 0));
+    EXPECT_EQ(strip[0], processing::RgbColor(1, 0, 0));
 }
