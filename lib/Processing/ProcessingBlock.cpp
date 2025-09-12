@@ -1,4 +1,4 @@
-#include "ProcessingBlock.h"
+#include "ProcessingBlock.hpp"
 
 void ProcessingBlock::activate() {}
 

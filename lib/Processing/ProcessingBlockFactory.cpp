@@ -1,11 +1,10 @@
-#include "ProcessingBlockFactory.h"
+#include "ProcessingBlockFactory.hpp"
 
-#include <Json11Helper.h>
-
-#include "NoteVisualizer.h"
-#include "Patch.h"
-#include "ProcessingChain.h"
-#include "SingleColorFill.h"
+#include "Json11Helper.hpp"
+#include "NoteVisualizer.hpp"
+#include "Patch.hpp"
+#include "ProcessingChain.hpp"
+#include "SingleColorFill.hpp"
 
 ProcessingBlockFactory::ProcessingBlockFactory(IMidiInput& midiInput,
                                                const IRgbFunctionFactory& rgbFunctionFactory,

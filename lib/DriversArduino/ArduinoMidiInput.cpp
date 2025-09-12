@@ -1,4 +1,4 @@
-#include "ArduinoMidiInput.h"
+#include "ArduinoMidiInput.hpp"
 
 #include <Stream.h>
 

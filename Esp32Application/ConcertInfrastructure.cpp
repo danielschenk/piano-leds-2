@@ -1,14 +1,14 @@
-#include "ConcertInfrastructure.h"
+#include "ConcertInfrastructure.hpp"
 
 #include "HorizontalStretcher.hpp"
-#include "LinearRgbFunction.h"
-#include "Logging.h"
-#include "NoteVisualizer.h"
-#include "Patch.h"
-#include "PianoDecayRgbFunction.h"
-#include "ProcessingTypes.h"
+#include "LinearRgbFunction.hpp"
+#include "Logging.hpp"
+#include "NoteVisualizer.hpp"
+#include "Patch.hpp"
+#include "PianoDecayRgbFunction.hpp"
+#include "ProcessingTypes.hpp"
 #include "SequentialColorPicker.hpp"
-#include "SingleColorFill.h"
+#include "SingleColorFill.hpp"
 
 namespace application
 {

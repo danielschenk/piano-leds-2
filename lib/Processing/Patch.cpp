@@ -1,8 +1,7 @@
-#include "Patch.h"
+#include "Patch.hpp"
 
-#include <Json11Helper.h>
-
-#include "IProcessingBlockFactory.h"
+#include "IProcessingBlockFactory.hpp"
+#include "Json11Helper.hpp"
 
 Patch::Patch(const IProcessingBlockFactory& processingBlockFactory)
     : processingChain(processingBlockFactory.createProcessingChain()),

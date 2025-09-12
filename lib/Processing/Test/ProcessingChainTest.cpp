@@ -1,13 +1,13 @@
-#include <Mock/LoggingTest.h>
 #include <gtest/gtest.h>
 
 #include <string>
 #include <vector>
 
-#include "../ProcessingBlock.h"
-#include "ProcessingBlockContainerTest.h"
-#include "ProcessingChain.h"
-#include "ProcessingTypes.h"
+#include "../ProcessingBlock.hpp"
+#include "Mock/LoggingTest.hpp"
+#include "ProcessingBlockContainerTest.hpp"
+#include "ProcessingChain.hpp"
+#include "ProcessingTypes.hpp"
 
 #define LOGGING_COMPONENT "ProcessingChain"
 

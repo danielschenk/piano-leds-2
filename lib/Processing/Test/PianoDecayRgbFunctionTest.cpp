@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "PianoDecayRgbFunction.h"
+#include "PianoDecayRgbFunction.hpp"
 #include "gtest/gtest.h"
 
 class PianoDecayRgbFunctionTest : public testing::Test

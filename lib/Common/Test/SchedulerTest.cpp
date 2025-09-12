@@ -3,7 +3,7 @@
 
 #include <functional>
 
-#include "../Scheduler.h"
+#include "../Scheduler.hpp"
 
 using ::testing::Expectation;
 using ::testing::StrictMock;

@@ -1,10 +1,10 @@
-#include "NetworkTask.h"
+#include "NetworkTask.hpp"
 
 #include <WiFi.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
-#include "SystemSettingsModel.h"
+#include "SystemSettingsModel.hpp"
 
 NetworkTask::NetworkTask(const SystemSettingsModel &systemSettingsModel, uint32_t stackSize,
                          UBaseType_t priority)

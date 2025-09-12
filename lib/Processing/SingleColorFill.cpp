@@ -1,6 +1,6 @@
-#include "SingleColorFill.h"
+#include "SingleColorFill.hpp"
 
-#include "Json11Helper.h"
+#include "Json11Helper.hpp"
 
 void SingleColorFill::activate() {}
 

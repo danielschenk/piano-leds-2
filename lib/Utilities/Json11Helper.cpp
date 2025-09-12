@@ -1,4 +1,4 @@
-#include "Json11Helper.h"
+#include "Json11Helper.hpp"
 
 #define LOGGING_COMPONENT "Json11Helper"
 

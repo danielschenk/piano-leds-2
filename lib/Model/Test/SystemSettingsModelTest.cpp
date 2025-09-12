@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../SystemSettingsModel.h"
+#include "../SystemSettingsModel.hpp"
 
 class SystemSettingsModelTest : public testing::Test
 {

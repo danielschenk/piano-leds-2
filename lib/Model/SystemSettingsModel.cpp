@@ -1,4 +1,4 @@
-#include "SystemSettingsModel.h"
+#include "SystemSettingsModel.hpp"
 
 std::string SystemSettingsModel::getWifiAPSsid() const
 {

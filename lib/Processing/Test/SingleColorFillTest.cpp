@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 
-#include "../SingleColorFill.h"
-#include "Json11Helper.h"
-#include "LoggingEntryPoint.h"
-#include "Mock/MockTime.h"
+#include "../SingleColorFill.hpp"
+#include "Json11Helper.hpp"
+#include "LoggingEntryPoint.hpp"
+#include "Mock/MockTime.hpp"
 
 using ::testing::NiceMock;
 

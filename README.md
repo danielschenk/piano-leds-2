@@ -18,7 +18,7 @@ powerful enough to make use of these advantages.
 
 ## How to build and run
 ### The ESP32 application
-1. Go to the `Esp32Application` folder and copy or rename the file `BoardOverride_template.h` to `BoardOverride.h` and change any pin definitions in there if needed.
+1. Go to the `Esp32Application` folder and copy or rename the file `BoardOverride_template.hpp` to `BoardOverride.hpp` and change any pin definitions in there if needed.
 1. Install PlatformIO.
 1. Execute one of the following:
     1. `platformio run` to only build.
@@ -27,7 +27,7 @@ powerful enough to make use of these advantages.
 ### The unit tests
 Execute one of the following:
 - `platformio run -e tests` to build and run all unit tests.
-- `platformio run -e tests --target [TestName]` to build and run only that test suite (e.g. _ProcessingChainTest_). 
+- `platformio run -e tests --target [TestName]` to build and run only that test suite (e.g. _ProcessingChainTest_).
 - `platformio run -e tests --target memcheck` to build and run all unit tests under valgrind (currently doesn't work correctly).
 
 ### The MidiInputMonitor (little test application for BaseMidiInput, to run on PC)

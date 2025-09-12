@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "../Mock/MockProcessingBlockFactory.h"
-#include "../Mock/MockProcessingChain.h"
-#include "../Patch.h"
+#include "../Mock/MockProcessingBlockFactory.hpp"
+#include "../Mock/MockProcessingChain.hpp"
+#include "../Patch.hpp"
 
 using ::testing::_;
 using ::testing::Invoke;

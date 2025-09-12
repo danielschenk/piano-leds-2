@@ -1,4 +1,4 @@
-#include "RtMidiMidiInput.h"
+#include "RtMidiMidiInput.hpp"
 
 #include <RtMidi.h>
 

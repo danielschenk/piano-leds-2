@@ -1,12 +1,11 @@
-#include "ProcessingChain.h"
-
-#include <Json11Helper.h>
-#include <Logging.h>
+#include "ProcessingChain.hpp"
 
 #include <algorithm>
 
-#include "IProcessingBlockFactory.h"
-#include "ProcessingBlock.h"
+#include "IProcessingBlockFactory.hpp"
+#include "Json11Helper.hpp"
+#include "Logging.hpp"
+#include "ProcessingBlock.hpp"
 
 #define LOGGING_COMPONENT "ProcessingChain"
 

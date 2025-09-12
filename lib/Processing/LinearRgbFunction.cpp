@@ -1,6 +1,6 @@
-#include "LinearRgbFunction.h"
+#include "LinearRgbFunction.hpp"
 
-#include "Json11Helper.h"
+#include "Json11Helper.hpp"
 
 LinearRgbFunction::LinearRgbFunction(const Processing::TRgb& color)
 {

@@ -1,9 +1,9 @@
-#include "../Mock/MockRgbFunction.h"
-#include "../Mock/MockRgbFunctionFactory.h"
-#include "../NoteVisualizer.h"
-#include "Mock/LoggingTest.h"
-#include "Mock/MockTime.h"
-#include "Test/MidiInputObserverTest.h"
+#include "../Mock/MockRgbFunction.hpp"
+#include "../Mock/MockRgbFunctionFactory.hpp"
+#include "../NoteVisualizer.hpp"
+#include "Mock/LoggingTest.hpp"
+#include "Mock/MockTime.hpp"
+#include "Test/MidiInputObserverTest.hpp"
 #include "gtest/gtest.h"
 
 using ::testing::_;

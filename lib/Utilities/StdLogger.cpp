@@ -1,8 +1,8 @@
-#include "StdLogger.h"
+#include "StdLogger.hpp"
 
 #include <iostream>
 
-#include "LoggingEntryPoint.h"
+#include "LoggingEntryPoint.hpp"
 
 StdLogger::StdLogger()
 {

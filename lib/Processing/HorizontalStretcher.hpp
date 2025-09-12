@@ -1,7 +1,7 @@
 #ifndef PROCESSING_DUPLICATOR
 #define PROCESSING_DUPLICATOR
 
-#include "ProcessingBlock.h"
+#include "ProcessingBlock.hpp"
 
 namespace Processing
 {

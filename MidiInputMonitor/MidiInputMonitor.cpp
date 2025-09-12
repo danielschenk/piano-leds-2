@@ -2,9 +2,9 @@
 #include <cstdio>
 #include <iostream>
 
-#include "MidiMessageLogger.h"
-#include "RtMidiMidiInput.h"
-#include "StdLogger.h"
+#include "MidiMessageLogger.hpp"
+#include "RtMidiMidiInput.hpp"
+#include "StdLogger.hpp"
 
 int main()
 {

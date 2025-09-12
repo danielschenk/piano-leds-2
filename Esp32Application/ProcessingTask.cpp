@@ -1,6 +1,6 @@
-#include "ProcessingTask.h"
+#include "ProcessingTask.hpp"
 
-#include "Concert.h"
+#include "Concert.hpp"
 
 ProcessingTask::ProcessingTask(Concert& concert, uint32_t stackSize, UBaseType_t priority)
     : BaseTask(), concert(concert), lastWakeTime(xTaskGetTickCount())

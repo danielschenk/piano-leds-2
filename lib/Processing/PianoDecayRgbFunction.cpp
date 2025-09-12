@@ -1,4 +1,4 @@
-#include "PianoDecayRgbFunction.h"
+#include "PianoDecayRgbFunction.hpp"
 
 #include <json11.hpp>
 

@@ -1,6 +1,6 @@
-#include "MidiMessageLogger.h"
+#include "MidiMessageLogger.hpp"
 
-#include "Logging.h"
+#include "Logging.hpp"
 
 #define LOGGING_COMPONENT "MidiMessageLogger"
 

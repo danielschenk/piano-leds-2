@@ -1,7 +1,7 @@
 #ifndef PROCESSING_COLORPICKER_HPP
 #define PROCESSING_COLORPICKER_HPP
 
-#include "ProcessingTypes.h"
+#include "ProcessingTypes.hpp"
 
 namespace Processing
 {

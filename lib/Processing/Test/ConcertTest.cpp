@@ -1,9 +1,9 @@
-#include "../Concert.h"
-#include "../Mock/MockPatch.h"
-#include "../Mock/MockProcessingBlockFactory.h"
-#include "LoggingEntryPoint.h"
-#include "Mock/MockTime.h"
-#include "Test/MidiInputObserverTest.h"
+#include "../Concert.hpp"
+#include "../Mock/MockPatch.hpp"
+#include "../Mock/MockProcessingBlockFactory.hpp"
+#include "LoggingEntryPoint.hpp"
+#include "Mock/MockTime.hpp"
+#include "Test/MidiInputObserverTest.hpp"
 #include "gtest/gtest.h"
 
 using testing::_;

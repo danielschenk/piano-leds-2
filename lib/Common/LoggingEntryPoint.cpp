@@ -1,4 +1,4 @@
-#include "LoggingEntryPoint.h"
+#include "LoggingEntryPoint.hpp"
 
 #include <stdio.h>
 
@@ -9,8 +9,8 @@
 #include <string>
 #include <vector>
 
-#include "ILoggingTarget.h"
-#include "ITime.h"
+#include "ILoggingTarget.hpp"
+#include "ITime.hpp"
 
 std::vector<ILoggingTarget*> LoggingEntryPoint::s_subscribers;
 std::mutex LoggingEntryPoint::s_mutex;

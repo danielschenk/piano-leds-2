@@ -1,11 +1,11 @@
-#include "Concert.h"
+#include "Concert.hpp"
 
 #include <cassert>
 #include <list>
 
-#include "IPatch.h"
-#include "IProcessingBlockFactory.h"
-#include "Json11Helper.h"
+#include "IPatch.hpp"
+#include "IProcessingBlockFactory.hpp"
+#include "Json11Helper.hpp"
 
 #define LOGGING_COMPONENT "Concert"
 

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "ProcessingTypes.h"
+#include "ProcessingTypes.hpp"
 
 using namespace Processing;
 

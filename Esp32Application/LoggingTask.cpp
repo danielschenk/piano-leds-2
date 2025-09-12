@@ -1,10 +1,10 @@
-#include "LoggingTask.h"
+#include "LoggingTask.hpp"
 
 #include <Stream.h>
 
 #include <cstdio>
 
-#include "LoggingEntryPoint.h"
+#include "LoggingEntryPoint.hpp"
 
 LoggingTask::LoggingTask(Stream& serial, uint32_t stackSize, UBaseType_t priority)
     : BaseTask(), serial(serial)

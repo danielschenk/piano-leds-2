@@ -1,9 +1,9 @@
-#include "StripChangeLogger.h"
+#include "StripChangeLogger.hpp"
 
 #include <cstdio>
 #include <string>
 
-#include "Logging.h"
+#include "Logging.hpp"
 
 #define LOGGING_COMPONENT "StripChangeLogger"
 

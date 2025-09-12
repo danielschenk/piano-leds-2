@@ -1,4 +1,4 @@
-#include "JsonConvertible.h"
+#include "JsonConvertible.hpp"
 
 Json JsonConvertible::convertToJson() const
 {

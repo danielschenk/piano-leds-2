@@ -1,10 +1,10 @@
-#include "RgbFunctionFactory.h"
+#include "RgbFunctionFactory.hpp"
 
-#include "IRgbFunction.h"
-#include "Json11Helper.h"
-#include "JsonConvertible.h"
-#include "LinearRgbFunction.h"
-#include "PianoDecayRgbFunction.h"
+#include "IRgbFunction.hpp"
+#include "Json11Helper.hpp"
+#include "JsonConvertible.hpp"
+#include "LinearRgbFunction.hpp"
+#include "PianoDecayRgbFunction.hpp"
 
 std::shared_ptr<IRgbFunction> RgbFunctionFactory::createRgbFunction(const Json& converted) const
 {

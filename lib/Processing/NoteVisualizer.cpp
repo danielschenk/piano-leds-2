@@ -1,13 +1,13 @@
-#include "NoteVisualizer.h"
+#include "NoteVisualizer.hpp"
 
 #include <functional>
 
 #include "ColorPicker.hpp"
-#include "IRgbFunction.h"
-#include "IRgbFunctionFactory.h"
-#include "ITime.h"
-#include "Json11Helper.h"
-#include "Logging.h"
+#include "IRgbFunction.hpp"
+#include "IRgbFunctionFactory.hpp"
+#include "ITime.hpp"
+#include "Json11Helper.hpp"
+#include "Logging.hpp"
 
 #define LOGGING_COMPONENT "NoteVisualizer"
 

@@ -1,11 +1,11 @@
-#include "ProcessingTypes.h"
+#include "ProcessingTypes.hpp"
 
 #include <cstdint>
 #include <cstdio>
 #include <iomanip>
 #include <iostream>
 
-#include "Json11Helper.h"
+#include "Json11Helper.hpp"
 
 namespace Processing
 {

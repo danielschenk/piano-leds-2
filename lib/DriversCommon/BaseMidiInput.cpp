@@ -1,6 +1,6 @@
-#include "BaseMidiInput.h"
+#include "BaseMidiInput.hpp"
 
-#include <Logging.h>
+#include "Logging.hpp"
 
 #define LOGGING_COMPONENT "BaseMidiInput"
 

@@ -1,24 +1,24 @@
-#include "ArduinoMidiInput.h"
-#include "ConcertInfrastructure.h"
-#include "IPatch.h"
-#include "LinearRgbFunction.h"
-#include "Logging.h"
-#include "LoggingTask.h"
-#include "MidiMessageLogger.h"
-#include "MidiTask.h"
-#include "NoteVisualizer.h"
-#include "PianoDecayRgbFunction.h"
-#include "ProcessingTask.h"
-#include "SingleColorFill.h"
+#include "ArduinoMidiInput.hpp"
+#include "ConcertInfrastructure.hpp"
+#include "IPatch.hpp"
+#include "LinearRgbFunction.hpp"
+#include "Logging.hpp"
+#include "LoggingTask.hpp"
+#include "MidiMessageLogger.hpp"
+#include "MidiTask.hpp"
+#include "NoteVisualizer.hpp"
+#include "PianoDecayRgbFunction.hpp"
+#include "ProcessingTask.hpp"
+#include "SingleColorFill.hpp"
 #if PIANOLEDS_NEOPIXEL
-#include "LedTaskNeoPixel.h"
+#include "LedTaskNeoPixel.hpp"
 #else
-#include "LedTask.h"
+#include "LedTask.hpp"
 #endif
-#include "Board.h"
-#include "FreeRtosTime.h"
-#include "NetworkTask.h"
-#include "SystemSettingsModel.h"
+#include "Board.hpp"
+#include "FreeRtosTime.hpp"
+#include "NetworkTask.hpp"
+#include "SystemSettingsModel.hpp"
 
 #define LOGGING_COMPONENT "Esp32Application"
 
@@ -150,7 +150,8 @@ void setup()
                            PRIORITY_CRITICAL);
 #endif
 
-    if (false) startNetwork();
+    if (false)
+        startNetwork();
 
     LOG_INFO("initialization done");
 }

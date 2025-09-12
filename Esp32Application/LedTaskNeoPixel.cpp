@@ -1,4 +1,4 @@
-#include "LedTaskNeoPixel.h"
+#include "LedTaskNeoPixel.hpp"
 
 #include <algorithm>
 
@@ -42,7 +42,8 @@ void LedTaskNeoPixel::run()
 
         for (unsigned int ledNumber(0); ledNumber < pendingValues.size(); ++ledNumber)
         {
-            if (ledNumber >= strip.PixelCount()) break;
+            if (ledNumber >= strip.PixelCount())
+                break;
 
             auto& color(pendingValues[ledNumber]);
             strip.SetPixelColor(ledNumber, RgbColor{color.r, color.g, color.b});
