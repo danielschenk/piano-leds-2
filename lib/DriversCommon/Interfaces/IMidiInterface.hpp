@@ -10,7 +10,7 @@ class IMidiInterface
 {
   public:
     /** Status type. */
-    enum TStatus : uint8_t
+    enum Status : uint8_t
     {
         NOTE_OFF = 0x80,
         NOTE_ON = 0x90,
@@ -22,7 +22,7 @@ class IMidiInterface
     };
 
     /** Controller number type. */
-    enum TControllerNumber : uint8_t
+    enum ControllerNumber : uint8_t
     {
         BANK_SELECT_MSB = 0x00,
         BANK_SELECT_LSB = 0x20,

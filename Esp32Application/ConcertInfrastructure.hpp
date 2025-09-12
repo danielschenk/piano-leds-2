@@ -24,7 +24,7 @@ struct ConcertInfrastructure
     void createLegacyPatches();
     Patch* addBasicPatch(const processing::RgbColor& color, bool likePiano,
                          std::shared_ptr<processing::ColorPicker> pressDownColorPicker = nullptr);
-    static processing::TNoteToLightMap createDefaultOneToOneFullPianoMapping(
+    static processing::NoteToLightMap createDefaultOneToOneFullPianoMapping(
         uint16_t skipLedsPerNote = 0);
 
     IMidiInput& midiInput;

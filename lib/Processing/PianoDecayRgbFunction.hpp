@@ -17,8 +17,8 @@ class PianoDecayRgbFunction : public LinearRgbFunction
     PianoDecayRgbFunction& operator=(const PianoDecayRgbFunction&) = delete;
 
     // IRgbFunction implementation
-    processing::RgbColor calculate(const processing::TNoteState& noteState,
-                                   processing::TTime currentTime) const override;
+    processing::RgbColor calculate(const processing::NoteState& noteState,
+                                   processing::Timestamp currentTime) const override;
 
   protected:
     // IRgbFunction implementation

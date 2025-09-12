@@ -8,8 +8,8 @@
 class MockRgbFunction : public IRgbFunction
 {
   public:
-    MOCK_CONST_METHOD2(calculate, processing::RgbColor(const processing::TNoteState& noteState,
-                                                       processing::TTime currentTime));
+    MOCK_CONST_METHOD2(calculate, processing::RgbColor(const processing::NoteState& noteState,
+                                                       processing::Timestamp currentTime));
     MOCK_CONST_METHOD0(convertToJson, Json());
     MOCK_METHOD1(convertFromJson, void(const Json& converted));
 

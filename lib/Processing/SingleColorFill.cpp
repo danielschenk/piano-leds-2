@@ -7,7 +7,7 @@ void SingleColorFill::activate() {}
 void SingleColorFill::deactivate() {}
 
 void SingleColorFill::execute(processing::RgbStrip& strip,
-                              const processing::TNoteToLightMap& noteToLightMap)
+                              const processing::NoteToLightMap& noteToLightMap)
 {
     std::lock_guard<std::mutex> lock(mutex);
 

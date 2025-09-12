@@ -18,7 +18,7 @@ class ProcessingBlock : public JsonConvertible
     virtual void activate();
     virtual void deactivate();
     virtual void execute(processing::RgbStrip& strip,
-                         const processing::TNoteToLightMap& noteToLightMap) = 0;
+                         const processing::NoteToLightMap& noteToLightMap) = 0;
 
     enum class Mode
     {

@@ -55,7 +55,7 @@ class BaseMidiInput : public IMidiInput
      * @param[in]   controller  The number of the controller.
      * @param[in]   value       The value of the controller.
      */
-    void notifyControlChange(uint8_t channel, IMidiInput::TControllerNumber control,
+    void notifyControlChange(uint8_t channel, IMidiInput::ControllerNumber control,
                              uint8_t value) const;
 
     /**

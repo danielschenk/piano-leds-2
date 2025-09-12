@@ -24,7 +24,7 @@ class ProcessingChain : public IProcessingChain
     void activate() override;
     void deactivate() override;
     void execute(processing::RgbStrip& strip,
-                 const processing::TNoteToLightMap& noteToLightMap) override;
+                 const processing::NoteToLightMap& noteToLightMap) override;
     void insertBlock(ProcessingBlock* block, unsigned int index) override;
     void insertBlock(ProcessingBlock* block) override;
     Json convertToJson() const override;

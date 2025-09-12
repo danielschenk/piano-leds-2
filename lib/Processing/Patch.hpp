@@ -44,7 +44,7 @@ class Patch : public IPatch
     virtual void activate();
     virtual void deactivate();
     virtual void execute(processing::RgbStrip& strip,
-                         const processing::TNoteToLightMap& noteToLightMap);
+                         const processing::NoteToLightMap& noteToLightMap);
     virtual bool hasBankAndProgram() const;
     virtual uint8_t getBank() const;
     virtual void setBank(uint8_t bank);

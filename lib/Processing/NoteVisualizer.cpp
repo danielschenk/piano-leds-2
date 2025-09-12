@@ -46,7 +46,7 @@ void NoteVisualizer::deactivate()
 }
 
 void NoteVisualizer::execute(processing::RgbStrip& strip,
-                             const processing::TNoteToLightMap& noteToLightMap)
+                             const processing::NoteToLightMap& noteToLightMap)
 {
     scheduler.executeAll();
 
@@ -98,7 +98,7 @@ void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t veloc
         });
 }
 
-void NoteVisualizer::onControlChange(uint8_t channel, IMidiInput::TControllerNumber number,
+void NoteVisualizer::onControlChange(uint8_t channel, IMidiInput::ControllerNumber number,
                                      uint8_t value)
 {
     std::lock_guard<std::mutex> lock(mutex);

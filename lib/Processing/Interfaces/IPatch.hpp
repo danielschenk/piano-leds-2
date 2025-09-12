@@ -37,7 +37,7 @@ class IPatch : public JsonConvertible
      * @param   [in/out]    noteToLightMap  To map from note number to light number.
      */
     virtual void execute(processing::RgbStrip& strip,
-                         const processing::TNoteToLightMap& noteToLightMap) = 0;
+                         const processing::NoteToLightMap& noteToLightMap) = 0;
 
     /**
      * Check if the patch has a valid bank and program number.

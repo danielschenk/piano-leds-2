@@ -21,8 +21,8 @@ class IRgbFunction : public JsonConvertible
      *
      * @return  The output color.
      */
-    virtual processing::RgbColor calculate(const processing::TNoteState& noteState,
-                                           processing::TTime currentTime) const = 0;
+    virtual processing::RgbColor calculate(const processing::NoteState& noteState,
+                                           processing::Timestamp currentTime) const = 0;
 };
 
 #endif /* PROCESSING_IRGBFUNCTION_H_ */

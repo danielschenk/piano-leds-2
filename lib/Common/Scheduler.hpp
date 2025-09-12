@@ -12,7 +12,7 @@ class Scheduler
 {
   public:
     /** Type for scheduled tasks. */
-    typedef std::function<void()> TTask;
+    typedef std::function<void()> Task;
 
     /**
      * Constructor.
@@ -29,7 +29,7 @@ class Scheduler
      *
      * @param   [in]    task    The task to schedule.
      */
-    void schedule(TTask task);
+    void schedule(Task task);
 
     /**
      * Execute one task from the queue.
@@ -49,7 +49,7 @@ class Scheduler
 
   private:
     /** The queue of tasks. */
-    std::queue<TTask> queue;
+    std::queue<Task> queue;
 
     /** The mutex to protect the queue. */
     std::mutex mutex;

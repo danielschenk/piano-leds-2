@@ -33,7 +33,7 @@ void BaseMidiInput::notifyNoteChange(uint8_t channel, uint8_t pitch, uint8_t vel
 }
 
 void BaseMidiInput::notifyControlChange(uint8_t channel,
-                                        IMidiInterface::TControllerNumber controller,
+                                        IMidiInterface::ControllerNumber controller,
                                         uint8_t value) const
 {
     std::lock_guard<std::mutex> lock(observersMutex);
@@ -93,7 +93,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
         uint8_t channel(statusByte & 0x0F);
 
         // Check if a message can be parsed and sent to subscribers.
-        switch (static_cast<IMidiInterface::TStatus>(status))
+        switch (static_cast<IMidiInterface::Status>(status))
         {
             case NOTE_OFF:
                 if (currentMessage.size() >= 3)
@@ -118,7 +118,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                 {
                     // Channel, controller number, value
                     notifyControlChange(channel,
-                                        (IMidiInterface::TControllerNumber)currentMessage[1],
+                                        (IMidiInterface::ControllerNumber)currentMessage[1],
                                         currentMessage[2]);
                     buildingMessage = false;
                 }

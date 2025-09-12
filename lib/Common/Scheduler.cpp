@@ -4,7 +4,7 @@ Scheduler::Scheduler() : queue(), mutex() {}
 
 Scheduler::~Scheduler() {}
 
-void Scheduler::schedule(Scheduler::TTask task)
+void Scheduler::schedule(Scheduler::Task task)
 {
     std::lock_guard<std::mutex> lock(mutex);
 

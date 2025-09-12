@@ -88,7 +88,7 @@ class NoteVisualizerTest : public LoggingTest, public MidiInputObserverTest, pub
     NoteVisualizer noteVisualizer;
     processing::RgbStrip strip;
 
-    processing::TNoteToLightMap noteToLightMap;
+    processing::NoteToLightMap noteToLightMap;
 
     std::string exampleJson;
 };

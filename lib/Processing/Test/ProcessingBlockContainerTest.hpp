@@ -44,13 +44,13 @@ class ProcessingBlockContainerTest : public LoggingTest
     static constexpr unsigned int stripSize = 3;
 
     // Make processing block mocks nice, to prevent warnings about unexpected calls to execute().
-    typedef NiceMock<MockProcessingBlock> TMockBlock;
+    typedef NiceMock<MockProcessingBlock> MockBlock;
 
     ProcessingBlockContainerTest()
         : LoggingTest(),
-          redSource(new TMockBlock()),
-          greenSource(new TMockBlock()),
-          valueDoubler(new TMockBlock()),
+          redSource(new MockBlock()),
+          greenSource(new MockBlock()),
+          valueDoubler(new MockBlock()),
           strip(stripSize),
           processingBlockFactory()
     {
@@ -80,9 +80,9 @@ class ProcessingBlockContainerTest : public LoggingTest
 
     // These have to be manually allocated, as the container under test takes ownership and will try
     // to delete it's children.
-    TMockBlock* redSource;
-    TMockBlock* greenSource;
-    TMockBlock* valueDoubler;
+    MockBlock* redSource;
+    MockBlock* greenSource;
+    MockBlock* valueDoubler;
 
     processing::RgbStrip strip;
 

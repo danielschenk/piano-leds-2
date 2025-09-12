@@ -90,7 +90,7 @@ TEST_F(ConcertTest, bankSelectFromOtherChannelIgnored)
 
 TEST_F(ConcertTest, execute)
 {
-    processing::TNoteToLightMap map;
+    processing::NoteToLightMap map;
     map[42] = 42;
     concert->setNoteToLightMap(map);
 
@@ -188,7 +188,7 @@ TEST_F(ConcertTest, getPatch)
 
 TEST_F(ConcertTest, updateStripSize)
 {
-    processing::TNoteToLightMap map;
+    processing::NoteToLightMap map;
     map[0] = 42;
     map[1] = 6;
     map[2] = 7;
@@ -204,7 +204,7 @@ TEST_F(ConcertTest, convertToJson)
     concert->setCurrentBank(2);
     concert->setProgramChangeChannel(3);
 
-    processing::TNoteToLightMap map({{1, 10}, {2, 20}});
+    processing::NoteToLightMap map({{1, 10}, {2, 20}});
     concert->setNoteToLightMap(map);
 
     Json::object mockPatchJson, mockPatch2Json;
@@ -298,7 +298,7 @@ TEST_F(ConcertTest, convertFromJson)
     EXPECT_EQ(name1, concert->getPatch(0)->getName());
     EXPECT_EQ(name2, concert->getPatch(1)->getName());
 
-    processing::TNoteToLightMap expectedMap;
+    processing::NoteToLightMap expectedMap;
     expectedMap[1] = 10;
     expectedMap[2] = 20;
     EXPECT_EQ(expectedMap, concert->getNoteToLightMap());

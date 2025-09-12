@@ -8,17 +8,17 @@
 namespace processing
 {
 
-bool TLinearConstants::operator==(const TLinearConstants& other) const
+bool LinearConstants::operator==(const LinearConstants& other) const
 {
     return (factor == other.factor) && (offset == other.offset);
 }
 
-bool TLinearConstants::operator!=(const TLinearConstants& other) const
+bool LinearConstants::operator!=(const LinearConstants& other) const
 {
     return !(other == *this);
 }
 
-Json convert(const TNoteToLightMap& source)
+Json convert(const NoteToLightMap& source)
 {
     Json::object converted;
     for (const auto& pair : source)
@@ -31,11 +31,11 @@ Json convert(const TNoteToLightMap& source)
     return Json(converted);
 }
 
-TNoteToLightMap convert(const Json& source)
+NoteToLightMap convert(const Json& source)
 {
     Json11Helper helper(__PRETTY_FUNCTION__, source, false /* logMissingKeys */);
 
-    TNoteToLightMap converted;
+    NoteToLightMap converted;
     for (unsigned int noteNumber = 0; noteNumber <= UINT8_MAX; ++noteNumber)
     {
         char buf[4];
@@ -51,8 +51,8 @@ TNoteToLightMap convert(const Json& source)
     return converted;
 }
 
-TNoteState::TNoteState(bool pressed, bool sounding, uint8_t pressDownVelocity,
-                       TTime noteOnTimeStamp)
+NoteState::NoteState(bool pressed, bool sounding, uint8_t pressDownVelocity,
+                     Timestamp noteOnTimeStamp)
     : pressed(pressed),
       sounding(sounding),
       pressDownVelocity(pressDownVelocity),

@@ -17,7 +17,7 @@ class SingleColorFill : public ProcessingBlock
     virtual void activate();
     virtual void deactivate();
     virtual void execute(processing::RgbStrip& strip,
-                         const processing::TNoteToLightMap& noteToLightMap);
+                         const processing::NoteToLightMap& noteToLightMap);
     virtual Json convertToJson() const;
     virtual void convertFromJson(const Json& converted);
 

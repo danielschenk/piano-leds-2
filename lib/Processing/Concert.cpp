@@ -32,7 +32,7 @@ size_t Concert::size() const
     return patches.size();
 }
 
-Concert::TPatchPosition Concert::addPatch()
+Concert::PatchPosition Concert::addPatch()
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -42,14 +42,14 @@ Concert::TPatchPosition Concert::addPatch()
     return addPatchInternal(patch);
 }
 
-Concert::TPatchPosition Concert::addPatch(IPatch* patch)
+Concert::PatchPosition Concert::addPatch(IPatch* patch)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
     return addPatchInternal(patch);
 }
 
-Concert::TPatchPosition Concert::addPatchInternal(IPatch* patch)
+Concert::PatchPosition Concert::addPatchInternal(IPatch* patch)
 {
     patches.push_back(patch);
 
@@ -63,7 +63,7 @@ Concert::TPatchPosition Concert::addPatchInternal(IPatch* patch)
     return patches.size() - 1;
 }
 
-IPatch* Concert::getPatch(TPatchPosition position) const
+IPatch* Concert::getPatch(PatchPosition position) const
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -75,7 +75,7 @@ IPatch* Concert::getPatch(TPatchPosition position) const
     return patches.at(position);
 }
 
-bool Concert::removePatch(TPatchPosition position)
+bool Concert::removePatch(PatchPosition position)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -156,14 +156,14 @@ void Concert::setListeningToProgramChange(bool listeningToProgramChange)
     this->listeningToProgramChange = listeningToProgramChange;
 }
 
-processing::TNoteToLightMap Concert::getNoteToLightMap() const
+processing::NoteToLightMap Concert::getNoteToLightMap() const
 {
     std::lock_guard<std::mutex> lock(mutex);
 
     return noteToLightMap;
 }
 
-void Concert::setNoteToLightMap(processing::TNoteToLightMap noteToLightMap)
+void Concert::setNoteToLightMap(processing::NoteToLightMap noteToLightMap)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -305,7 +305,7 @@ void Concert::onProgramChange(uint8_t channel, uint8_t program)
     scheduler.schedule(taskFn);
 }
 
-void Concert::onControlChange(uint8_t channel, IMidiInterface::TControllerNumber controllerNumber,
+void Concert::onControlChange(uint8_t channel, IMidiInterface::ControllerNumber controllerNumber,
                               uint8_t value)
 {
     if ((controllerNumber != IMidiInterface::BANK_SELECT_MSB) &&

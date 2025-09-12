@@ -2,8 +2,8 @@
 
 #include <json11.hpp>
 
-processing::RgbColor PianoDecayRgbFunction::calculate(const processing::TNoteState& noteState,
-                                                      processing::TTime currentTime) const
+processing::RgbColor PianoDecayRgbFunction::calculate(const processing::NoteState& noteState,
+                                                      processing::Timestamp currentTime) const
 {
     auto startColor(LinearRgbFunction::calculate(noteState, currentTime));
     if (startColor == processing::RgbColor{0, 0, 0})

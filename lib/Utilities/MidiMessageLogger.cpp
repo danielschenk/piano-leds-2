@@ -20,7 +20,7 @@ void MidiMessageLogger::onNoteChange(uint8_t channel, uint8_t pitch, uint8_t vel
 }
 
 void MidiMessageLogger::onControlChange(uint8_t channel,
-                                        IMidiInterface::TControllerNumber controller, uint8_t value)
+                                        IMidiInterface::ControllerNumber controller, uint8_t value)
 {
     LOG_DEBUG_PARAMS("CON chan %2u controller %3u val %3u", channel, controller, value);
 }

@@ -9,8 +9,8 @@ LinearRgbFunction::LinearRgbFunction(const processing::RgbColor& color)
     blueConstants = {2.0f * color.b / 255.0f, 0};
 }
 
-processing::RgbColor LinearRgbFunction::calculate(const processing::TNoteState& noteState,
-                                                  processing::TTime currentTime) const
+processing::RgbColor LinearRgbFunction::calculate(const processing::NoteState& noteState,
+                                                  processing::Timestamp currentTime) const
 {
     processing::RgbColor output;
 
@@ -28,32 +28,32 @@ processing::RgbColor LinearRgbFunction::calculate(const processing::TNoteState& 
     return output;
 }
 
-void LinearRgbFunction::setRedConstants(processing::TLinearConstants redConstants)
+void LinearRgbFunction::setRedConstants(processing::LinearConstants redConstants)
 {
     this->redConstants = redConstants;
 }
 
-void LinearRgbFunction::setGreenConstants(processing::TLinearConstants greenConstants)
+void LinearRgbFunction::setGreenConstants(processing::LinearConstants greenConstants)
 {
     this->greenConstants = greenConstants;
 }
 
-void LinearRgbFunction::setBlueConstants(processing::TLinearConstants blueConstants)
+void LinearRgbFunction::setBlueConstants(processing::LinearConstants blueConstants)
 {
     this->blueConstants = blueConstants;
 }
 
-processing::TLinearConstants LinearRgbFunction::getRedConstants() const
+processing::LinearConstants LinearRgbFunction::getRedConstants() const
 {
     return redConstants;
 }
 
-processing::TLinearConstants LinearRgbFunction::getGreenConstants() const
+processing::LinearConstants LinearRgbFunction::getGreenConstants() const
 {
     return greenConstants;
 }
 
-processing::TLinearConstants LinearRgbFunction::getBlueConstants() const
+processing::LinearConstants LinearRgbFunction::getBlueConstants() const
 {
     return blueConstants;
 }

@@ -46,8 +46,8 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
     virtual Json convertToJson() const;
     virtual void convertFromJson(const Json& converted);
 
-    typedef int TPatchPosition;
-    static constexpr TPatchPosition invalidPatchPosition = -1;
+    typedef int PatchPosition;
+    static constexpr PatchPosition invalidPatchPosition = -1;
 
     /**
      * Get the number of patches.
@@ -59,7 +59,7 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
      *
      * @return The patch position, or @ref invalidPatchPosition on error.
      */
-    TPatchPosition addPatch();
+    PatchPosition addPatch();
 
     /**
      * Add an existing patch.
@@ -68,7 +68,7 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
      *
      * @return The patch position.
      */
-    TPatchPosition addPatch(IPatch* patch);
+    PatchPosition addPatch(IPatch* patch);
 
     /**
      * Get the patch at the specified position, for modifications.
@@ -78,7 +78,7 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
      *
      * @return Pointer to the patch, or nullptr on error.
      */
-    IPatch* getPatch(TPatchPosition position) const;
+    IPatch* getPatch(PatchPosition position) const;
 
     /**
      * Remove the patch at the specified position.
@@ -87,7 +87,7 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
      *
      * @return True on success.
      */
-    bool removePatch(TPatchPosition position);
+    bool removePatch(PatchPosition position);
 
     /**
      * @TODO
@@ -97,7 +97,7 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
      *
      * @return The new patch position.
      */
-    // TPatchPosition movePatchUp(TPatchPosition position);
+    // PatchPosition movePatchUp(PatchPosition position);
 
     /**
      * @TODO
@@ -107,12 +107,12 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
      *
      * @return The new patch position.
      */
-    // TPatchPosition movePatchDown(TPatchPosition position);
+    // PatchPosition movePatchDown(PatchPosition position);
 
     bool isListeningToProgramChange() const;
     void setListeningToProgramChange(bool listeningToProgramChange);
-    processing::TNoteToLightMap getNoteToLightMap() const;
-    void setNoteToLightMap(processing::TNoteToLightMap noteToLightMap);
+    processing::NoteToLightMap getNoteToLightMap() const;
+    void setNoteToLightMap(processing::NoteToLightMap noteToLightMap);
     size_t getStripSize() const;
     uint8_t getProgramChangeChannel() const;
     void setProgramChangeChannel(uint8_t programChangeChannel);
@@ -139,7 +139,7 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
     // IMidiInput::IObserver implementation
     virtual void onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on);
     virtual void onProgramChange(uint8_t channel, uint8_t program);
-    virtual void onControlChange(uint8_t channel, IMidiInterface::TControllerNumber number,
+    virtual void onControlChange(uint8_t channel, IMidiInterface::ControllerNumber number,
                                  uint8_t value);
     virtual void onChannelPressureChange(uint8_t channel, uint8_t value);
     virtual void onPitchBendChange(uint8_t channel, uint16_t value);
@@ -156,16 +156,16 @@ class Concert : public JsonConvertible, public IMidiInput::IObserver
     static constexpr const char* currentBankJsonKey = "currentBank";
     static constexpr const char* patchesJsonKey = "patches";
 
-    typedef std::vector<IPatch*> TPatches;
+    typedef std::vector<IPatch*> Patches;
 
-    TPatchPosition addPatchInternal(IPatch* patch);
+    PatchPosition addPatchInternal(IPatch* patch);
     void createMinimumAmountOfLights();
 
-    processing::TNoteToLightMap noteToLightMap;
+    processing::NoteToLightMap noteToLightMap;
 
     processing::RgbStrip strip;
-    TPatches patches;
-    TPatchPosition activePatchPosition = invalidPatchPosition;
+    Patches patches;
+    PatchPosition activePatchPosition = invalidPatchPosition;
     bool listeningToProgramChange{true};
     uint8_t programChangeChannel = 0;
     uint16_t currentBank = 0;

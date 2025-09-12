@@ -31,7 +31,7 @@ class MidiMessageLogger : public IMidiInput::IObserver
     // IMidiInput::IObserver implementation
     virtual void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on);
     virtual void onProgramChange(uint8_t channel, uint8_t program);
-    virtual void onControlChange(uint8_t channel, IMidiInterface::TControllerNumber controller,
+    virtual void onControlChange(uint8_t channel, IMidiInterface::ControllerNumber controller,
                                  uint8_t value);
     virtual void onChannelPressureChange(uint8_t channel, uint8_t value);
     virtual void onPitchBendChange(uint8_t channel, uint16_t value);

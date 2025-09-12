@@ -96,7 +96,7 @@ void setup()
     auto src2(
         new NoteVisualizer(midiInput, concertInfrastructure.rgbFunctionFactory, freeRtosTime));
     auto rgbFunction(std::make_shared<LinearRgbFunction>());
-    const processing::TLinearConstants fullWhite({255, 0});
+    const processing::LinearConstants fullWhite({255, 0});
     rgbFunction->setRedConstants(fullWhite);
     rgbFunction->setGreenConstants(fullWhite);
     rgbFunction->setBlueConstants(fullWhite);

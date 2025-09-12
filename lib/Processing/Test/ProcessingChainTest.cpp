@@ -27,7 +27,7 @@ class ProcessingChainTest : public ProcessingBlockContainerTest, public ::testin
     }
 
     ProcessingChain processingChain;
-    processing::TNoteToLightMap map;
+    processing::NoteToLightMap map;
 };
 
 TEST_F(ProcessingChainTest, empty)
@@ -37,7 +37,7 @@ TEST_F(ProcessingChainTest, empty)
     testStrip[1] = {0, 1, 0};
     testStrip[2] = {0, 0, 1};
 
-    processingChain.execute(testStrip, processing::TNoteToLightMap());
+    processingChain.execute(testStrip, processing::NoteToLightMap());
     // strip is still zero
     EXPECT_EQ(strip, testStrip);
 }
@@ -52,7 +52,7 @@ TEST_F(ProcessingChainTest, insertOne)
     reference[1] = {10, 0, 0};
     reference[2] = {10, 0, 0};
 
-    processingChain.execute(strip, processing::TNoteToLightMap());
+    processingChain.execute(strip, processing::NoteToLightMap());
     EXPECT_EQ(reference, strip);
 }
 
@@ -68,7 +68,7 @@ TEST_F(ProcessingChainTest, insertTwo)
     reference[1] = {20, 0, 0};
     reference[2] = {20, 0, 0};
 
-    processingChain.execute(strip, processing::TNoteToLightMap());
+    processingChain.execute(strip, processing::NoteToLightMap());
     EXPECT_EQ(reference, strip);
 }
 
@@ -77,7 +77,7 @@ TEST_F(ProcessingChainTest, convertToJson)
     Json::array mockBlocksJson;
     for (unsigned int i = 0; i < 3; ++i)
     {
-        TMockBlock* mockBlock = new TMockBlock;
+        MockBlock* mockBlock = new MockBlock;
         ASSERT_NE(nullptr, mockBlock);
 
         Json mockJson = createMockBlockJson(i);
@@ -118,7 +118,7 @@ TEST_F(ProcessingChainTest, convertFromJson)
     reference[1] = {0, 20, 0};
     reference[2] = {0, 20, 0};
     processing::RgbStrip testStrip(3);
-    processingChain.execute(testStrip, processing::TNoteToLightMap());
+    processingChain.execute(testStrip, processing::NoteToLightMap());
     EXPECT_EQ(reference, testStrip);
 }
 
@@ -126,7 +126,7 @@ TEST_F(ProcessingChainTest, activate)
 {
     for (int i = 0; i < 3; i++)
     {
-        TMockBlock* block = new TMockBlock;
+        MockBlock* block = new MockBlock;
         processingChain.insertBlock(block);
         EXPECT_CALL(*block, activate());
         block = nullptr;
@@ -139,7 +139,7 @@ TEST_F(ProcessingChainTest, deactivate)
 {
     for (int i = 0; i < 3; i++)
     {
-        TMockBlock* block = new TMockBlock;
+        MockBlock* block = new MockBlock;
         processingChain.insertBlock(block);
         EXPECT_CALL(*block, deactivate());
         block = nullptr;
@@ -152,7 +152,7 @@ TEST_F(ProcessingChainTest, activateOnInsert)
 {
     for (int i = 0; i < 3; i++)
     {
-        TMockBlock* block = new TMockBlock;
+        MockBlock* block = new MockBlock;
         EXPECT_CALL(*block, activate());
         processingChain.insertBlock(block);
         block = nullptr;
@@ -165,7 +165,7 @@ TEST_F(ProcessingChainTest, deactivateOnInsert)
 
     for (int i = 0; i < 3; i++)
     {
-        TMockBlock* block = new TMockBlock;
+        MockBlock* block = new MockBlock;
         EXPECT_CALL(*block, deactivate());
         processingChain.insertBlock(block);
         block = nullptr;
@@ -179,7 +179,7 @@ class FakeAdditiveBlock : public ProcessingBlock
 
     void activate() override {}
     void deactivate() override {}
-    void execute(processing::RgbStrip& strip, const processing::TNoteToLightMap&) override
+    void execute(processing::RgbStrip& strip, const processing::NoteToLightMap&) override
     {
         strip[0] = color;
     }

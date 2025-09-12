@@ -85,10 +85,10 @@ Patch* ConcertInfrastructure::addBasicPatch(
     return patch;
 }
 
-processing::TNoteToLightMap ConcertInfrastructure::createDefaultOneToOneFullPianoMapping(
+processing::NoteToLightMap ConcertInfrastructure::createDefaultOneToOneFullPianoMapping(
     uint16_t skipLedsPerNote)
 {
-    processing::TNoteToLightMap noteToLightMap;
+    processing::NoteToLightMap noteToLightMap;
     uint16_t lightNumber = 0;
     constexpr uint8_t noteNumberA0 = 21;
     constexpr uint8_t noteNumberC8 = 108;

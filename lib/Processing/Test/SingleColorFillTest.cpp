@@ -30,7 +30,7 @@ TEST_F(SingleColorFillTest, executeDifferentColors)
     for (const auto& colorIt : colors)
     {
         source.setColor(colorIt);
-        source.execute(strip, processing::TNoteToLightMap());
+        source.execute(strip, processing::NoteToLightMap());
         for (const auto& outputIt : strip)
         {
             EXPECT_EQ(outputIt, colorIt);

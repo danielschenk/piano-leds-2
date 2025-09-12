@@ -31,7 +31,7 @@ class IMidiInput : public IMidiInterface
          * @param controller    Controller number
          * @param value         New value of the changed control
          */
-        virtual void onControlChange(uint8_t channel, TControllerNumber controller,
+        virtual void onControlChange(uint8_t channel, ControllerNumber controller,
                                      uint8_t value) = 0;
 
         /**

@@ -17,7 +17,7 @@ class MockProcessingBlock : public ProcessingBlock
     MOCK_METHOD0(activate, void());
     MOCK_METHOD0(deactivate, void());
     MOCK_METHOD2(execute, void(processing::RgbStrip& strip,
-                               const processing::TNoteToLightMap& noteToLightMap));
+                               const processing::NoteToLightMap& noteToLightMap));
     MOCK_CONST_METHOD0(convertToJson, Json());
     MOCK_METHOD1(convertFromJson, void(const Json& converted));
     MOCK_CONST_METHOD0(mode, Mode());

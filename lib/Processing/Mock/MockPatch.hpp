@@ -12,7 +12,7 @@ class MockPatch : public IPatch
     MOCK_METHOD0(activate, void());
     MOCK_METHOD0(deactivate, void());
     MOCK_METHOD2(execute, void(processing::RgbStrip& strip,
-                               const processing::TNoteToLightMap& noteToLightMap));
+                               const processing::NoteToLightMap& noteToLightMap));
     MOCK_CONST_METHOD0(hasBankAndProgram, bool());
     MOCK_CONST_METHOD0(getBank, uint8_t());
     MOCK_METHOD1(setBank, void(uint8_t bank));
