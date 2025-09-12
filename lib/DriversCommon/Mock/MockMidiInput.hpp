@@ -13,8 +13,8 @@ class MockMidiInput : public MidiInput
     MOCK_METHOD1(openPort, void(int number));
 
     // MidiInput implementation
-    MOCK_METHOD1(subscribe, void(IObserver& observer));
-    MOCK_METHOD1(unsubscribe, void(IObserver& observer));
+    MOCK_METHOD1(subscribe, void(Observer& observer));
+    MOCK_METHOD1(unsubscribe, void(Observer& observer));
 };
 
 #endif /* DRIVERS_MOCK_MOCKMIDIINPUT_H_ */

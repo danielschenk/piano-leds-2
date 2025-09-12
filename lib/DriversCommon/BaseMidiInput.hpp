@@ -18,8 +18,8 @@ class BaseMidiInput : public MidiInput
     BaseMidiInput& operator=(const BaseMidiInput&) = delete;
 
     // MidiInput implementation.
-    virtual void subscribe(IObserver& observer);
-    virtual void unsubscribe(IObserver& observer);
+    virtual void subscribe(Observer& observer);
+    virtual void unsubscribe(Observer& observer);
 
   protected:
     BaseMidiInput();
@@ -33,7 +33,7 @@ class BaseMidiInput : public MidiInput
     void notifyChannelPressureChange(uint8_t channel, uint8_t value) const;
     void notifyPitchBendChange(uint8_t channel, uint16_t value) const;
 
-    std::list<MidiInput::IObserver*> observers;
+    std::list<MidiInput::Observer*> observers;
     bool buildingMessage{false};
     std::vector<uint8_t> currentMessage;
     mutable std::mutex observersMutex;

@@ -8,7 +8,7 @@ class MidiInput;
 /**
  * Class which logs a description of incoming MIDI messages.
  */
-class MidiMessageLogger : public MidiInput::IObserver
+class MidiMessageLogger : public MidiInput::Observer
 {
   public:
     /**
@@ -28,7 +28,7 @@ class MidiMessageLogger : public MidiInput::IObserver
     MidiMessageLogger(const MidiMessageLogger&) = delete;
     MidiMessageLogger& operator=(const MidiMessageLogger&) = delete;
 
-    // MidiInput::IObserver implementation
+    // MidiInput::Observer implementation
     virtual void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on);
     virtual void onProgramChange(uint8_t channel, uint8_t program);
     virtual void onControlChange(uint8_t channel, MidiInterface::ControllerNumber controller,

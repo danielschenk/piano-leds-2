@@ -4,17 +4,15 @@
 
 #define LOGGING_COMPONENT "BaseMidiInput"
 
-BaseMidiInput::BaseMidiInput()
-{
-}
+BaseMidiInput::BaseMidiInput() {}
 
-void BaseMidiInput::subscribe(IObserver& observer)
+void BaseMidiInput::subscribe(Observer& observer)
 {
     std::lock_guard<std::mutex> lock(observersMutex);
     observers.push_back(&observer);
 }
 
-void BaseMidiInput::unsubscribe(IObserver& observer)
+void BaseMidiInput::unsubscribe(Observer& observer)
 {
     std::lock_guard<std::mutex> lock(observersMutex);
     observers.remove(&observer);

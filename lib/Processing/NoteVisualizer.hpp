@@ -17,7 +17,7 @@ namespace processing
 class ColorPicker;
 }
 
-class NoteVisualizer : public ProcessingBlock, public MidiInput::IObserver
+class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
 {
   public:
     NoteVisualizer(MidiInput& midiDriver, const IRgbFunctionFactory& rgbFunctionFactory,
@@ -44,7 +44,7 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::IObserver
     void setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction);
     void setPressDownColorPicker(std::shared_ptr<processing::ColorPicker> colorPicker);
 
-    // MidiInput::IObserver implementation
+    // MidiInput::Observer implementation
     void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) override;
     void onControlChange(uint8_t channel, MidiInput::ControllerNumber controller,
                          uint8_t value) override;

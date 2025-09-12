@@ -8,7 +8,7 @@
 class MidiInput : public MidiInterface
 {
   public:
-    class IObserver
+    class Observer
     {
       public:
         virtual void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) = 0;
@@ -19,11 +19,11 @@ class MidiInput : public MidiInterface
         virtual void onPitchBendChange(uint8_t channel, uint16_t value) = 0;
 
       protected:
-        ~IObserver() = default;
+        ~Observer() = default;
     };
 
-    virtual void subscribe(IObserver& observer) = 0;
-    virtual void unsubscribe(IObserver& observer) = 0;
+    virtual void subscribe(Observer& observer) = 0;
+    virtual void unsubscribe(Observer& observer) = 0;
 
   protected:
     virtual ~MidiInput() = default;

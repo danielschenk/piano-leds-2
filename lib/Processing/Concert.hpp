@@ -21,7 +21,7 @@ class IPatch;
  * A concert is a collection of patches, together with some settings which are typically constant
  * throughout a gig, like MIDI channels to listen to and the note-to-light mapping.
  */
-class Concert : public JsonConvertible, public MidiInput::IObserver
+class Concert : public JsonConvertible, public MidiInput::Observer
 {
   public:
     /**
