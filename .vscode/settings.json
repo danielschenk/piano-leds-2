@@ -4,6 +4,7 @@
         "editor.formatOnSave": true,
         "editor.rulers": [100]
     },
+    "C_Cpp.default.cppStandard": "gnu++17",
     "files.associations": {
         "limits": "cpp",
         "array": "cpp",
