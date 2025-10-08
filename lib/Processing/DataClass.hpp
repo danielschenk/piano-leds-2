@@ -2,6 +2,7 @@
 #define PROCESSING_DATACLASS_HPP
 
 #include <map>
+#include <string>
 #include <tuple>
 #include <variant>
 
@@ -68,6 +69,11 @@ class DataClass
         std::get<Resolver<T>>(pair->second).resolve(this) = value;
     }
 
+    void set(std::string name, const char* value)
+    {
+        set(name, std::string(value));
+    }
+
     template <typename T>
     struct Resolver
     {
@@ -80,7 +86,7 @@ class DataClass
         }
     };
 
-    using Descriptor = std::variant<Resolver<int>, Resolver<bool>>;
+    using Descriptor = std::variant<Resolver<int>, Resolver<bool>, Resolver<std::string>>;
 
   private:
     static std::map<std::string, Descriptor> descriptors;
