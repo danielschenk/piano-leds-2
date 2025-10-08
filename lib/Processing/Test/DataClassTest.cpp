@@ -12,6 +12,7 @@ struct FooProperties : public DataClass<FooProperties>
 {
     PROPERTY(FooProperties, int, foo);
     PROPERTY(FooProperties, bool, bar);
+    PROPERTY(FooProperties, int, baz);
 };
 
 class DataClassTest : public ::testing::Test, public LoggingTest
@@ -24,6 +25,12 @@ TEST_F(DataClassTest, resolve)
 {
     properties.set("foo", 42);
     EXPECT_EQ(properties.foo, 42);
+}
+
+TEST_F(DataClassTest, resolveNotFirst)
+{
+    properties.set("baz", 42);
+    EXPECT_EQ(properties.baz, 42);
 }
 
 TEST_F(DataClassTest, resolveWrongType)
