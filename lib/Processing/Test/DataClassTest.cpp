@@ -1,4 +1,5 @@
 #include "../DataClass.hpp"
+#include "Mock/LoggingTest.hpp"
 #include "gtest/gtest.h"
 
 namespace processing
@@ -10,7 +11,7 @@ struct FooProperties : public DataClass<FooProperties>
     PROPERTY(FooProperties, bool, bar);
 };
 
-class DataClassTest : public ::testing::Test
+class DataClassTest : public ::testing::Test, public LoggingTest
 {
   public:
     FooProperties properties;

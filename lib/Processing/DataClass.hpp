@@ -5,6 +5,8 @@
 #include <tuple>
 #include <variant>
 
+#include "Logging.hpp"
+
 namespace processing
 {
 
@@ -22,6 +24,7 @@ struct Property
     T& operator=(T value)
     {
         this->value = value;
+        return this->value;
     }
 
     bool operator==(const T& other) const
@@ -45,18 +48,34 @@ class DataClass
         descriptors.emplace(name, Resolver<T>{offset});
     }
 
+    static constexpr const char* LOGGING_COMPONENT = "DataClass";
+
     template <typename T>
     void set(std::string name, T value)
     {
+        auto pair = descriptors.find(name);
+        if (pair == descriptors.end())
+        {
+            LOG_ERROR_PARAMS("property %s not found", name.c_str());
+            return;
+        }
+
+        if (!std::holds_alternative<Resolver<T>>(pair->second))
+        {
+            LOG_ERROR_PARAMS("type of property %s does not match type of value", name.c_str());
+            return;
+        }
+        std::get<Resolver<T>>(pair->second).resolve(this) = value;
     }
 
     template <typename T>
     struct Resolver
     {
         const std::size_t offset;
-        Property<T>& resolve(Child* object) const
+        Property<T>& resolve(DataClass<Child>* object) const
         {
-            Property<T>* property = static_cast<void*>(object) + offset;
+            Property<T>* property =
+                reinterpret_cast<Property<T>*>(reinterpret_cast<uint8_t*>(object) + offset);
             return *property;
         }
     };
@@ -65,8 +84,6 @@ class DataClass
 
   private:
     static std::map<std::string, Descriptor> descriptors;
-
-    // static_assert(std::is_pod<Child>(), "child must be a POD type");
 };
 
 template <typename Child>
@@ -92,7 +109,7 @@ struct RegisteredProperty : public Property<T>
 };
 
 #define PROPERTY(container, type, name) \
-    RegisteredProperty<type, container> name{*this, #name, offsetof(container, name)};
+    processing::RegisteredProperty<type, container> name{*this, #name, offsetof(container, name)};
 
 }  // namespace processing
 
