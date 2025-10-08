@@ -95,15 +95,16 @@ class DataClass
 template <typename Child>
 std::map<std::string, typename DataClass<Child>::Descriptor> DataClass<Child>::descriptors;
 
-template <typename T, typename Container>
+template <typename T, typename DataClassChild>
 struct RegisteredProperty : public Property<T>
 {
-    RegisteredProperty(Container& container, std::string name, std::size_t offset)
+    RegisteredProperty(DataClass<DataClassChild>& container, std::string name, std::size_t offset)
     {
         container.template addDescriptor<T>(name, offset);
     }
 
-    RegisteredProperty(Container& container, std::string name, std::size_t offset, T value)
+    RegisteredProperty(DataClass<DataClassChild>& container, std::string name, std::size_t offset,
+                       T value)
         : Property<T>(value)
     {
         container.template addDescriptor<T>(name, offset);
