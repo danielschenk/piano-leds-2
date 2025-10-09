@@ -3,6 +3,7 @@
 
 #include <mutex>
 
+#include "DataClass.hpp"
 #include "ProcessingBlock.hpp"
 
 class SingleColorFill : public ProcessingBlock
@@ -14,19 +15,22 @@ class SingleColorFill : public ProcessingBlock
     SingleColorFill& operator=(SingleColorFill&) = delete;
 
     // ProcessingBlock implementation.
-    virtual void activate();
-    virtual void deactivate();
-    virtual void execute(processing::RgbStrip& strip,
-                         const processing::NoteToLightMap& noteToLightMap);
-    virtual Json convertToJson() const;
-    virtual void convertFromJson(const Json& converted);
+    void activate() override;
+    void deactivate() override;
+    void execute(processing::RgbStrip& strip,
+                 const processing::NoteToLightMap& noteToLightMap) override;
+    Json convertToJson() const override;
+    void convertFromJson(const Json& converted) override;
 
-    processing::RgbColor getColor() const;
-    void setColor(processing::RgbColor color);
+    struct Properties : public processing::DataClass<Properties>
+    {
+        PROPERTY(Properties, processing::RgbColor, color);
+    };
+    Properties properties;
 
   protected:
     // ProcessingBlock implementation
-    virtual std::string getObjectType() const;
+    std::string getObjectType() const override;
 
   private:
     static constexpr const char* rJsonKey = "r";
@@ -34,9 +38,6 @@ class SingleColorFill : public ProcessingBlock
     static constexpr const char* bJsonKey = "b";
 
     mutable std::mutex mutex;
-
-    /** Output color. */
-    processing::RgbColor color;
 };
 
 #endif /* PROCESSING_SINGLECOLORFILL_H_ */

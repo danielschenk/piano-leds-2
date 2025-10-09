@@ -6,6 +6,7 @@
 #include <tuple>
 #include <variant>
 
+#include "Color.hpp"
 #include "Logging.hpp"
 
 namespace processing
@@ -17,7 +18,12 @@ struct Property
     Property() = default;
     Property(T value) : value(value) {}
 
-    explicit operator T() const
+    explicit operator T&()
+    {
+        return value;
+    }
+
+    explicit operator const T&() const
     {
         return value;
     }
@@ -86,7 +92,8 @@ class DataClass
         }
     };
 
-    using Descriptor = std::variant<Resolver<int>, Resolver<bool>, Resolver<std::string>>;
+    using Descriptor =
+        std::variant<Resolver<int>, Resolver<bool>, Resolver<std::string>, Resolver<RgbColor>>;
 
   private:
     static std::map<std::string, Descriptor> descriptors;
@@ -112,7 +119,7 @@ struct RegisteredProperty : public Property<T>
 
     using Property<T>::operator=;
     using Property<T>::operator==;
-    using Property<T>::operator T;
+    using Property<T>::operator T&;
 };
 
 #define PROPERTY(container, type, name) \

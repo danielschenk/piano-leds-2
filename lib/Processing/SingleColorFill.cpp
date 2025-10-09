@@ -11,6 +11,7 @@ void SingleColorFill::execute(processing::RgbStrip& strip,
 {
     std::lock_guard<std::mutex> lock(mutex);
 
+    processing::RgbColor& color(properties.color);
     for (auto& it : strip)
     {
         it.r = color.r;
@@ -19,26 +20,13 @@ void SingleColorFill::execute(processing::RgbStrip& strip,
     }
 }
 
-processing::RgbColor SingleColorFill::getColor() const
-{
-    std::lock_guard<std::mutex> lock(mutex);
-
-    return color;
-}
-
-void SingleColorFill::setColor(processing::RgbColor color)
-{
-    std::lock_guard<std::mutex> lock(mutex);
-
-    this->color = color;
-}
-
 Json SingleColorFill::convertToJson() const
 {
     std::lock_guard<std::mutex> lock(mutex);
 
     Json::object json;
     json[JsonConvertible::objectTypeKey] = getObjectType();
+    const processing::RgbColor& color(properties.color);
     json[rJsonKey] = color.r;
     json[gJsonKey] = color.g;
     json[bJsonKey] = color.b;
@@ -51,6 +39,7 @@ void SingleColorFill::convertFromJson(const Json& converted)
     std::lock_guard<std::mutex> lock(mutex);
 
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
+    processing::RgbColor& color(properties.color);
     helper.getItemIfPresent(rJsonKey, color.r);
     helper.getItemIfPresent(gJsonKey, color.g);
     helper.getItemIfPresent(bJsonKey, color.b);
