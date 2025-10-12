@@ -18,14 +18,24 @@ struct Property
     Property() = default;
     Property(T value) : value(value) {}
 
-    explicit operator T&()
+    T& operator*()
     {
         return value;
     }
 
-    explicit operator const T&() const
+    const T& operator*() const
     {
         return value;
+    }
+
+    T* operator->()
+    {
+        return &value;
+    }
+
+    const T* operator->() const
+    {
+        return &value;
     }
 
     T& operator=(T value)
@@ -119,7 +129,8 @@ struct RegisteredProperty : public Property<T>
 
     using Property<T>::operator=;
     using Property<T>::operator==;
-    using Property<T>::operator T&;
+    using Property<T>::operator*;
+    using Property<T>::operator->;
 };
 
 #define PROPERTY(container, type, name) \

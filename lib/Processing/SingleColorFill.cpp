@@ -11,12 +11,11 @@ void SingleColorFill::execute(processing::RgbStrip& strip,
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    processing::RgbColor& color(properties.color);
     for (auto& it : strip)
     {
-        it.r = color.r;
-        it.g = color.g;
-        it.b = color.b;
+        it.r = properties.color->r;
+        it.g = properties.color->g;
+        it.b = properties.color->b;
     }
 }
 
@@ -26,10 +25,9 @@ Json SingleColorFill::convertToJson() const
 
     Json::object json;
     json[JsonConvertible::objectTypeKey] = getObjectType();
-    const processing::RgbColor& color(properties.color);
-    json[rJsonKey] = color.r;
-    json[gJsonKey] = color.g;
-    json[bJsonKey] = color.b;
+    json[rJsonKey] = properties.color->r;
+    json[gJsonKey] = properties.color->g;
+    json[bJsonKey] = properties.color->b;
 
     return Json(json);
 }
@@ -39,10 +37,9 @@ void SingleColorFill::convertFromJson(const Json& converted)
     std::lock_guard<std::mutex> lock(mutex);
 
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
-    processing::RgbColor& color(properties.color);
-    helper.getItemIfPresent(rJsonKey, color.r);
-    helper.getItemIfPresent(gJsonKey, color.g);
-    helper.getItemIfPresent(bJsonKey, color.b);
+    helper.getItemIfPresent(rJsonKey, properties.color->r);
+    helper.getItemIfPresent(gJsonKey, properties.color->g);
+    helper.getItemIfPresent(bJsonKey, properties.color->b);
 }
 
 std::string SingleColorFill::getObjectType() const
