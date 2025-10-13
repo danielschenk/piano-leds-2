@@ -50,11 +50,6 @@ struct RgbColor
         return !(other == *this);
     }
 
-    constexpr RgbColor operator*(float factor) const
-    {
-        return RgbColor(factor * r, factor * g, factor * b);
-    }
-
     // Multiplies every color using other color as factor (meaning 255=100%).
     constexpr RgbColor operator*(const RgbColor& other) const
     {
@@ -84,6 +79,16 @@ struct RgbColor
     uint8_t g{0};
     uint8_t b{0};
 };
+
+constexpr RgbColor operator*(const RgbColor& other, float factor)
+{
+    return RgbColor(factor * other.r, factor * other.g, factor * other.b);
+}
+
+constexpr RgbColor operator*(float factor, const RgbColor& other)
+{
+    return other * factor;
+}
 
 namespace color_constants
 {

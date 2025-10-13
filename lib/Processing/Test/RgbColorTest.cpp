@@ -89,3 +89,11 @@ TEST(RgbColorTest, multiplicationWithClipping)
     EXPECT_EQ(255, result.g);
     EXPECT_EQ(255, result.b);
 }
+
+TEST(RgbColorTest, multiplicationWithFloatBothWays)
+{
+    using namespace color_constants;
+    float f = 0.5f;
+    EXPECT_EQ(red * f, RgbColor(0x7f, 0, 0));
+    EXPECT_EQ(f * red, RgbColor(0x7f, 0, 0));
+}
