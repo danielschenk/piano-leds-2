@@ -13,9 +13,9 @@ void SingleColorFill::execute(processing::RgbStrip& strip,
 
     for (auto& it : strip)
     {
-        it.r = properties.color->r;
-        it.g = properties.color->g;
-        it.b = properties.color->b;
+        it.r = color->r;
+        it.g = color->g;
+        it.b = color->b;
     }
 }
 
@@ -25,9 +25,9 @@ Json SingleColorFill::convertToJson() const
 
     Json::object json;
     json[JsonConvertible::objectTypeKey] = getObjectType();
-    json[rJsonKey] = properties.color->r;
-    json[gJsonKey] = properties.color->g;
-    json[bJsonKey] = properties.color->b;
+    json[rJsonKey] = color->r;
+    json[gJsonKey] = color->g;
+    json[bJsonKey] = color->b;
 
     return Json(json);
 }
@@ -37,9 +37,15 @@ void SingleColorFill::convertFromJson(const Json& converted)
     std::lock_guard<std::mutex> lock(mutex);
 
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
-    helper.getItemIfPresent(rJsonKey, properties.color->r);
-    helper.getItemIfPresent(gJsonKey, properties.color->g);
-    helper.getItemIfPresent(bJsonKey, properties.color->b);
+    helper.getItemIfPresent(rJsonKey, color->r);
+    helper.getItemIfPresent(gJsonKey, color->g);
+    helper.getItemIfPresent(bJsonKey, color->b);
+}
+
+std::map<std::string, processing::Modulatable*> SingleColorFill::modulationSinks() const
+{
+    // return {MODULATION_SINK_INIT(color)};
+    return {};
 }
 
 std::string SingleColorFill::getObjectType() const

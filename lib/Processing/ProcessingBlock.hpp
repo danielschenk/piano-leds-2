@@ -1,10 +1,16 @@
 #ifndef PROCESSING_PROCESSINGELEMENT_H_
 #define PROCESSING_PROCESSINGELEMENT_H_
 
-#include <vector>
+#include <map>
+#include <string>
 
 #include "JsonConvertible.hpp"
 #include "ProcessingTypes.hpp"
+
+namespace processing
+{
+class Modulatable;
+}
 
 class ProcessingBlock : public JsonConvertible
 {
@@ -20,6 +26,8 @@ class ProcessingBlock : public JsonConvertible
     virtual void execute(processing::RgbStrip& strip,
                          const processing::NoteToLightMap& noteToLightMap) = 0;
 
+    virtual std::map<std::string, processing::Modulatable*> modulationSinks() const;
+
     enum class Mode
     {
         additive,
@@ -27,5 +35,7 @@ class ProcessingBlock : public JsonConvertible
     };
     virtual Mode mode() const;
 };
+
+#define MODULATION_SINK_INIT(var) {#var, &var}
 
 #endif /* PROCESSING_PROCESSINGELEMENT_H_ */

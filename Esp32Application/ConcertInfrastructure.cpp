@@ -48,7 +48,7 @@ void ConcertInfrastructure::createLegacyPatches()
     patch->setProgram(52);
     patch->setName("Peter Gunn Intro");
     auto fill = new SingleColorFill;
-    fill->properties.color = blue * 0.1f;
+    fill->color = blue * 0.1f;
     patch->getProcessingChain().insertBlock(fill, 0);
 
     patch = addBasicPatch(white, true, std::make_shared<processing::SequentialColorPicker>());

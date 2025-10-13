@@ -3,7 +3,7 @@
 
 #include <mutex>
 
-#include "DataClass.hpp"
+#include "Parameter.hpp"
 #include "ProcessingBlock.hpp"
 
 class SingleColorFill : public ProcessingBlock
@@ -22,11 +22,9 @@ class SingleColorFill : public ProcessingBlock
     Json convertToJson() const override;
     void convertFromJson(const Json& converted) override;
 
-    struct Properties : public processing::DataClass<Properties>
-    {
-        PROPERTY(Properties, processing::RgbColor, color);
-    };
-    Properties properties;
+    std::map<std::string, processing::Modulatable*> modulationSinks() const override;
+
+    processing::Parameter<processing::RgbColor> color;
 
   protected:
     // ProcessingBlock implementation

@@ -23,6 +23,32 @@ struct Parameter : public Modulatable
 
     T current;
 
+    T* operator->()
+    {
+        return &current;
+    }
+
+    const T* operator->() const
+    {
+        return &current;
+    }
+
+    T& operator*()
+    {
+        return current;
+    }
+
+    const T& operator*() const
+    {
+        return current;
+    }
+
+    T& operator=(T other)
+    {
+        current = other;
+        return current;
+    }
+
     struct ModulationBinding
     {
         std::pair<uint16_t, uint16_t> inputRange;
