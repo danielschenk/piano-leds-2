@@ -44,6 +44,14 @@ TEST_F(ParameterTest, modulate)
     EXPECT_EQ(1300, parameter.current);
 }
 
+TEST_F(ParameterTest, modulateNoBinding)
+{
+    parameter.modulationBinding.reset();
+    parameter.current = 42;
+    parameter.modulate(100);
+    EXPECT_EQ(42, parameter.current);
+}
+
 TEST(ComplexParameterTest, modulateComplexType)
 {
     Parameter<RgbColor> parameter;
