@@ -10,33 +10,33 @@ using ::testing::Test;
 struct ParameterTest : public Test
 {
     Parameter<int> parameter;
-    std::shared_ptr<Parameter<int>::ModulationBinding> binding{
-        std::make_shared<Parameter<int>::ModulationBinding>()};
+    std::shared_ptr<Parameter<int>::RangeMapping> mapping{
+        std::make_shared<Parameter<int>::RangeMapping>()};
 
     ParameterTest()
     {
-        binding->inputRange = {10, 110};
-        binding->outputRange = {200, 2200};
-        parameter.modulationBinding = binding;
+        mapping->inputRange = {10, 110};
+        mapping->outputRange = {200, 2200};
+        parameter.rangeMapping = mapping;
     }
 };
 
 TEST_F(ParameterTest, modulateClipping)
 {
     parameter.modulate(0);
-    EXPECT_EQ(binding->outputRange.first, parameter.current);
+    EXPECT_EQ(mapping->outputRange.first, parameter.current);
 
     parameter.modulate(1000);
-    EXPECT_EQ(binding->outputRange.second, parameter.current);
+    EXPECT_EQ(mapping->outputRange.second, parameter.current);
 }
 
 TEST_F(ParameterTest, modulate)
 {
     parameter.modulate(10);
-    EXPECT_EQ(binding->outputRange.first, parameter.current);
+    EXPECT_EQ(mapping->outputRange.first, parameter.current);
 
     parameter.modulate(110);
-    EXPECT_EQ(binding->outputRange.second, parameter.current);
+    EXPECT_EQ(mapping->outputRange.second, parameter.current);
 
     parameter.modulate(60);
     EXPECT_EQ(1200, parameter.current);
@@ -44,9 +44,9 @@ TEST_F(ParameterTest, modulate)
     EXPECT_EQ(1300, parameter.current);
 }
 
-TEST_F(ParameterTest, modulateNoBinding)
+TEST_F(ParameterTest, modulateNoMapping)
 {
-    parameter.modulationBinding.reset();
+    parameter.rangeMapping.reset();
     parameter.current = 42;
     parameter.modulate(100);
     EXPECT_EQ(42, parameter.current);
@@ -55,13 +55,13 @@ TEST_F(ParameterTest, modulateNoBinding)
 TEST(ComplexParameterTest, modulateComplexType)
 {
     Parameter<RgbColor> parameter;
-    std::shared_ptr<Parameter<RgbColor>::ModulationBinding> binding{
-        std::make_shared<Parameter<RgbColor>::ModulationBinding>()};
+    std::shared_ptr<Parameter<RgbColor>::RangeMapping> mapping{
+        std::make_shared<Parameter<RgbColor>::RangeMapping>()};
 
     using namespace color_constants;
-    binding->inputRange = {0, 100};
-    binding->outputRange = {red, blue};
-    parameter.modulationBinding = binding;
+    mapping->inputRange = {0, 100};
+    mapping->outputRange = {red, blue};
+    parameter.rangeMapping = mapping;
 
     parameter.modulate(0);
     EXPECT_EQ(parameter.current, red);

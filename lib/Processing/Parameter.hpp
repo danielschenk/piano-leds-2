@@ -49,20 +49,20 @@ struct Parameter : public Modulatable
         return current;
     }
 
-    struct ModulationBinding
+    struct RangeMapping
     {
         std::pair<uint16_t, uint16_t> inputRange;
         std::pair<T, T> outputRange;
     };
-    std::shared_ptr<ModulationBinding> modulationBinding;
+    std::shared_ptr<RangeMapping> rangeMapping;
 
     void modulate(uint16_t input) override
     {
-        if (!modulationBinding)
+        if (!rangeMapping)
             return;
 
-        auto& inputRange = modulationBinding->inputRange;
-        auto& outputRange = modulationBinding->outputRange;
+        auto& inputRange = rangeMapping->inputRange;
+        auto& outputRange = rangeMapping->outputRange;
         input = std::min(input, inputRange.second);
         input = std::max(input, inputRange.first);
 
