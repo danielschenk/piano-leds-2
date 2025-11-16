@@ -49,7 +49,7 @@ TEST_F(ParameterTest, modulateNoMapping)
     parameter.rangeMapping.reset();
     parameter.current = 42;
     parameter.modulate(100);
-    EXPECT_EQ(42, parameter.current);
+    EXPECT_EQ(42, *parameter);
 }
 
 TEST(ComplexParameterTest, modulateComplexType)
@@ -64,13 +64,13 @@ TEST(ComplexParameterTest, modulateComplexType)
     parameter.rangeMapping = mapping;
 
     parameter.modulate(0);
-    EXPECT_EQ(parameter.current, red);
+    EXPECT_EQ(*parameter, red);
 
     parameter.modulate(100);
-    EXPECT_EQ(parameter.current, blue);
+    EXPECT_EQ(*parameter, blue);
 
     parameter.modulate(50);
-    EXPECT_EQ(parameter.current, magenta * 0.5f);
+    EXPECT_EQ(*parameter, magenta * 0.5f);
 }
 
 }  // namespace processing
