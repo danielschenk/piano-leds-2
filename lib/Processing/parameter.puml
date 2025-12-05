@@ -1,0 +1,30 @@
+@startuml
+
+class Parameter
+{
+    + current: T
+    + modulate(input: u16)
+}
+
+class RangeMapping
+{
+    + inputRange: pair<u16, u16>
+    + outputRange: pair<T, T>
+}
+
+Parameter *-- RangeMapping
+
+interface MidiInput::Observer
+{
+    + onControlChange(channel: u8, controllerNumber: u16, value: u8)
+}
+
+class ControlChangeModulation
+{
+    + channel: u8
+    + controllerNumber: u16
+}
+
+ControlChangeModulation -|> MidiInput::Observer
+
+@enduml
