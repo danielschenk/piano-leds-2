@@ -9,6 +9,7 @@
 #include "PianoDecayRgbFunction.hpp"
 #include "SequentialColorPicker.hpp"
 #include "SingleColorFill.hpp"
+#include "Twinkle.hpp"
 
 namespace application
 {
@@ -54,6 +55,13 @@ void ConcertInfrastructure::createLegacyPatches()
     patch = addBasicPatch(white, true, std::make_shared<processing::SequentialColorPicker>());
     patch->setProgram(53);
     patch->setName("Multicolor");
+
+    patch = addBasicPatch(red, true);
+    patch->setProgram(54);
+    patch->setName("Merry Xmas Everybody");
+    patch->getProcessingChain().insertBlock(new processing::Twinkle(time));
+
+    concert.onProgramChange(0, 54);
 }
 
 Patch* ConcertInfrastructure::addBasicPatch(

@@ -14,6 +14,7 @@
 #include "FreeRtosMonotonicTime.hpp"
 #include "NetworkTask.hpp"
 #include "SystemSettingsModel.hpp"
+#include "bootloader_random.h"
 
 #define LOGGING_COMPONENT "Esp32Application"
 
@@ -52,6 +53,8 @@ void setup()
     Serial2.begin(31250, SERIAL_8N1, MIDI_RX_PIN, MIDI_TX_PIN);
 
     static MidiMessageLogger midiMessageLogger(midiInput);
+
+    bootloader_random_enable();
 
     static application::ConcertInfrastructure concertInfrastructure(midiInput, freeRtosTime);
     static ProcessingTask processingTask(concertInfrastructure.concert, defaultStackSize,
