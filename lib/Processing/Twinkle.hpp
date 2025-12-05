@@ -16,10 +16,10 @@ class Twinkle : public ProcessingBlock
     explicit Twinkle(const MonotonicTime& monotonicTime);
     void execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap) override;
 
-    RgbColor color{color_constants::white};
-    static constexpr uint32_t startIntervalMs{200};
-    static constexpr uint32_t fadeInMs{500};
-    static constexpr uint32_t fadeOutMs{500};
+    RgbColor color{RgbColor{0xda, 0xa5, 0x20} * 0.3};
+    static constexpr uint32_t startIntervalMs{100};
+    static constexpr uint32_t fadeInMs{1000};
+    static constexpr uint32_t fadeOutMs{1000};
 
   private:
     void addNewTwinkle(std::size_t stripSize, uint32_t now);
