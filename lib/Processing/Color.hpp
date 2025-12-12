@@ -95,6 +95,8 @@ constexpr RgbColor yellow{red + green};
 constexpr RgbColor magenta{red + blue};
 constexpr RgbColor cyan{green + blue};
 constexpr RgbColor white{red + green + blue};
+
+constexpr RgbColor goldenrod{0xda, 0xa5, 0x20};
 }  // namespace color_constants
 
 typedef std::vector<RgbColor> RgbStrip;

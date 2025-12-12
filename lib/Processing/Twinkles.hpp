@@ -16,20 +16,21 @@ class Twinkles : public ProcessingBlock
     explicit Twinkles(const MonotonicTime& monotonicTime);
     void execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap) override;
 
-    RgbColor color{RgbColor{0xda, 0xa5, 0x20} * 0.3};
-    // TODO instead of fixed interval just keep adding until strip is filled a certain pct?
-    static constexpr uint32_t startIntervalMs{100};
+    RgbColor color{color_constants::goldenrod * 0.3f};
+    // TODO instead of fixed interval just keep adding until strip is filled a certain pct
+    // This allows to control density independently of strip size and fade times
+    static constexpr uint32_t spawnIntervalMs{100};
     static constexpr uint32_t fadeInMs{1000};
     static constexpr uint32_t fadeOutMs{1000};
 
   private:
-    void addNewTwinkle(std::size_t stripSize, uint32_t now);
+    void spawnTwinkle(std::size_t stripSize, uint32_t now);
     void pruneDeadTwinkles(uint32_t now);
     void render(RgbStrip& strip, uint32_t now);
 
     const MonotonicTime& monotonicTime;
 
-    uint32_t lastOnTimeMs{0};
+    uint32_t lastSpawnTimeMs{0};
     // TODO less realloc-intensive method
     std::map<std::size_t, uint32_t> twinkles;
 };

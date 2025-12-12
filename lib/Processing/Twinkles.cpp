@@ -17,10 +17,10 @@ void Twinkles::execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap)
     auto now = monotonicTime.getMilliseconds();
 
     pruneDeadTwinkles(now);
-    if (now - lastOnTimeMs >= startIntervalMs)
+    if (now - lastSpawnTimeMs >= spawnIntervalMs)
     {
-        addNewTwinkle(strip.size(), now);
-        lastOnTimeMs = now;
+        spawnTwinkle(strip.size(), now);
+        lastSpawnTimeMs = now;
     }
 
     render(strip, now);
@@ -33,7 +33,7 @@ static unsigned int boundedRand(unsigned int range)
             return r;
 }
 
-void Twinkles::addNewTwinkle(std::size_t stripSize, uint32_t now)
+void Twinkles::spawnTwinkle(std::size_t stripSize, uint32_t now)
 {
     if (twinkles.size() >= stripSize)
         return;
