@@ -56,12 +56,14 @@ void ConcertInfrastructure::createLegacyPatches()
     patch->setProgram(53);
     patch->setName("Multicolor");
 
-    auto redOrGreen = std::make_shared<processing::SequentialColorPicker>(
-        std::vector<processing::RgbColor>{red, green});
-    patch = addBasicPatch(off, false, redOrGreen);
+    auto colorPicker = std::make_shared<processing::SequentialColorPicker>();
+    colorPicker->sequence = {red, green};
+    patch = addBasicPatch(white, false, colorPicker);
     patch->setProgram(54);
     patch->setName("Merry Xmas Everybody");
     patch->getProcessingChain().insertBlock(new processing::Twinkles(time));
+
+    concert.onProgramChange(0, 54);
 }
 
 Patch* ConcertInfrastructure::addBasicPatch(

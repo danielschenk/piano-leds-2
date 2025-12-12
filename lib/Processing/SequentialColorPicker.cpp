@@ -3,16 +3,11 @@
 namespace processing
 {
 
-SequentialColorPicker::SequentialColorPicker(std::vector<RgbColor> sequence)
-    : sequence(std::move(sequence))
-{
-}
-
 RgbColor SequentialColorPicker::pick()
 {
-    if (currentColor >= sequence.cend() || currentColor < sequence.cbegin())
-        currentColor = sequence.cbegin();
-    return *currentColor++;
+    if (index >= sequence.size())
+        index = 0;
+    return sequence[index++];
 }
 
 }  // namespace processing

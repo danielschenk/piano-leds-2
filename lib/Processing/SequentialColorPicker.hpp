@@ -13,14 +13,14 @@ class SequentialColorPicker : public ColorPicker
 {
   public:
     SequentialColorPicker() = default;
-    explicit SequentialColorPicker(std::vector<RgbColor> sequence);
     RgbColor pick() override;
 
-  private:
     std::vector<RgbColor> sequence{color_constants::red,     color_constants::green,
                                    color_constants::blue,    color_constants::yellow,
                                    color_constants::magenta, color_constants::cyan};
-    decltype(sequence)::const_iterator currentColor{sequence.cbegin()};
+
+  private:
+    std::size_t index{0};
 };
 
 }  // namespace processing
