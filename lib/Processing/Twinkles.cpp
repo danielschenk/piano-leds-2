@@ -14,6 +14,12 @@ Twinkles::Twinkles(const MonotonicTime& monotonicTime) : monotonicTime(monotonic
 
 void Twinkles::execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap)
 {
+    if (twinkles.size() != strip.size())
+    {
+        twinkles.resize(strip.size());
+        twinkles.shrink_to_fit();
+    }
+
     auto now = monotonicTime.getMilliseconds();
 
     pruneDeadTwinkles(now);
@@ -35,15 +41,12 @@ static unsigned int boundedRand(unsigned int range)
 
 void Twinkles::spawnTwinkle(std::size_t stripSize, uint32_t now)
 {
-    if (twinkles.size() >= stripSize)
-        return;
-
     for (std::size_t attempt = 0; attempt < stripSize; ++attempt)
     {
         std::size_t pos = boundedRand(stripSize);
-        if (twinkles.find(pos) == twinkles.end())
+        if (!twinkles[pos].has_value())
         {
-            twinkles[pos] = now;
+            twinkles[pos] = Twinkle{now};
             break;
         }
     }
@@ -51,24 +54,26 @@ void Twinkles::spawnTwinkle(std::size_t stripSize, uint32_t now)
 
 void Twinkles::pruneDeadTwinkles(uint32_t now)
 {
-    for (auto it = twinkles.cbegin(); it != twinkles.cend();)
-        if (now > it->second + fadeInMs + fadeOutMs)
-            twinkles.erase(it++);
-        else
-            ++it;
+    for (auto& twinkle : twinkles)
+        if (twinkle.has_value() && (now > twinkle->spawnTimeMs + fadeInMs + fadeOutMs))
+            twinkle.reset();
 }
 
 void Twinkles::render(RgbStrip& strip, uint32_t now)
 {
-    for (const auto& pair : twinkles)
+    for (size_t pos = 0; pos < twinkles.size(); ++pos)
     {
-        auto& startTime = pair.second;
-        bool fadingIn = (now - startTime) <= fadeInMs;
-        float fadeProgress = fadingIn ? float(now - startTime) / fadeInMs
-                                      : float(now - startTime - fadeInMs) / fadeOutMs;
+        auto& twinkle = twinkles[pos];
+        if (!twinkle.has_value())
+            continue;
+
+        auto spawnTimeMs = twinkle->spawnTimeMs;
+        bool fadingIn = (now - spawnTimeMs) <= fadeInMs;
+        float fadeProgress = fadingIn ? float(now - spawnTimeMs) / fadeInMs
+                                      : float(now - spawnTimeMs - fadeInMs) / fadeOutMs;
         float brightness = fadingIn ? fadeProgress : 1 - fadeProgress;
 
-        strip[pair.first] = color * brightness;
+        strip[pos] = color * brightness;
     }
 }
 

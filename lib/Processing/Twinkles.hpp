@@ -1,7 +1,8 @@
 #ifndef PROCESSING_TWINKLE_HPP
 #define PROCESSING_TWINKLE_HPP
 
-#include <map>
+#include <optional>
+#include <vector>
 
 #include "ProcessingBlock.hpp"
 
@@ -31,8 +32,12 @@ class Twinkles : public ProcessingBlock
     const MonotonicTime& monotonicTime;
 
     uint32_t lastSpawnTimeMs{0};
-    // TODO less realloc-intensive method
-    std::map<std::size_t, uint32_t> twinkles;
+
+    struct Twinkle
+    {
+        uint32_t spawnTimeMs;
+    };
+    std::vector<std::optional<Twinkle>> twinkles;
 };
 
 }  // namespace processing
