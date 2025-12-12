@@ -3,17 +3,16 @@
 namespace processing
 {
 
-using namespace color_constants;
-
-const std::array<RgbColor, 6> SequentialColorPicker::sequence{red,    green,   blue,
-                                                              yellow, magenta, cyan};
+SequentialColorPicker::SequentialColorPicker(std::vector<RgbColor> sequence)
+    : sequence(std::move(sequence))
+{
+}
 
 RgbColor SequentialColorPicker::pick()
 {
-    auto color = *currentColor;
-    if (++currentColor >= sequence.cend())
+    if (currentColor >= sequence.cend() || currentColor < sequence.cbegin())
         currentColor = sequence.cbegin();
-    return color;
+    return *currentColor++;
 }
 
 }  // namespace processing

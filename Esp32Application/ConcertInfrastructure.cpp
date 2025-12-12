@@ -56,8 +56,9 @@ void ConcertInfrastructure::createLegacyPatches()
     patch->setProgram(53);
     patch->setName("Multicolor");
 
-    // TODO use sequential color picker for alternating red/green notes for xmas
-    patch = addBasicPatch(red, true);
+    auto redOrGreen = std::make_shared<processing::SequentialColorPicker>(
+        std::vector<processing::RgbColor>{red, green});
+    patch = addBasicPatch(off, false, redOrGreen);
     patch->setProgram(54);
     patch->setName("Merry Xmas Everybody");
     patch->getProcessingChain().insertBlock(new processing::Twinkles(time));
