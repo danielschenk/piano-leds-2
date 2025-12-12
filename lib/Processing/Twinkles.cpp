@@ -61,7 +61,7 @@ void Twinkles::pruneDeadTwinkles(uint32_t now)
 
 void Twinkles::render(RgbStrip& strip, uint32_t now)
 {
-    for (size_t pos = 0; pos < twinkles.size(); ++pos)
+    for (std::size_t pos = 0; pos < twinkles.size(); ++pos)
     {
         auto& twinkle = twinkles[pos];
         if (!twinkle.has_value())
