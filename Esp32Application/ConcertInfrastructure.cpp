@@ -62,8 +62,6 @@ void ConcertInfrastructure::createLegacyPatches()
     patch->setProgram(54);
     patch->setName("Merry Xmas Everybody");
     patch->getProcessingChain().insertBlock(new processing::Twinkles(time));
-
-    concert.onProgramChange(0, 54);
 }
 
 Patch* ConcertInfrastructure::addBasicPatch(
