@@ -9,7 +9,7 @@
 #include "PianoDecayRgbFunction.hpp"
 #include "SequentialColorPicker.hpp"
 #include "SingleColorFill.hpp"
-#include "Twinkle.hpp"
+#include "Twinkles.hpp"
 
 namespace application
 {
@@ -59,7 +59,7 @@ void ConcertInfrastructure::createLegacyPatches()
     patch = addBasicPatch(red, true);
     patch->setProgram(54);
     patch->setName("Merry Xmas Everybody");
-    patch->getProcessingChain().insertBlock(new processing::Twinkle(time));
+    patch->getProcessingChain().insertBlock(new processing::Twinkles(time));
 
     concert.onProgramChange(0, 54);
 }

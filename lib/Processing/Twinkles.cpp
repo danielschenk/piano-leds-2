@@ -1,15 +1,18 @@
-#include "Twinkle.hpp"
+#include "Twinkles.hpp"
 
 #include <cstdlib>
 
+#include "Logging.hpp"
 #include "MonotonicTime.hpp"
+
+#define LOGGING_COMPONENT "Twinkles"
 
 namespace processing
 {
 
-Twinkle::Twinkle(const MonotonicTime& monotonicTime) : monotonicTime(monotonicTime) {}
+Twinkles::Twinkles(const MonotonicTime& monotonicTime) : monotonicTime(monotonicTime) {}
 
-void Twinkle::execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap)
+void Twinkles::execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap)
 {
     auto now = monotonicTime.getMilliseconds();
 
@@ -30,7 +33,7 @@ static unsigned int boundedRand(unsigned int range)
             return r;
 }
 
-void Twinkle::addNewTwinkle(std::size_t stripSize, uint32_t now)
+void Twinkles::addNewTwinkle(std::size_t stripSize, uint32_t now)
 {
     if (twinkles.size() >= stripSize)
         return;
@@ -46,7 +49,7 @@ void Twinkle::addNewTwinkle(std::size_t stripSize, uint32_t now)
     }
 }
 
-void Twinkle::pruneDeadTwinkles(uint32_t now)
+void Twinkles::pruneDeadTwinkles(uint32_t now)
 {
     for (auto it = twinkles.cbegin(); it != twinkles.cend();)
         if (now > it->second + fadeInMs + fadeOutMs)
@@ -55,7 +58,7 @@ void Twinkle::pruneDeadTwinkles(uint32_t now)
             ++it;
 }
 
-void Twinkle::render(RgbStrip& strip, uint32_t now)
+void Twinkles::render(RgbStrip& strip, uint32_t now)
 {
     for (const auto& pair : twinkles)
     {
