@@ -42,7 +42,9 @@ jobs:
         with:
           name: Firmware
           path: |
-            .pio/build/**/*.{bin,elf,map}
+            .pio/build/**/*.bin
+            .pio/build/**/*.elf
+            .pio/build/**/*.map
 
   event_file:
     name: "Event File"
