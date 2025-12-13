@@ -6,8 +6,11 @@ on:
       - master
 
 jobs:
-  build:
+  CI:
     runs-on: ubuntu-latest
+
+    env:
+      python-version: '3.11'
 
     steps:
       - uses: actions/checkout@v6
@@ -16,10 +19,14 @@ jobs:
           path: |
             ~/.cache/pip
             ~/.platformio/.cache
-          key: ${{ runner.os }}-pio
+          key: py${{ env.python-version }}-${{ hashFiles('platformio.ini') }}
+          restore-keys: |
+            py${{ env.python-version }}-${{ hashFiles('platformio.ini') }}
+            py${{ env.python-version }}-
+
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
+          python-version: ${{ env.python-version }}
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
 
