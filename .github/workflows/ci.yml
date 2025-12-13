@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+
+    env:
+      python-version: '3.11'
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: py${{ env.python-version }}-${{ hashFiles('platformio.ini') }}
+          restore-keys: |
+            py${{ env.python-version }}-${{ hashFiles('platformio.ini') }}
+            py${{ env.python-version }}-
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.python-version }}
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+
+      - name: Build PlatformIO Project
+        run: |
+          cp Esp32Application/BoardOverride_template.hpp Esp32Application/BoardOverride.hpp
+          pio run
+
+      - name: Upload Test Results
+        if: (!cancelled())
+        uses: actions/upload-artifact@v6
+        with:
+          name: Test Results
+          path: |
+            .pio/build/tests/*.xml
+
+      - name: Upload Firmware
+        if: (!cancelled())
+        uses: actions/upload-artifact@v6
+        with:
+          name: Firmware
+          path: |
+            .pio/build/**/*.bin
+            .pio/build/**/*.elf
+            .pio/build/**/*.map
+
+  event_file:
+    name: "Event File"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload
+        uses: actions/upload-artifact@v6
+        with:
+          name: Event File
+          path: ${{ github.event_path }}
