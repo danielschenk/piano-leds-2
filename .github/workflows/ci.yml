@@ -24,7 +24,9 @@ jobs:
         run: pip install --upgrade platformio
 
       - name: Build PlatformIO Project
-        run: pio run
+        run: |
+          cp Esp32Application/BoardOverride_template.hpp Esp32Application/BoardOverride.hpp
+          pio run
 
       - name: Upload Test Results
         if: (!cancelled())
@@ -35,6 +37,7 @@ jobs:
             .pio/build/tests/*.xml
 
       - name: Upload Firmware
+        if: (!cancelled())
         uses: actions/upload-artifact@v4
         with:
           name: Firmware
