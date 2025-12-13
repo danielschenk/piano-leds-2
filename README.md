@@ -1,10 +1,12 @@
 # PianoLeds2
+[![CI](https://github.com/danielschenk/piano-leds-2/actions/workflows/ci.yml/badge.svg)](https://github.com/danielschenk/piano-leds-2/actions/workflows/ci.yml)
+
 This is the code of the second generation controller for my MIDI based keyboard LED strip, which makes different LEDs
 shine based on the notes I play. It is currently work in progress.
 
 ## History
-I started the redesign because I found that the [first version](https://github.com/danielschenk/mlc) was not extensible
-enough anymore, both in terms of hardware and software.
+
+I started the redesign because I found that the [first version](https://github.com/danielschenk/piano-leds) was not extensible enough anymore, both in terms of hardware and software.
 The first version has some light effect "patches" (presets with different colors) hard-coded into
 the firmware, together with the MIDI program numbers they respond to. This means that adding or changing a patch means
 C coding, recompiling and flashing the chip.
@@ -17,19 +19,21 @@ of the object-oriented nature of the language. There's enough cheap hardware aro
 powerful enough to make use of these advantages.
 
 ## How to build and run
-### The ESP32 application
+
 1. Go to the `Esp32Application` folder and copy or rename the file `BoardOverride_template.hpp` to `BoardOverride.hpp` and change any pin definitions in there if needed.
 1. Install PlatformIO.
 1. Execute one of the following:
     1. `platformio run` to only build.
     1. `platformio run --target upload` to build and upload on to the ESP32 module (don't forget to hold the IO0 button).
 
-### The unit tests
-Execute one of the following:
-- `platformio run -e tests` to build and run all unit tests.
-- `platformio run -e tests --target [TestName]` to build and run only that test suite (e.g. _ProcessingChainTest_).
-- `platformio run -e tests --target memcheck` to build and run all unit tests under valgrind (currently doesn't work correctly).
+> [!TIP]
+> You can instead use the PlatformIO IDE or the PlatformIO extension for your favorite IDE to build.
+
+> [!NOTE]
+> The unit tests will also be run by default. For this, you need to have a compiler available on your system to compile
+> native code. See [PlatformIO native platform](https://docs.platformio.org/en/latest/platforms/native.html).
 
 ### The MidiInputMonitor (little test application for BaseMidiInput, to run on PC)
+
 This currently only supports Mac.
 Execute `platformio run -e pc` to build and `.pioenvs/pc/program` to run.
