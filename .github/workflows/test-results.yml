@@ -23,11 +23,18 @@ jobs:
       actions: read
 
     steps:
-      - name: Download and Extract Artifacts
+      - name: Download and Extract Test Results
         uses: dawidd6/action-download-artifact@e7466d1a7587ed14867642c2ca74b5bcc1e19a2d
         with:
           run_id: ${{ github.event.workflow_run.id }}
           name: Test Results
+          path: artifacts
+
+      - name: Download and Extract Event File
+        uses: dawidd6/action-download-artifact@e7466d1a7587ed14867642c2ca74b5bcc1e19a2d
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          name: Event File
           path: artifacts
 
       - name: Publish Test Results
