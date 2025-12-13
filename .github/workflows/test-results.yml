@@ -24,18 +24,18 @@ jobs:
 
     steps:
       - name: Download and Extract Test Results
-        uses: dawidd6/action-download-artifact@e7466d1a7587ed14867642c2ca74b5bcc1e19a2d
+        uses: dawidd6/action-download-artifact@v3
         with:
           run_id: ${{ github.event.workflow_run.id }}
           name: Test Results
-          path: artifacts
+          path: artifacts/Test Results
 
       - name: Download and Extract Event File
-        uses: dawidd6/action-download-artifact@e7466d1a7587ed14867642c2ca74b5bcc1e19a2d
+        uses: dawidd6/action-download-artifact@v3
         with:
           run_id: ${{ github.event.workflow_run.id }}
           name: Event File
-          path: artifacts
+          path: artifacts/Event File
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
