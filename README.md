@@ -1,4 +1,5 @@
-# PianoLeds2
+# piano-leds-2
+
 [![CI](https://github.com/danielschenk/piano-leds-2/actions/workflows/ci.yml/badge.svg)](https://github.com/danielschenk/piano-leds-2/actions/workflows/ci.yml)
 
 This is the code of the second generation controller for my MIDI based keyboard LED strip, which makes different LEDs
