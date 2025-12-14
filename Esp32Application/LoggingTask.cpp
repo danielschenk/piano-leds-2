@@ -29,7 +29,15 @@ void LoggingTask::logMessage(uint64_t time, logging::Level level, std::string co
     entry.component = new std::string(component);
     entry.message = new std::string(message);
 
-    xQueueSend(queue, &entry, portMAX_DELAY);
+    if (xQueueSend(queue, &entry, 0) != pdTRUE)
+    {
+#ifdef DIAG_LIGHT
+        queueDrops++;
+#endif
+        // Drop message to avoid blocking hot paths.
+        delete entry.component;
+        delete entry.message;
+    }
 }
 
 void LoggingTask::run()
@@ -70,5 +78,15 @@ void LoggingTask::run()
         delete entry.message;
 
         serial.print(buf);
+
+#ifdef DIAG_LIGHT
+        static uint32_t ticks = 0;
+        ticks++;
+        if ((ticks % 1000) == 0)
+        {
+            // Periodically report logging queue health.
+            LOG_INFO_PARAMS("Logging diag: queueDrops=%lu", (unsigned long)queueDrops);
+        }
+#endif
     }
 }

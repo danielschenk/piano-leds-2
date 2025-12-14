@@ -25,6 +25,24 @@ class BaseMidiInput : public MidiInput
     BaseMidiInput();
     void processMidiByte(uint8_t value);
 
+#ifdef DIAG_LIGHT
+    // Lightweight diagnostics (enabled via DIAG_LIGHT):
+    // Counters are updated in hot paths but only read/logged sparingly.
+    struct Diagnostics
+    {
+        uint32_t totalBytes{0};
+        uint32_t totalMessages{0};
+        uint32_t unsupportedStatus{0};
+        uint32_t parseErrors{0};
+        uint8_t maxMessageSize{0};
+    } diag;
+
+    Diagnostics getDiagnostics() const
+    {
+        return diag;
+    }
+#endif
+
   private:
     void notifyNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) const;
     void notifyControlChange(uint8_t channel, MidiInput::ControllerNumber control,

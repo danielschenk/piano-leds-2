@@ -53,5 +53,26 @@ void LedTaskNeoPixel::run()
     // Send latest state to strip.
     // This is done outside of the lock to prevent holding up the thread sending the
     // strip updates. The driver is accessed only in this thread anyway.
+
+#ifdef DIAG_LIGHT
+    auto start = esp_timer_get_time();  // microseconds
+#endif
     strip.Show();
+#ifdef DIAG_LIGHT
+    auto dur_us = esp_timer_get_time() - start;
+    static uint32_t max_show_us = 0;
+    if (dur_us > max_show_us)
+    {
+        max_show_us = (uint32_t)dur_us;
+        LOG_INFO_PARAMS("LED diag: strip.Show max_us=%lu", (unsigned long)max_show_us);
+    }
+    // Periodically report stack high-water for this task
+    static uint32_t ticks = 0;
+    ticks++;
+    if ((ticks % 2000) == 0)
+    {
+        UBaseType_t hwm = uxTaskGetStackHighWaterMark(NULL);
+        LOG_INFO_PARAMS("LED diag: stackHWM=%lu words", (unsigned long)hwm);
+    }
+#endif
 }
