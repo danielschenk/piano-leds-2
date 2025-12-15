@@ -2,6 +2,10 @@
 
 #include <algorithm>
 
+#include "Logging.hpp"
+
+#define LOGGING_COMPONENT "LedTaskNeoPixel"
+
 LedTaskNeoPixel::LedTaskNeoPixel(Concert& concert, int16_t dataPin, uint32_t stackSize,
                                  UBaseType_t priority)
     : strip(concert.getStripSize(), dataPin), concert(concert)

@@ -1,6 +1,9 @@
 #include "ProcessingTask.hpp"
 
 #include "Concert.hpp"
+#include "Logging.hpp"
+
+#define LOGGING_COMPONENT "ProcessingTask"
 
 ProcessingTask::ProcessingTask(Concert& concert, uint32_t stackSize, UBaseType_t priority)
     : BaseTask(), concert(concert), lastWakeTime(xTaskGetTickCount())

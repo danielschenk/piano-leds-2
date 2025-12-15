@@ -4,6 +4,9 @@
 #include <freertos/task.h>
 
 #include "ArduinoMidiInput.hpp"
+#include "Logging.hpp"
+
+#define LOGGING_COMPONENT "MidiTask"
 
 MidiTask::MidiTask(ArduinoMidiInput& midiInput, uint32_t stackSize, UBaseType_t priority)
     : BaseTask(), midiInput(midiInput)

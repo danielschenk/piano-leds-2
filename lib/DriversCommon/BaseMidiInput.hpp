@@ -21,10 +21,6 @@ class BaseMidiInput : public MidiInput
     virtual void subscribe(Observer& observer);
     virtual void unsubscribe(Observer& observer);
 
-  protected:
-    BaseMidiInput();
-    void processMidiByte(uint8_t value);
-
 #ifdef DIAG_LIGHT
     // Lightweight diagnostics (enabled via DIAG_LIGHT):
     // Counters are updated in hot paths but only read/logged sparingly.
@@ -42,6 +38,10 @@ class BaseMidiInput : public MidiInput
         return diag;
     }
 #endif
+
+  protected:
+    BaseMidiInput();
+    void processMidiByte(uint8_t value);
 
   private:
     void notifyNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) const;

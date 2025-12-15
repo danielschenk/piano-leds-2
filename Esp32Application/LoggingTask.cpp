@@ -4,7 +4,10 @@
 
 #include <cstdio>
 
+#include "Logging.hpp"
 #include "LoggingEntryPoint.hpp"
+
+#define LOGGING_COMPONENT "LoggingTask"
 
 LoggingTask::LoggingTask(Stream& serial, uint32_t stackSize, UBaseType_t priority)
     : BaseTask(), serial(serial)
