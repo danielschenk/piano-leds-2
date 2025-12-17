@@ -14,12 +14,12 @@ void Scheduler::schedule(Scheduler::Task task)
 bool Scheduler::executeOne()
 {
     Task task;
+
     {
         std::lock_guard<std::mutex> lock(mutex);
         if (queue.empty())
-        {
             return false;
-        }
+
         task = queue.front();
         queue.pop();
     }
@@ -34,12 +34,12 @@ bool Scheduler::executeAll()
     while (true)
     {
         Task task;
+
         {
             std::lock_guard<std::mutex> lock(mutex);
             if (queue.empty())
-            {
                 break;
-            }
+
             task = queue.front();
             queue.pop();
         }
