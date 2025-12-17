@@ -62,7 +62,6 @@ void NoteVisualizer::execute(processing::RgbStrip& strip,
 
 void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on)
 {
-    // Schedule without holding NV.mutex to avoid lock inversion with Scheduler.
     scheduler.schedule(
         [this, channel, number, velocity, on]()
         {
@@ -103,7 +102,6 @@ void NoteVisualizer::onControlChange(uint8_t channel, MidiInput::ControllerNumbe
     // Channel check must be scheduled as it uses a member
     if (number == MidiInterface::damperPedal)
     {
-        // Schedule without holding NV.mutex to avoid lock inversion with Scheduler.
         scheduler.schedule(
             [this, channel, value]()
             {

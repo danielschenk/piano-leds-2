@@ -87,7 +87,6 @@ void LoggingTask::run()
         ticks++;
         if ((ticks % 1000) == 0)
         {
-            // Periodically report logging queue health.
             LOG_INFO_PARAMS("Logging diag: queueDrops=%lu", (unsigned long)queueDrops);
         }
 #endif

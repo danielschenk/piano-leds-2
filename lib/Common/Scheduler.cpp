@@ -13,7 +13,6 @@ void Scheduler::schedule(Scheduler::Task task)
 
 bool Scheduler::executeOne()
 {
-    // Pop a task under lock, then execute it outside the lock.
     Task task;
     {
         std::lock_guard<std::mutex> lock(mutex);
@@ -25,7 +24,6 @@ bool Scheduler::executeOne()
         queue.pop();
     }
 
-    // Execute outside of the mutex to avoid lock inversion with user code.
     task();
     return true;
 }
@@ -33,7 +31,7 @@ bool Scheduler::executeOne()
 bool Scheduler::executeAll()
 {
     bool executed = false;
-    for (;;)
+    while (true)
     {
         Task task;
         {
@@ -46,7 +44,6 @@ bool Scheduler::executeAll()
             queue.pop();
         }
 
-        // Execute outside of the mutex to avoid lock inversion with user code.
         task();
         executed = true;
     }

@@ -21,7 +21,6 @@ void BaseMidiInput::unsubscribe(Observer& observer)
 void BaseMidiInput::notifyNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity,
                                      bool on) const
 {
-    // Copy observer list under lock, then invoke callbacks outside the lock
     std::list<MidiInput::Observer*> snapshot;
     {
         std::lock_guard<std::mutex> lock(observersMutex);
@@ -199,7 +198,6 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                 break;
 
             default:
-                // Unsupported status.
                 LOG_WARNING_PARAMS(
                     "Unsupported MIDI status %#02x on channel %2u, ignoring rest of message.",
                     status, channel);
