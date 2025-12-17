@@ -33,6 +33,12 @@ class ProcessingTask : public BaseTask
     static constexpr uint32_t runIntervalMs = 10;
     Concert& concert;
     TickType_t lastWakeTime;
+#ifdef DIAGNOSTICS
+    // Diagnostics counters
+    uint32_t cycles{0};
+    uint32_t overrunCount{0};
+    uint32_t maxExecUs{0};
+#endif
 };
 
 #endif /* BUILD_PROCESSINGTASK_H_ */

@@ -21,9 +21,13 @@ void BaseMidiInput::unsubscribe(Observer& observer)
 void BaseMidiInput::notifyNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity,
                                      bool on) const
 {
-    std::lock_guard<std::mutex> lock(observersMutex);
+    std::list<MidiInput::Observer*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(observersMutex);
+        snapshot.assign(observers.begin(), observers.end());
+    }
 
-    for (auto observer : observers)
+    for (auto observer : snapshot)
     {
         observer->onNoteChange(channel, pitch, velocity, on);
     }
@@ -32,9 +36,13 @@ void BaseMidiInput::notifyNoteChange(uint8_t channel, uint8_t pitch, uint8_t vel
 void BaseMidiInput::notifyControlChange(uint8_t channel, MidiInterface::ControllerNumber controller,
                                         uint8_t value) const
 {
-    std::lock_guard<std::mutex> lock(observersMutex);
+    std::list<MidiInput::Observer*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(observersMutex);
+        snapshot.assign(observers.begin(), observers.end());
+    }
 
-    for (auto observer : observers)
+    for (auto observer : snapshot)
     {
         observer->onControlChange(channel, controller, value);
     }
@@ -42,9 +50,13 @@ void BaseMidiInput::notifyControlChange(uint8_t channel, MidiInterface::Controll
 
 void BaseMidiInput::notifyProgramChange(uint8_t channel, uint8_t program) const
 {
-    std::lock_guard<std::mutex> lock(observersMutex);
+    std::list<MidiInput::Observer*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(observersMutex);
+        snapshot.assign(observers.begin(), observers.end());
+    }
 
-    for (auto observer : observers)
+    for (auto observer : snapshot)
     {
         observer->onProgramChange(channel, program);
     }
@@ -52,9 +64,13 @@ void BaseMidiInput::notifyProgramChange(uint8_t channel, uint8_t program) const
 
 void BaseMidiInput::notifyChannelPressureChange(uint8_t channel, uint8_t value) const
 {
-    std::lock_guard<std::mutex> lock(observersMutex);
+    std::list<MidiInput::Observer*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(observersMutex);
+        snapshot.assign(observers.begin(), observers.end());
+    }
 
-    for (auto observer : observers)
+    for (auto observer : snapshot)
     {
         observer->onChannelPressureChange(channel, value);
     }
@@ -62,9 +78,13 @@ void BaseMidiInput::notifyChannelPressureChange(uint8_t channel, uint8_t value) 
 
 void BaseMidiInput::notifyPitchBendChange(uint8_t channel, uint16_t value) const
 {
-    std::lock_guard<std::mutex> lock(observersMutex);
+    std::list<MidiInput::Observer*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(observersMutex);
+        snapshot.assign(observers.begin(), observers.end());
+    }
 
-    for (auto observer : observers)
+    for (auto observer : snapshot)
     {
         observer->onPitchBendChange(channel, value);
     }
@@ -72,6 +92,9 @@ void BaseMidiInput::notifyPitchBendChange(uint8_t channel, uint16_t value) const
 
 void BaseMidiInput::processMidiByte(uint8_t value)
 {
+#ifdef DIAGNOSTICS
+    diag.totalBytes++;
+#endif
     if (!buildingMessage && ((value & 0x80) == 0x80))
     {
         // Is a status byte. Start building new message
@@ -82,6 +105,12 @@ void BaseMidiInput::processMidiByte(uint8_t value)
     if (buildingMessage)
     {
         currentMessage.push_back(value);
+#ifdef DIAGNOSTICS
+        if (currentMessage.size() > diag.maxMessageSize)
+        {
+            diag.maxMessageSize = static_cast<uint8_t>(currentMessage.size());
+        }
+#endif
 
         // Get status (high nibble) and channel (low nibble) from status byte
         uint8_t statusByte(currentMessage[0]);
@@ -97,6 +126,9 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     // Channel, pitch, velocity, note off
                     notifyNoteChange(channel, currentMessage[1], currentMessage[2], false);
                     buildingMessage = false;
+#ifdef DIAGNOSTICS
+                    diag.totalMessages++;
+#endif
                 }
                 break;
 
@@ -106,6 +138,9 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     // Channel, pitch, velocity, note on
                     notifyNoteChange(channel, currentMessage[1], currentMessage[2], true);
                     buildingMessage = false;
+#ifdef DIAGNOSTICS
+                    diag.totalMessages++;
+#endif
                 }
                 break;
 
@@ -116,6 +151,9 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     notifyControlChange(channel, (MidiInterface::ControllerNumber)currentMessage[1],
                                         currentMessage[2]);
                     buildingMessage = false;
+#ifdef DIAGNOSTICS
+                    diag.totalMessages++;
+#endif
                 }
                 break;
 
@@ -125,6 +163,9 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     // Channel, number
                     notifyProgramChange(channel, currentMessage[1]);
                     buildingMessage = false;
+#ifdef DIAGNOSTICS
+                    diag.totalMessages++;
+#endif
                 }
                 break;
 
@@ -134,6 +175,9 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     // Channel, value
                     notifyChannelPressureChange(channel, currentMessage[1]);
                     buildingMessage = false;
+#ifdef DIAGNOSTICS
+                    diag.totalMessages++;
+#endif
                 }
                 break;
 
@@ -147,16 +191,34 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     // Channel, value
                     notifyPitchBendChange(channel, value);
                     buildingMessage = false;
+#ifdef DIAGNOSTICS
+                    diag.totalMessages++;
+#endif
                 }
                 break;
 
             default:
-                // Unsupported status.
                 LOG_WARNING_PARAMS(
                     "Unsupported MIDI status %#02x on channel %2u, ignoring rest of message.",
                     status, channel);
                 buildingMessage = false;
+#ifdef DIAGNOSTICS
+                diag.unsupportedStatus++;
+#endif
                 break;
         }
+
+#ifdef DIAGNOSTICS
+        // If the message grows unusually without parsing, count as parse error and reset.
+        // Typical MIDI channel messages are <=3 bytes; sysex is unsupported here.
+        if (currentMessage.size() > 3)
+        {
+            // If we didn't recognize a status by now, treat as parse anomaly.
+            // Do not spam logs: only increment a counter.
+            diag.parseErrors++;
+            currentMessage.clear();
+            buildingMessage = false;
+        }
+#endif
     }
 }

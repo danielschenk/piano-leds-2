@@ -36,6 +36,9 @@ class LoggingTask : public LoggingTarget, public BaseTask
 
     Stream& serial;
     QueueHandle_t queue;
+#ifdef DIAGNOSTICS
+    uint32_t queueDrops{0};
+#endif
 };
 
 #endif /* ESP32APPLICATION_LOGGINGTASK_H_ */

@@ -21,6 +21,22 @@ class BaseMidiInput : public MidiInput
     virtual void subscribe(Observer& observer);
     virtual void unsubscribe(Observer& observer);
 
+#ifdef DIAGNOSTICS
+    struct Diagnostics
+    {
+        uint32_t totalBytes{0};
+        uint32_t totalMessages{0};
+        uint32_t unsupportedStatus{0};
+        uint32_t parseErrors{0};
+        uint8_t maxMessageSize{0};
+    } diag;
+
+    Diagnostics getDiagnostics() const
+    {
+        return diag;
+    }
+#endif
+
   protected:
     BaseMidiInput();
     void processMidiByte(uint8_t value);

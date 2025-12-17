@@ -25,21 +25,20 @@ NoteVisualizer::~NoteVisualizer()
 
 void NoteVisualizer::activate()
 {
-    std::lock_guard<std::mutex> lock(mutex);
-
     active = true;
 }
 
 void NoteVisualizer::deactivate()
 {
-    std::lock_guard<std::mutex> lock(mutex);
-
-    // Make sure no notes stay active. Handle remaining events first.
     scheduler.executeAll();
-    for (auto& noteState : noteStates)
+
     {
-        noteState.pressed = false;
-        noteState.sounding = false;
+        std::lock_guard<std::mutex> lock(mutex);
+        for (auto& noteState : noteStates)
+        {
+            noteState.pressed = false;
+            noteState.sounding = false;
+        }
     }
 
     active = false;
@@ -63,12 +62,8 @@ void NoteVisualizer::execute(processing::RgbStrip& strip,
 
 void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on)
 {
-    std::lock_guard<std::mutex> lock(mutex);
-
     if (!active)
-    {
         return;
-    }
 
     scheduler.schedule(
         [this, channel, number, velocity, on]()
@@ -101,39 +96,30 @@ void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t veloc
 void NoteVisualizer::onControlChange(uint8_t channel, MidiInput::ControllerNumber number,
                                      uint8_t value)
 {
-    std::lock_guard<std::mutex> lock(mutex);
-
-    if (!active)
-    {
+    if ((number != MidiInterface::damperPedal) || !active)
         return;
-    }
 
-    // Don't cause scheduling overhead when it's an unimportant controller number.
-    // Channel check must be scheduled as it uses a member
-    if (number == MidiInterface::damperPedal)
-    {
-        scheduler.schedule(
-            [this, channel, value]()
+    scheduler.schedule(
+        [this, channel, value]()
+        {
+            std::lock_guard<std::mutex> lock(mutex);
+
+            if (channel == this->channel && usingPedal)
             {
-                std::lock_guard<std::mutex> lock(mutex);
-
-                if (channel == this->channel && usingPedal)
+                pedalPressed = (value >= 64);
+                if (!pedalPressed)
                 {
-                    pedalPressed = (value >= 64);
-                    if (!pedalPressed)
+                    // Stop all notes which are sounding due to pedal only
+                    for (int note = 0; note < MidiInterface::numNotes; ++note)
                     {
-                        // Stop all notes which are sounding due to pedal only
-                        for (int note = 0; note < MidiInterface::numNotes; ++note)
+                        if (!noteStates[note].pressed)
                         {
-                            if (!noteStates[note].pressed)
-                            {
-                                noteStates[note].sounding = false;
-                            }
+                            noteStates[note].sounding = false;
                         }
                     }
                 }
-            });
-    }
+            }
+        });
 }
 
 void NoteVisualizer::onProgramChange(uint8_t channel, uint8_t program)

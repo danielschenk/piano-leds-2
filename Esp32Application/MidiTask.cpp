@@ -4,6 +4,9 @@
 #include <freertos/task.h>
 
 #include "ArduinoMidiInput.hpp"
+#include "Logging.hpp"
+
+#define LOGGING_COMPONENT "MidiTask"
 
 MidiTask::MidiTask(ArduinoMidiInput& midiInput, uint32_t stackSize, UBaseType_t priority)
     : BaseTask(), midiInput(midiInput)
@@ -25,4 +28,20 @@ void MidiTask::run()
 
     // Process any data.
     midiInput.run();
+
+#ifdef DIAGNOSTICS
+    static uint32_t tickCount = 0;
+    tickCount++;
+    if ((tickCount % 3000) == 0)  // roughly every ~30s if wake ~10ms
+    {
+        auto d = midiInput.getDiagnostics();
+        LOG_INFO_PARAMS("MIDI diag: bytes=%lu msgs=%lu unsup=%lu parseErr=%lu maxSize=%u",
+                        (unsigned long)d.totalBytes, (unsigned long)d.totalMessages,
+                        (unsigned long)d.unsupportedStatus, (unsigned long)d.parseErrors,
+                        (unsigned int)d.maxMessageSize);
+
+        UBaseType_t hwm = uxTaskGetStackHighWaterMark(NULL);
+        LOG_INFO_PARAMS("MIDI diag: stackHWM=%lu words", (unsigned long)hwm);
+    }
+#endif
 }
