@@ -36,7 +36,7 @@ class LoggingTask : public LoggingTarget, public BaseTask
 
     Stream& serial;
     QueueHandle_t queue;
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
     uint32_t queueDrops{0};
 #endif
 };

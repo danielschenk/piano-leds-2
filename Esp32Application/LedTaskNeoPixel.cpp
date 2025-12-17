@@ -58,11 +58,11 @@ void LedTaskNeoPixel::run()
     // This is done outside of the lock to prevent holding up the thread sending the
     // strip updates. The driver is accessed only in this thread anyway.
 
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
     auto start = esp_timer_get_time();  // microseconds
 #endif
     strip.Show();
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
     auto dur_us = esp_timer_get_time() - start;
     static uint32_t max_show_us = 0;
     if (dur_us > max_show_us)

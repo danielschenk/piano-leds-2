@@ -18,11 +18,11 @@ void ProcessingTask::run()
     // Wait for the next cycle.
     vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(runIntervalMs));
 
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
     auto start = esp_timer_get_time();
 #endif
     concert.execute();
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
     auto dur_us = esp_timer_get_time() - start;
     if (dur_us > maxExecUs)
         maxExecUs = (uint32_t)dur_us;

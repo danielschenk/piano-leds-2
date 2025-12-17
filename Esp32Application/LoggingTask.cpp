@@ -34,7 +34,7 @@ void LoggingTask::logMessage(uint64_t time, logging::Level level, std::string co
 
     if (xQueueSend(queue, &entry, 0) != pdTRUE)
     {
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
         queueDrops++;
 #endif
         // Drop message to avoid blocking hot paths.
@@ -82,7 +82,7 @@ void LoggingTask::run()
 
         serial.print(buf);
 
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
         static uint32_t ticks = 0;
         ticks++;
         if ((ticks % 1000) == 0)

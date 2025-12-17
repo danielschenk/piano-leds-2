@@ -29,7 +29,7 @@ void MidiTask::run()
     // Process any data.
     midiInput.run();
 
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
     static uint32_t tickCount = 0;
     tickCount++;
     if ((tickCount % 3000) == 0)  // roughly every ~30s if wake ~10ms

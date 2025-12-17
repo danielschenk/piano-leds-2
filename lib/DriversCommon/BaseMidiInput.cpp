@@ -93,7 +93,7 @@ void BaseMidiInput::notifyPitchBendChange(uint8_t channel, uint16_t value) const
 
 void BaseMidiInput::processMidiByte(uint8_t value)
 {
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
     diag.totalBytes++;
 #endif
     if (!buildingMessage && ((value & 0x80) == 0x80))
@@ -106,7 +106,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
     if (buildingMessage)
     {
         currentMessage.push_back(value);
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
         if (currentMessage.size() > diag.maxMessageSize)
         {
             diag.maxMessageSize = static_cast<uint8_t>(currentMessage.size());
@@ -127,7 +127,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     // Channel, pitch, velocity, note off
                     notifyNoteChange(channel, currentMessage[1], currentMessage[2], false);
                     buildingMessage = false;
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
                     diag.totalMessages++;
 #endif
                 }
@@ -139,7 +139,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     // Channel, pitch, velocity, note on
                     notifyNoteChange(channel, currentMessage[1], currentMessage[2], true);
                     buildingMessage = false;
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
                     diag.totalMessages++;
 #endif
                 }
@@ -152,7 +152,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     notifyControlChange(channel, (MidiInterface::ControllerNumber)currentMessage[1],
                                         currentMessage[2]);
                     buildingMessage = false;
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
                     diag.totalMessages++;
 #endif
                 }
@@ -164,7 +164,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     // Channel, number
                     notifyProgramChange(channel, currentMessage[1]);
                     buildingMessage = false;
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
                     diag.totalMessages++;
 #endif
                 }
@@ -176,7 +176,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     // Channel, value
                     notifyChannelPressureChange(channel, currentMessage[1]);
                     buildingMessage = false;
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
                     diag.totalMessages++;
 #endif
                 }
@@ -192,7 +192,7 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     // Channel, value
                     notifyPitchBendChange(channel, value);
                     buildingMessage = false;
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
                     diag.totalMessages++;
 #endif
                 }
@@ -204,13 +204,13 @@ void BaseMidiInput::processMidiByte(uint8_t value)
                     "Unsupported MIDI status %#02x on channel %2u, ignoring rest of message.",
                     status, channel);
                 buildingMessage = false;
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
                 diag.unsupportedStatus++;
 #endif
                 break;
         }
 
-#ifdef DIAG_LIGHT
+#ifdef DIAGNOSTICS
         // If the message grows unusually without parsing, count as parse error and reset.
         // Typical MIDI channel messages are <=3 bytes; sysex is unsupported here.
         if (currentMessage.size() > 3)
