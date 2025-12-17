@@ -2,6 +2,7 @@
 #define PROCESSING_NOTEVISUALIZER_H_
 
 #include <array>
+#include <atomic>
 #include <memory>
 #include <mutex>
 
@@ -62,7 +63,7 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
     static constexpr const char* rgbFunctionJsonKey = "rgbFunction";
 
     mutable std::mutex mutex;
-    bool active{false};
+    std::atomic<bool> active{false};
     bool usingPedal{true};
     const IRgbFunctionFactory& rgbFunctionFactory;
     MidiInput& midiInput;

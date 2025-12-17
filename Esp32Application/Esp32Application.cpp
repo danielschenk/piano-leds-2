@@ -87,7 +87,7 @@ void loop()
     vTaskDelay(1000);
     digitalWrite(RUN_LED_PIN, !digitalRead(RUN_LED_PIN));
 
-    if ((loopCount % (5 * 60)) == 0)
+    if ((loopCount % 10) == 0)
     {
         LOG_INFO_PARAMS("free heap: %u", ESP.getFreeHeap());
     }
