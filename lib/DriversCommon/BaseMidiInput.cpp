@@ -21,9 +21,14 @@ void BaseMidiInput::unsubscribe(Observer& observer)
 void BaseMidiInput::notifyNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity,
                                      bool on) const
 {
-    std::lock_guard<std::mutex> lock(observersMutex);
+    // Copy observer list under lock, then invoke callbacks outside the lock
+    std::list<MidiInput::Observer*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(observersMutex);
+        snapshot.assign(observers.begin(), observers.end());
+    }
 
-    for (auto observer : observers)
+    for (auto observer : snapshot)
     {
         observer->onNoteChange(channel, pitch, velocity, on);
     }
@@ -32,9 +37,13 @@ void BaseMidiInput::notifyNoteChange(uint8_t channel, uint8_t pitch, uint8_t vel
 void BaseMidiInput::notifyControlChange(uint8_t channel, MidiInterface::ControllerNumber controller,
                                         uint8_t value) const
 {
-    std::lock_guard<std::mutex> lock(observersMutex);
+    std::list<MidiInput::Observer*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(observersMutex);
+        snapshot.assign(observers.begin(), observers.end());
+    }
 
-    for (auto observer : observers)
+    for (auto observer : snapshot)
     {
         observer->onControlChange(channel, controller, value);
     }
@@ -42,9 +51,13 @@ void BaseMidiInput::notifyControlChange(uint8_t channel, MidiInterface::Controll
 
 void BaseMidiInput::notifyProgramChange(uint8_t channel, uint8_t program) const
 {
-    std::lock_guard<std::mutex> lock(observersMutex);
+    std::list<MidiInput::Observer*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(observersMutex);
+        snapshot.assign(observers.begin(), observers.end());
+    }
 
-    for (auto observer : observers)
+    for (auto observer : snapshot)
     {
         observer->onProgramChange(channel, program);
     }
@@ -52,9 +65,13 @@ void BaseMidiInput::notifyProgramChange(uint8_t channel, uint8_t program) const
 
 void BaseMidiInput::notifyChannelPressureChange(uint8_t channel, uint8_t value) const
 {
-    std::lock_guard<std::mutex> lock(observersMutex);
+    std::list<MidiInput::Observer*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(observersMutex);
+        snapshot.assign(observers.begin(), observers.end());
+    }
 
-    for (auto observer : observers)
+    for (auto observer : snapshot)
     {
         observer->onChannelPressureChange(channel, value);
     }
@@ -62,9 +79,13 @@ void BaseMidiInput::notifyChannelPressureChange(uint8_t channel, uint8_t value) 
 
 void BaseMidiInput::notifyPitchBendChange(uint8_t channel, uint16_t value) const
 {
-    std::lock_guard<std::mutex> lock(observersMutex);
+    std::list<MidiInput::Observer*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(observersMutex);
+        snapshot.assign(observers.begin(), observers.end());
+    }
 
-    for (auto observer : observers)
+    for (auto observer : snapshot)
     {
         observer->onPitchBendChange(channel, value);
     }

@@ -21,8 +21,8 @@ class BaseMidiInput : public MidiInput
     virtual void subscribe(Observer& observer);
     virtual void unsubscribe(Observer& observer);
 
-#ifdef DIAG_LIGHT
-    // Lightweight diagnostics (enabled via DIAG_LIGHT):
+#ifdef DIAGNOSTICS
+    // Lightweight diagnostics (enabled via DIAGNOSTICS):
     // Counters are updated in hot paths but only read/logged sparingly.
     struct Diagnostics
     {

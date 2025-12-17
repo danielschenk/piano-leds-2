@@ -32,10 +32,9 @@ void NoteVisualizer::activate()
 
 void NoteVisualizer::deactivate()
 {
-    std::lock_guard<std::mutex> lock(mutex);
-
-    // Make sure no notes stay active. Handle remaining events first.
     scheduler.executeAll();
+
+    std::lock_guard<std::mutex> lock(mutex);
     for (auto& noteState : noteStates)
     {
         noteState.pressed = false;
@@ -63,17 +62,16 @@ void NoteVisualizer::execute(processing::RgbStrip& strip,
 
 void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on)
 {
-    std::lock_guard<std::mutex> lock(mutex);
-
-    if (!active)
-    {
-        return;
-    }
-
+    // Schedule without holding NV.mutex to avoid lock inversion with Scheduler.
     scheduler.schedule(
         [this, channel, number, velocity, on]()
         {
             std::lock_guard<std::mutex> lock(mutex);
+
+            if (!active)
+            {
+                return;
+            }
 
             if (channel == this->channel)
             {
@@ -101,21 +99,20 @@ void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t veloc
 void NoteVisualizer::onControlChange(uint8_t channel, MidiInput::ControllerNumber number,
                                      uint8_t value)
 {
-    std::lock_guard<std::mutex> lock(mutex);
-
-    if (!active)
-    {
-        return;
-    }
-
     // Don't cause scheduling overhead when it's an unimportant controller number.
     // Channel check must be scheduled as it uses a member
     if (number == MidiInterface::damperPedal)
     {
+        // Schedule without holding NV.mutex to avoid lock inversion with Scheduler.
         scheduler.schedule(
             [this, channel, value]()
             {
                 std::lock_guard<std::mutex> lock(mutex);
+
+                if (!active)
+                {
+                    return;
+                }
 
                 if (channel == this->channel && usingPedal)
                 {
