@@ -27,4 +27,10 @@ TEST_F(OnOffRgbFunctionTest, sounding)
     }
 }
 
+TEST_F(OnOffRgbFunctionTest, defaultColor)
+{
+    OnOffRgbFunction defaultConstructedFunction;
+    EXPECT_EQ(defaultConstructedFunction.color, color_constants::white);
+}
+
 }  // namespace processing

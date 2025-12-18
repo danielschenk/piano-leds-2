@@ -12,7 +12,7 @@ class OnOffRgbFunction : public RgbFunction
     OnOffRgbFunction() = default;
     explicit OnOffRgbFunction(const RgbColor& color);
 
-    RgbColor color;
+    RgbColor color{color_constants::white};
 
     // RgbFunction implementation
     RgbColor calculate(const NoteState& noteState, Timestamp currentTime) const override;
