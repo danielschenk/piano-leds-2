@@ -20,10 +20,12 @@ NoteVisualizer::NoteVisualizer(MidiInput& midiInput,
 
 void NoteVisualizer::activate()
 {
-    midiInput.subscribe(*this);
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        noteStates.resize(MidiInterface::numNotes);
+    }
 
-    std::lock_guard<std::mutex> lock(mutex);
-    noteStates.resize(MidiInterface::numNotes);
+    midiInput.subscribe(*this);
 }
 
 void NoteVisualizer::deactivate()
