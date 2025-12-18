@@ -24,89 +24,30 @@ class IPatch;
 class Concert : public JsonConvertible, public MidiInput::Observer
 {
   public:
-    /**
-     * Constructor.
-     *
-     * @param[in]   midiInput               Reference to the MIDI input.
-     * @param[in]   processingBlockFactory  Reference to the processing block factory.
-     */
     Concert(MidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory);
+    ~Concert() override;
 
-    /**
-     * Destructor.
-     */
-    virtual ~Concert();
-
-    // Prevent implicit constructor, copy constructor and assignment operator.
     Concert() = delete;
     Concert(const Concert&) = delete;
     Concert& operator=(const Concert&) = delete;
 
     // JsonConvertible implementation
-    virtual Json convertToJson() const;
-    virtual void convertFromJson(const Json& converted);
+    Json convertToJson() const override;
+    void convertFromJson(const Json& converted) override;
 
     typedef int PatchPosition;
     static constexpr PatchPosition invalidPatchPosition = -1;
 
-    /**
-     * Get the number of patches.
-     */
     size_t size() const;
-
-    /**
-     * Add a new patch.
-     *
-     * @return The patch position, or @ref invalidPatchPosition on error.
-     */
     PatchPosition addPatch();
-
-    /**
-     * Add an existing patch.
-     *
-     * @param[in] patch The patch to add.
-     *
-     * @return The patch position.
-     */
     PatchPosition addPatch(IPatch* patch);
-
-    /**
-     * Get the patch at the specified position, for modifications.
-     * Concert stays owner of the patch.
-     *
-     * @param[in] position  The patch position.
-     *
-     * @return Pointer to the patch, or nullptr on error.
-     */
     IPatch* getPatch(PatchPosition position) const;
-
-    /**
-     * Remove the patch at the specified position.
-     *
-     * @param[in] position  The patch position.
-     *
-     * @return True on success.
-     */
     bool removePatch(PatchPosition position);
 
-    /**
-     * @TODO
-     * Move a patch up in the list.
-     *
-     * @param[in] position  The patch position.
-     *
-     * @return The new patch position.
-     */
+    // TODO
     // PatchPosition movePatchUp(PatchPosition position);
 
-    /**
-     * @TODO
-     * Move a patch down in the list.
-     *
-     * @param[in] position  The patch position.
-     *
-     * @return The new patch position.
-     */
+    // TODO
     // PatchPosition movePatchDown(PatchPosition position);
 
     bool isListeningToProgramChange() const;
@@ -137,16 +78,13 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     void unsubscribe(IObserver& observer);
 
     // MidiInput::IObserver implementation
-    virtual void onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on);
-    virtual void onProgramChange(uint8_t channel, uint8_t program);
-    virtual void onControlChange(uint8_t channel, MidiInterface::ControllerNumber number,
-                                 uint8_t value);
-    virtual void onChannelPressureChange(uint8_t channel, uint8_t value);
-    virtual void onPitchBendChange(uint8_t channel, uint16_t value);
+    void onProgramChange(uint8_t channel, uint8_t program) override;
+    void onControlChange(uint8_t channel, MidiInterface::ControllerNumber number,
+                         uint8_t value) override;
 
   protected:
     // JsonConvertible implementation
-    std::string getObjectType() const;
+    std::string getObjectType() const override;
 
   private:
     static constexpr const char* typeName = "Concert";

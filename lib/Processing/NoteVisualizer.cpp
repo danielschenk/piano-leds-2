@@ -122,21 +122,6 @@ void NoteVisualizer::onControlChange(uint8_t channel, MidiInput::ControllerNumbe
         });
 }
 
-void NoteVisualizer::onProgramChange(uint8_t channel, uint8_t program)
-{
-    // ignore
-}
-
-void NoteVisualizer::onChannelPressureChange(uint8_t channel, uint8_t value)
-{
-    // ignore
-}
-
-void NoteVisualizer::onPitchBendChange(uint8_t channel, uint16_t value)
-{
-    // ignore
-}
-
 uint8_t NoteVisualizer::getChannel() const
 {
     std::lock_guard<std::mutex> lock(mutex);

@@ -49,9 +49,6 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
     void onNoteChange(uint8_t channel, uint8_t pitch, uint8_t velocity, bool on) override;
     void onControlChange(uint8_t channel, MidiInput::ControllerNumber controller,
                          uint8_t value) override;
-    void onProgramChange(uint8_t channel, uint8_t program) override;
-    void onChannelPressureChange(uint8_t channel, uint8_t value) override;
-    void onPitchBendChange(uint8_t channel, uint16_t value) override;
 
   protected:
     // ProcessingBlock implementation

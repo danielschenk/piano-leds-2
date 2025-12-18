@@ -261,11 +261,6 @@ std::string Concert::getObjectType() const
     return typeName;
 }
 
-void Concert::onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on)
-{
-    // ignore
-}
-
 void Concert::onProgramChange(uint8_t channel, uint8_t program)
 {
     auto taskFn = [=]()
@@ -333,14 +328,4 @@ void Concert::onControlChange(uint8_t channel, MidiInterface::ControllerNumber c
         }
     };
     scheduler.schedule(taskFn);
-}
-
-void Concert::onChannelPressureChange(uint8_t channel, uint8_t value)
-{
-    // ignore
-}
-
-void Concert::onPitchBendChange(uint8_t channel, uint16_t value)
-{
-    // ignore
 }
