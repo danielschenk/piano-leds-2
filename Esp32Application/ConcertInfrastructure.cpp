@@ -76,15 +76,15 @@ Patch* ConcertInfrastructure::addBasicPatch(
 {
     auto patch = new Patch(processingBlockFactory);
     auto block = new NoteVisualizer(midiInput, rgbFunctionFactory, time);
-    std::shared_ptr<RgbFunction> rgbFunction;
+    std::shared_ptr<processing::RgbFunction> rgbFunction;
     if (likePiano)
     {
-        rgbFunction = std::make_shared<PianoDecayRgbFunction>(color);
+        rgbFunction = std::make_shared<processing::PianoDecayRgbFunction>(color);
         block->setUsingPedal(true);
     }
     else
     {
-        rgbFunction = std::make_shared<LinearRgbFunction>(color);
+        rgbFunction = std::make_shared<processing::LinearRgbFunction>();
     }
     block->setRgbFunction(rgbFunction);
     block->setPressDownColorPicker(pressDownColorPicker);

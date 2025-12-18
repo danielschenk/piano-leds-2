@@ -2,6 +2,9 @@
 
 #include "Json11Helper.hpp"
 
+namespace processing
+{
+
 LinearRgbFunction::LinearRgbFunction(const processing::RgbColor& color)
 {
     redConstants = {2.0f * color.r / 255.0f, 0};
@@ -57,3 +60,5 @@ std::string LinearRgbFunction::getObjectType() const
 {
     return RgbFunction::jsonTypeNameLinearRgbFunction;
 }
+
+}  // namespace processing

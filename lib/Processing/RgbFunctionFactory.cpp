@@ -6,6 +6,9 @@
 #include "PianoDecayRgbFunction.hpp"
 #include "RgbFunction.hpp"
 
+namespace processing
+{
+
 std::shared_ptr<RgbFunction> RgbFunctionFactory::createRgbFunction(const Json& converted) const
 {
     std::shared_ptr<RgbFunction> rgbFunction;
@@ -32,3 +35,5 @@ std::shared_ptr<RgbFunction> RgbFunctionFactory::createRgbFunction(const Json& c
 
     return rgbFunction;
 }
+
+}  // namespace processing

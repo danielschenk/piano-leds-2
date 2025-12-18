@@ -5,6 +5,9 @@
 
 #include "LinearRgbFunction.hpp"
 
+namespace processing
+{
+
 /**
  * RGB function which slowly dims sounding notes to visually mimic the sound of piano strings.
  */
@@ -17,8 +20,7 @@ class PianoDecayRgbFunction : public LinearRgbFunction
     PianoDecayRgbFunction& operator=(const PianoDecayRgbFunction&) = delete;
 
     // RgbFunction implementation
-    processing::RgbColor calculate(const processing::NoteState& noteState,
-                                   processing::Timestamp currentTime) const override;
+    RgbColor calculate(const NoteState& noteState, Timestamp currentTime) const override;
 
   protected:
     // RgbFunction implementation
@@ -31,5 +33,7 @@ class PianoDecayRgbFunction : public LinearRgbFunction
     static constexpr uint32_t slowDecayDurationMs = 13800;
     static constexpr float slowDecayFactor = 0.5f;
 };
+
+}  // namespace processing
 
 #endif /* LIB_PROCESSING_PIANODECAYRGBFUNCTION_H_ */

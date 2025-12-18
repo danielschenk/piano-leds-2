@@ -1,14 +1,15 @@
 #include "ProcessingBlockFactory.hpp"
 
+#include "IRgbFunctionFactory.hpp"
 #include "Json11Helper.hpp"
 #include "NoteVisualizer.hpp"
 #include "Patch.hpp"
 #include "ProcessingChain.hpp"
 #include "SingleColorFill.hpp"
 
-ProcessingBlockFactory::ProcessingBlockFactory(MidiInput& midiInput,
-                                               const IRgbFunctionFactory& rgbFunctionFactory,
-                                               const MonotonicTime& time)
+ProcessingBlockFactory::ProcessingBlockFactory(
+    MidiInput& midiInput, const processing::IRgbFunctionFactory& rgbFunctionFactory,
+    const MonotonicTime& time)
     : midiInput(midiInput), rgbFunctionFactory(rgbFunctionFactory), time(time)
 {
 }

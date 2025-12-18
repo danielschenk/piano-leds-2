@@ -6,6 +6,9 @@
 
 using Json = json11::Json;
 
+namespace processing
+{
+
 class RgbFunction;
 
 class IRgbFunctionFactory
@@ -14,5 +17,7 @@ class IRgbFunctionFactory
     virtual ~IRgbFunctionFactory() = default;
     virtual std::shared_ptr<RgbFunction> createRgbFunction(const Json& converted) const = 0;
 };
+
+}  // namespace processing
 
 #endif /* PROCESSING_INTERFACES_IRGBFUNCTIONFACTORY_H_ */

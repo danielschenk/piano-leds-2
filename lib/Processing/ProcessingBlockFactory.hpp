@@ -4,8 +4,12 @@
 #include "IProcessingBlockFactory.hpp"
 
 class MidiInput;
-class IRgbFunctionFactory;
 class MonotonicTime;
+
+namespace processing
+{
+class IRgbFunctionFactory;
+}
 
 /**
  * Factory for processing blocks.
@@ -16,7 +20,8 @@ class ProcessingBlockFactory : public IProcessingBlockFactory
     /**
      * Constructor.
      */
-    ProcessingBlockFactory(MidiInput& midiInput, const IRgbFunctionFactory& rgbFunctionFactory,
+    ProcessingBlockFactory(MidiInput& midiInput,
+                           const processing::IRgbFunctionFactory& rgbFunctionFactory,
                            const MonotonicTime& time);
 
     // Prevent implicit constructors and assignment operator
@@ -40,7 +45,7 @@ class ProcessingBlockFactory : public IProcessingBlockFactory
     MidiInput& midiInput;
 
     /** Reference to the RGB function factory to pass to new blocks. */
-    const IRgbFunctionFactory& rgbFunctionFactory;
+    const processing::IRgbFunctionFactory& rgbFunctionFactory;
 
     /** Time provider to pass to new blocks. */
     const MonotonicTime& time;

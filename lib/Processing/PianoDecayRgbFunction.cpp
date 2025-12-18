@@ -2,11 +2,13 @@
 
 #include <json11.hpp>
 
-processing::RgbColor PianoDecayRgbFunction::calculate(const processing::NoteState& noteState,
-                                                      processing::Timestamp currentTime) const
+namespace processing
+{
+
+RgbColor PianoDecayRgbFunction::calculate(const NoteState& noteState, Timestamp currentTime) const
 {
     auto startColor(LinearRgbFunction::calculate(noteState, currentTime));
-    if (startColor == processing::RgbColor{0, 0, 0})
+    if (startColor == RgbColor{0, 0, 0})
         return startColor;
 
     uint32_t soundingTime(currentTime - noteState.noteOnTimeStamp);
@@ -37,3 +39,5 @@ std::string PianoDecayRgbFunction::getObjectType() const
 {
     return RgbFunction::jsonTypeNamePianoDecayRgbFunction;
 }
+
+}  // namespace processing

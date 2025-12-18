@@ -67,7 +67,7 @@ class NoteVisualizerTest : public LoggingTest, public MidiInputObserverTest, pub
             noteToLightMap[i] = i;
         }
 
-        auto rgbFunction(std::make_shared<NiceMock<MockRgbFunction>>());
+        auto rgbFunction(std::make_shared<NiceMock<processing::MockRgbFunction>>());
         ON_CALL(*rgbFunction, calculate(_, _)).WillByDefault(ReturnFullWhiteWhenSounding());
         noteVisualizer.setRgbFunction(rgbFunction);
         noteVisualizer.activate();
@@ -83,7 +83,7 @@ class NoteVisualizerTest : public LoggingTest, public MidiInputObserverTest, pub
         }
     }
 
-    MockRgbFunctionFactory mockRgbFunctionFactory;
+    processing::MockRgbFunctionFactory mockRgbFunctionFactory;
     NiceMock<MockMonotonicTime> mockTime;
     NoteVisualizer noteVisualizer;
     processing::RgbStrip strip;
@@ -122,7 +122,7 @@ TEST_F(NoteVisualizerTest, noteOn)
 
 TEST_F(NoteVisualizerTest, noteOnOverwritesAlreadyEnabledLed)
 {
-    auto rgbFunction(std::make_shared<NiceMock<MockRgbFunction>>());
+    auto rgbFunction(std::make_shared<NiceMock<processing::MockRgbFunction>>());
     ON_CALL(*rgbFunction, calculate(_, _)).WillByDefault(ReturnMinimalWhiteWhenSounding());
     noteVisualizer.setRgbFunction(rgbFunction);
 
@@ -246,7 +246,7 @@ ACTION(ReturnBlueWhenNoteSoundingOtherwiseRed)
 
 TEST_F(NoteVisualizerTest, otherRgbFunction)
 {
-    auto mockRgbFunction = std::make_shared<MockRgbFunction>();
+    auto mockRgbFunction = std::make_shared<processing::MockRgbFunction>();
     EXPECT_CALL(*mockRgbFunction, calculate(_, _))
         .WillRepeatedly(ReturnBlueWhenNoteSoundingOtherwiseRed());
     noteVisualizer.setRgbFunction(mockRgbFunction);
@@ -279,7 +279,7 @@ TEST_F(NoteVisualizerTest, timePassedToRgbFunction)
         .WillOnce(Return(43))
         .WillRepeatedly(Return(44));
 
-    auto mockRgbFunction = std::make_shared<MockRgbFunction>();
+    auto mockRgbFunction = std::make_shared<processing::MockRgbFunction>();
 
     {
         InSequence dummy;
@@ -330,8 +330,8 @@ TEST_F(NoteVisualizerTest, doNotWriteOutsideStrip)
 
 TEST_F(NoteVisualizerTest, deleteRgbFunction)
 {
-    auto mock1 = std::make_shared<MockRgbFunction>();
-    auto mock2 = std::make_shared<MockRgbFunction>();
+    auto mock1 = std::make_shared<processing::MockRgbFunction>();
+    auto mock2 = std::make_shared<processing::MockRgbFunction>();
 
     // Need to set an action, to make Google Test throw an error in case of a leaked mock.
     ON_CALL(*mock1, calculate(_, _)).WillByDefault(Return(processing::RgbColor()));
@@ -343,7 +343,7 @@ TEST_F(NoteVisualizerTest, deleteRgbFunction)
 
 TEST_F(NoteVisualizerTest, convertToJson)
 {
-    auto mockRgbFunction = std::make_shared<MockRgbFunction>();
+    auto mockRgbFunction = std::make_shared<processing::MockRgbFunction>();
     ASSERT_NE(nullptr, mockRgbFunction);
 
     Json::object mockRgbFunctionJson;
@@ -373,7 +373,7 @@ TEST_F(NoteVisualizerTest, convertFromJson)
     mockRgbFunctionJson["objectType"] = "MockRgbFunction";
     mockRgbFunctionJson["someParameter"] = 42;
 
-    auto mockRgbFunction = std::make_shared<MockRgbFunction>();
+    auto mockRgbFunction = std::make_shared<processing::MockRgbFunction>();
     ASSERT_NE(nullptr, mockRgbFunction);
     EXPECT_CALL(*mockRgbFunction, calculate(_, _))
         .WillRepeatedly(Return(processing::RgbColor(1, 2, 3)));
