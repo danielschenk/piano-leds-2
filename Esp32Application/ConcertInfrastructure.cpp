@@ -5,6 +5,7 @@
 #include "LinearRgbFunction.hpp"
 #include "Logging.hpp"
 #include "NoteVisualizer.hpp"
+#include "OnOffRgbFunction.hpp"
 #include "Patch.hpp"
 #include "PianoDecayRgbFunction.hpp"
 #include "SequentialColorPicker.hpp"
@@ -78,14 +79,10 @@ Patch* ConcertInfrastructure::addBasicPatch(
     auto block = new NoteVisualizer(midiInput, rgbFunctionFactory, time);
     std::shared_ptr<processing::RgbFunction> rgbFunction;
     if (likePiano)
-    {
         rgbFunction = std::make_shared<processing::PianoDecayRgbFunction>(color);
-        block->setUsingPedal(true);
-    }
     else
-    {
-        rgbFunction = std::make_shared<processing::LinearRgbFunction>();
-    }
+        rgbFunction = std::make_shared<processing::OnOffRgbFunction>(color);
+    block->setUsingPedal(true);
     block->setRgbFunction(rgbFunction);
     block->setPressDownColorPicker(pressDownColorPicker);
     patch->getProcessingChain().insertBlock(block);
