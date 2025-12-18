@@ -1,9 +1,5 @@
 #include "Scheduler.hpp"
 
-Scheduler::Scheduler() : queue(), mutex() {}
-
-Scheduler::~Scheduler() {}
-
 void Scheduler::schedule(Scheduler::Task task)
 {
     std::lock_guard<std::mutex> lock(mutex);
@@ -49,4 +45,10 @@ bool Scheduler::executeAll()
     }
 
     return executed;
+}
+
+void Scheduler::clear()
+{
+    std::lock_guard<std::mutex> lock(mutex);
+    queue = std::queue<Task>();
 }

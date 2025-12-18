@@ -5,53 +5,21 @@
 #include <mutex>
 #include <queue>
 
-/**
- * Scheduler.
- */
 class Scheduler
 {
   public:
-    /** Type for scheduled tasks. */
     typedef std::function<void()> Task;
 
-    /**
-     * Constructor.
-     */
-    Scheduler();
+    Scheduler() = default;
+    ~Scheduler() = default;
 
-    /**
-     * Destructor.
-     */
-    virtual ~Scheduler();
-
-    /**
-     * Schedule a task.
-     *
-     * @param   [in]    task    The task to schedule.
-     */
     void schedule(Task task);
-
-    /**
-     * Execute one task from the queue.
-     *
-     * @retval  true    A task was executed.
-     * @retval  false   The queue was empty.
-     */
     bool executeOne();
-
-    /**
-     * Execute all tasks from the queue.
-     *
-     * @retval  true    One or more tasks were executed.
-     * @retval  false   The queue was empty.
-     */
     bool executeAll();
+    void clear();
 
   private:
-    /** The queue of tasks. */
     std::queue<Task> queue;
-
-    /** The mutex to protect the queue. */
     std::mutex mutex;
 };
 

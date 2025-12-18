@@ -32,6 +32,12 @@ void Twinkles::execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap)
     render(strip, now);
 }
 
+void Twinkles::deactivate()
+{
+    twinkles.clear();
+    twinkles.shrink_to_fit();
+}
+
 static unsigned int boundedRand(unsigned int range)
 {
     for (unsigned int x, r;;)

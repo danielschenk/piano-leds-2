@@ -15,7 +15,10 @@ class Twinkles : public ProcessingBlock
 {
   public:
     explicit Twinkles(const MonotonicTime& monotonicTime);
+
+    // ProcessingBlock
     void execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap) override;
+    void deactivate() override;
 
     RgbColor color{color_constants::goldenrod * 0.3f};
     // TODO instead of fixed interval just keep adding until strip is filled a certain pct
