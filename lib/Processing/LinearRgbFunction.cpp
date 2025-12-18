@@ -2,26 +2,28 @@
 
 #include "Json11Helper.hpp"
 
-LinearRgbFunction::LinearRgbFunction(const processing::RgbColor& color)
+namespace processing
+{
+
+LinearRgbFunction::LinearRgbFunction(const RgbColor& color)
 {
     redConstants = {2.0f * color.r / 255.0f, 0};
     greenConstants = {2.0f * color.g / 255.0f, 0};
     blueConstants = {2.0f * color.b / 255.0f, 0};
 }
 
-processing::RgbColor LinearRgbFunction::calculate(const processing::NoteState& noteState,
-                                                  processing::Timestamp currentTime) const
+RgbColor LinearRgbFunction::calculate(const NoteState& noteState, Timestamp currentTime) const
 {
-    processing::RgbColor output;
+    RgbColor output;
 
     if (noteState.sounding)
     {
-        output = processing::RgbColor(
-            redConstants.factor * noteState.pressDownVelocity + redConstants.offset,
-            greenConstants.factor * noteState.pressDownVelocity + greenConstants.offset,
-            blueConstants.factor * noteState.pressDownVelocity + blueConstants.offset);
+        output =
+            RgbColor(redConstants.factor * noteState.pressDownVelocity + redConstants.offset,
+                     greenConstants.factor * noteState.pressDownVelocity + greenConstants.offset,
+                     blueConstants.factor * noteState.pressDownVelocity + blueConstants.offset);
 
-        if (noteState.pressDownColor != processing::color_constants::off)
+        if (noteState.pressDownColor != color_constants::off)
             output *= noteState.pressDownColor;
     }
 
@@ -57,3 +59,5 @@ std::string LinearRgbFunction::getObjectType() const
 {
     return RgbFunction::jsonTypeNameLinearRgbFunction;
 }
+
+}  // namespace processing

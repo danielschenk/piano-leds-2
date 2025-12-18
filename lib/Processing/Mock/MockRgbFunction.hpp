@@ -5,6 +5,9 @@
 
 #include "../RgbFunction.hpp"
 
+namespace processing
+{
+
 class MockRgbFunction : public RgbFunction
 {
   public:
@@ -16,5 +19,7 @@ class MockRgbFunction : public RgbFunction
   protected:
     MOCK_CONST_METHOD0(getObjectType, std::string());
 };
+
+}  // namespace processing
 
 #endif /* PROCESSING_MOCK_MOCKRGBFUNCTION_H_ */

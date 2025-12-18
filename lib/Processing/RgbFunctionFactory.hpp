@@ -5,6 +5,9 @@
 
 #include "IRgbFunctionFactory.hpp"
 
+namespace processing
+{
+
 class RgbFunctionFactory : public IRgbFunctionFactory
 {
   public:
@@ -16,5 +19,7 @@ class RgbFunctionFactory : public IRgbFunctionFactory
     // IRgbFunctionFactory implementation
     std::shared_ptr<RgbFunction> createRgbFunction(const Json& converted) const override;
 };
+
+}  // namespace processing
 
 #endif /* PROCESSING_RGBFUNCTIONFACTORY_H_ */

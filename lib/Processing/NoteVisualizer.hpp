@@ -10,18 +10,19 @@
 #include "ProcessingBlock.hpp"
 #include "Scheduler.hpp"
 
-class RgbFunction;
-class IRgbFunctionFactory;
 class MonotonicTime;
+
 namespace processing
 {
+class RgbFunction;
+class IRgbFunctionFactory;
 class ColorPicker;
-}
+}  // namespace processing
 
 class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
 {
   public:
-    NoteVisualizer(MidiInput& midiDriver, const IRgbFunctionFactory& rgbFunctionFactory,
+    NoteVisualizer(MidiInput& midiDriver, const processing::IRgbFunctionFactory& rgbFunctionFactory,
                    const MonotonicTime& time);
 
     ~NoteVisualizer() override;
@@ -42,7 +43,7 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
     bool isUsingPedal() const;
     void setUsingPedal(bool usingPedal);
 
-    void setRgbFunction(std::shared_ptr<RgbFunction> rgbFunction);
+    void setRgbFunction(std::shared_ptr<processing::RgbFunction> rgbFunction);
     void setPressDownColorPicker(std::shared_ptr<processing::ColorPicker> colorPicker);
 
     // MidiInput::Observer implementation
@@ -62,13 +63,13 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
     mutable std::mutex mutex;
     std::atomic<bool> active{false};
     bool usingPedal{true};
-    const IRgbFunctionFactory& rgbFunctionFactory;
+    const processing::IRgbFunctionFactory& rgbFunctionFactory;
     MidiInput& midiInput;
     uint8_t channel = 0;
     Scheduler scheduler;
     std::array<processing::NoteState, MidiInterface::numNotes> noteStates;
     bool pedalPressed{false};
-    std::shared_ptr<RgbFunction> rgbFunction;
+    std::shared_ptr<processing::RgbFunction> rgbFunction;
     std::shared_ptr<processing::ColorPicker> pressDownColorPicker;
     const MonotonicTime& time;
 };

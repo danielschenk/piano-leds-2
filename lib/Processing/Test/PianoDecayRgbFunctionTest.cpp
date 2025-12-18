@@ -3,13 +3,16 @@
 #include "PianoDecayRgbFunction.hpp"
 #include "gtest/gtest.h"
 
+namespace processing
+{
+
 class PianoDecayRgbFunctionTest : public testing::Test
 {
   public:
     struct TruthTableEntry
     {
-        processing::Timestamp time;
-        processing::RgbColor result;
+        Timestamp time;
+        RgbColor result;
     };
 
     PianoDecayRgbFunctionTest() : function() {}
@@ -25,7 +28,7 @@ TEST_F(PianoDecayRgbFunctionTest, decay)
         {8100, {50, 25, 25}}, {15000, {0, 0, 0}},
     };
 
-    const processing::NoteState noteState(true, true, 100, 0);
+    const NoteState noteState(true, true, 100, 0);
 
     function.redConstants = {2, 0};
     function.greenConstants = {1, 0};
@@ -40,8 +43,8 @@ TEST_F(PianoDecayRgbFunctionTest, decay)
 
 TEST_F(PianoDecayRgbFunctionTest, notSounding)
 {
-    const processing::NoteState noteState(false, false, 127, 0);
-    EXPECT_EQ(processing::RgbColor(0, 0, 0), function.calculate(noteState, 42));
+    const NoteState noteState(false, false, 127, 0);
+    EXPECT_EQ(RgbColor(0, 0, 0), function.calculate(noteState, 42));
 }
 
 TEST_F(PianoDecayRgbFunctionTest, convertToJson)
@@ -72,7 +75,9 @@ TEST_F(PianoDecayRgbFunctionTest, convertFromJson)
 
     function.convertFromJson(j);
 
-    EXPECT_EQ(processing::LinearConstants({42, 43}), function.redConstants);
-    EXPECT_EQ(processing::LinearConstants({44, 45}), function.greenConstants);
-    EXPECT_EQ(processing::LinearConstants({46, 47}), function.blueConstants);
+    EXPECT_EQ(LinearConstants({42, 43}), function.redConstants);
+    EXPECT_EQ(LinearConstants({44, 45}), function.greenConstants);
+    EXPECT_EQ(LinearConstants({46, 47}), function.blueConstants);
 }
+
+}  // namespace processing

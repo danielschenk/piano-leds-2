@@ -3,15 +3,16 @@
 #include <functional>
 
 #include "ColorPicker.hpp"
-#include "RgbFunction.hpp"
 #include "IRgbFunctionFactory.hpp"
 #include "Json11Helper.hpp"
 #include "Logging.hpp"
 #include "MonotonicTime.hpp"
+#include "RgbFunction.hpp"
 
 #define LOGGING_COMPONENT "NoteVisualizer"
 
-NoteVisualizer::NoteVisualizer(MidiInput& midiInput, const IRgbFunctionFactory& rgbFunctionFactory,
+NoteVisualizer::NoteVisualizer(MidiInput& midiInput,
+                               const processing::IRgbFunctionFactory& rgbFunctionFactory,
                                const MonotonicTime& time)
     : rgbFunctionFactory(rgbFunctionFactory), midiInput(midiInput), time(time)
 {
@@ -146,7 +147,7 @@ void NoteVisualizer::setUsingPedal(bool usingPedal)
     this->usingPedal = usingPedal;
 }
 
-void NoteVisualizer::setRgbFunction(std::shared_ptr<RgbFunction> rgbFunction)
+void NoteVisualizer::setRgbFunction(std::shared_ptr<processing::RgbFunction> rgbFunction)
 {
     std::lock_guard<std::mutex> lock(mutex);
     this->rgbFunction = rgbFunction;

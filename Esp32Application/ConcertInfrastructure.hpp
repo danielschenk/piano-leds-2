@@ -30,7 +30,7 @@ struct ConcertInfrastructure
     MidiInput& midiInput;
     const MonotonicTime& time;
 
-    RgbFunctionFactory rgbFunctionFactory;
+    processing::RgbFunctionFactory rgbFunctionFactory;
     ProcessingBlockFactory processingBlockFactory;
     Concert concert;
 };

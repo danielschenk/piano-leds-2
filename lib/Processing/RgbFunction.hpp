@@ -4,6 +4,9 @@
 #include "JsonConvertible.hpp"
 #include "ProcessingTypes.hpp"
 
+namespace processing
+{
+
 class RgbFunction : public JsonConvertible
 {
   public:
@@ -11,8 +14,9 @@ class RgbFunction : public JsonConvertible
     static constexpr const char* jsonTypeNamePianoDecayRgbFunction = "PianoDecayRgbFunction";
 
     virtual ~RgbFunction() = default;
-    virtual processing::RgbColor calculate(const processing::NoteState& noteState,
-                                           processing::Timestamp currentTime) const = 0;
+    virtual RgbColor calculate(const NoteState& noteState, Timestamp currentTime) const = 0;
 };
+
+}  // namespace processing
 
 #endif /* PROCESSING_RGBFUNCTION_HPP */
