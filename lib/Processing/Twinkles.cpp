@@ -34,7 +34,7 @@ void Twinkles::execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap)
 
 void Twinkles::deactivate()
 {
-    twinkles.resize(0);
+    twinkles.clear();
     twinkles.shrink_to_fit();
 }
 

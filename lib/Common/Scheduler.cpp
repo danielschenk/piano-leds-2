@@ -49,6 +49,7 @@ bool Scheduler::executeAll()
 
 void Scheduler::clear()
 {
+    std::lock_guard<std::mutex> lock(mutex);
     std::queue<Task> empty;
     queue.swap(empty);
 }

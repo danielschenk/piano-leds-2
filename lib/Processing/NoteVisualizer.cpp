@@ -32,7 +32,7 @@ void NoteVisualizer::deactivate()
     scheduler.clear();
 
     std::lock_guard<std::mutex> lock(mutex);
-    noteStates.resize(0);
+    noteStates.clear();
     noteStates.shrink_to_fit();
 }
 
