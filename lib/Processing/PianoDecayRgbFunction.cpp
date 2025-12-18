@@ -35,5 +35,5 @@ processing::RgbColor PianoDecayRgbFunction::calculate(const processing::NoteStat
 
 std::string PianoDecayRgbFunction::getObjectType() const
 {
-    return IRgbFunction::jsonTypeNamePianoDecayRgbFunction;
+    return RgbFunction::jsonTypeNamePianoDecayRgbFunction;
 }

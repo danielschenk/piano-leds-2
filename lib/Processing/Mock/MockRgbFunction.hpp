@@ -3,9 +3,9 @@
 
 #include <gmock/gmock.h>
 
-#include "../Interfaces/IRgbFunction.hpp"
+#include "../RgbFunction.hpp"
 
-class MockRgbFunction : public IRgbFunction
+class MockRgbFunction : public RgbFunction
 {
   public:
     MOCK_CONST_METHOD2(calculate, processing::RgbColor(const processing::NoteState& noteState,

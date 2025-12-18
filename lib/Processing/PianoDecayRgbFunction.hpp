@@ -16,12 +16,12 @@ class PianoDecayRgbFunction : public LinearRgbFunction
     PianoDecayRgbFunction(const PianoDecayRgbFunction&) = delete;
     PianoDecayRgbFunction& operator=(const PianoDecayRgbFunction&) = delete;
 
-    // IRgbFunction implementation
+    // RgbFunction implementation
     processing::RgbColor calculate(const processing::NoteState& noteState,
                                    processing::Timestamp currentTime) const override;
 
   protected:
-    // IRgbFunction implementation
+    // RgbFunction implementation
     std::string getObjectType() const override;
 
   private:

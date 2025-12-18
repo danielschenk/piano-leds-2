@@ -28,36 +28,6 @@ processing::RgbColor LinearRgbFunction::calculate(const processing::NoteState& n
     return output;
 }
 
-void LinearRgbFunction::setRedConstants(processing::LinearConstants redConstants)
-{
-    this->redConstants = redConstants;
-}
-
-void LinearRgbFunction::setGreenConstants(processing::LinearConstants greenConstants)
-{
-    this->greenConstants = greenConstants;
-}
-
-void LinearRgbFunction::setBlueConstants(processing::LinearConstants blueConstants)
-{
-    this->blueConstants = blueConstants;
-}
-
-processing::LinearConstants LinearRgbFunction::getRedConstants() const
-{
-    return redConstants;
-}
-
-processing::LinearConstants LinearRgbFunction::getGreenConstants() const
-{
-    return greenConstants;
-}
-
-processing::LinearConstants LinearRgbFunction::getBlueConstants() const
-{
-    return blueConstants;
-}
-
 Json LinearRgbFunction::convertToJson() const
 {
     Json::object json;
@@ -85,5 +55,5 @@ void LinearRgbFunction::convertFromJson(const Json& converted)
 
 std::string LinearRgbFunction::getObjectType() const
 {
-    return IRgbFunction::jsonTypeNameLinearRgbFunction;
+    return RgbFunction::jsonTypeNameLinearRgbFunction;
 }

@@ -5,9 +5,6 @@
 
 #include "IRgbFunctionFactory.hpp"
 
-/**
- * Factory for RGB functions.
- */
 class RgbFunctionFactory : public IRgbFunctionFactory
 {
   public:
@@ -16,10 +13,8 @@ class RgbFunctionFactory : public IRgbFunctionFactory
     RgbFunctionFactory(const RgbFunctionFactory&) = delete;
     RgbFunctionFactory& operator=(const RgbFunctionFactory&) = delete;
 
-    virtual ~RgbFunctionFactory() = default;
-
     // IRgbFunctionFactory implementation
-    virtual std::shared_ptr<IRgbFunction> createRgbFunction(const Json& converted) const;
+    std::shared_ptr<RgbFunction> createRgbFunction(const Json& converted) const override;
 };
 
 #endif /* PROCESSING_RGBFUNCTIONFACTORY_H_ */

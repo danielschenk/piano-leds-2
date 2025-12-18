@@ -10,7 +10,7 @@
 #include "ProcessingBlock.hpp"
 #include "Scheduler.hpp"
 
-class IRgbFunction;
+class RgbFunction;
 class IRgbFunctionFactory;
 class MonotonicTime;
 namespace processing
@@ -42,7 +42,7 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
     bool isUsingPedal() const;
     void setUsingPedal(bool usingPedal);
 
-    void setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction);
+    void setRgbFunction(std::shared_ptr<RgbFunction> rgbFunction);
     void setPressDownColorPicker(std::shared_ptr<processing::ColorPicker> colorPicker);
 
     // MidiInput::Observer implementation
@@ -68,7 +68,7 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
     Scheduler scheduler;
     std::array<processing::NoteState, MidiInterface::numNotes> noteStates;
     bool pedalPressed{false};
-    std::shared_ptr<IRgbFunction> rgbFunction;
+    std::shared_ptr<RgbFunction> rgbFunction;
     std::shared_ptr<processing::ColorPicker> pressDownColorPicker;
     const MonotonicTime& time;
 };

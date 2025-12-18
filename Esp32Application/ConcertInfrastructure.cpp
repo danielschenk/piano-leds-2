@@ -76,7 +76,7 @@ Patch* ConcertInfrastructure::addBasicPatch(
 {
     auto patch = new Patch(processingBlockFactory);
     auto block = new NoteVisualizer(midiInput, rgbFunctionFactory, time);
-    std::shared_ptr<IRgbFunction> rgbFunction;
+    std::shared_ptr<RgbFunction> rgbFunction;
     if (likePiano)
     {
         rgbFunction = std::make_shared<PianoDecayRgbFunction>(color);

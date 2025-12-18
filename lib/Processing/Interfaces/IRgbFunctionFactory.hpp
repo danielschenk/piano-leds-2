@@ -6,13 +6,13 @@
 
 using Json = json11::Json;
 
-class IRgbFunction;
+class RgbFunction;
 
 class IRgbFunctionFactory
 {
   public:
     virtual ~IRgbFunctionFactory() = default;
-    virtual std::shared_ptr<IRgbFunction> createRgbFunction(const Json& converted) const = 0;
+    virtual std::shared_ptr<RgbFunction> createRgbFunction(const Json& converted) const = 0;
 };
 
 #endif /* PROCESSING_INTERFACES_IRGBFUNCTIONFACTORY_H_ */

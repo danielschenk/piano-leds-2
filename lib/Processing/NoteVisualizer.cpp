@@ -3,7 +3,7 @@
 #include <functional>
 
 #include "ColorPicker.hpp"
-#include "IRgbFunction.hpp"
+#include "RgbFunction.hpp"
 #include "IRgbFunctionFactory.hpp"
 #include "Json11Helper.hpp"
 #include "Logging.hpp"
@@ -146,7 +146,7 @@ void NoteVisualizer::setUsingPedal(bool usingPedal)
     this->usingPedal = usingPedal;
 }
 
-void NoteVisualizer::setRgbFunction(std::shared_ptr<IRgbFunction> rgbFunction)
+void NoteVisualizer::setRgbFunction(std::shared_ptr<RgbFunction> rgbFunction)
 {
     std::lock_guard<std::mutex> lock(mutex);
     this->rgbFunction = rgbFunction;

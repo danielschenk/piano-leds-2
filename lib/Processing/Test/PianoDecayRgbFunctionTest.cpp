@@ -27,9 +27,9 @@ TEST_F(PianoDecayRgbFunctionTest, decay)
 
     const processing::NoteState noteState(true, true, 100, 0);
 
-    function.setRedConstants({2, 0});
-    function.setGreenConstants({1, 0});
-    function.setBlueConstants({1, 0});
+    function.redConstants = {2, 0};
+    function.greenConstants = {1, 0};
+    function.blueConstants = {1, 0};
 
     for (const auto& entry : truthTable)
     {
@@ -46,9 +46,9 @@ TEST_F(PianoDecayRgbFunctionTest, notSounding)
 
 TEST_F(PianoDecayRgbFunctionTest, convertToJson)
 {
-    function.setRedConstants({42, 43});
-    function.setGreenConstants({44, 45});
-    function.setBlueConstants({46, 47});
+    function.redConstants = {42, 43};
+    function.greenConstants = {44, 45};
+    function.blueConstants = {46, 47};
 
     auto converted = function.convertToJson().object_items();
     EXPECT_STREQ("PianoDecayRgbFunction", converted.at("objectType").string_value().c_str());
@@ -72,7 +72,7 @@ TEST_F(PianoDecayRgbFunctionTest, convertFromJson)
 
     function.convertFromJson(j);
 
-    EXPECT_EQ(processing::LinearConstants({42, 43}), function.getRedConstants());
-    EXPECT_EQ(processing::LinearConstants({44, 45}), function.getGreenConstants());
-    EXPECT_EQ(processing::LinearConstants({46, 47}), function.getBlueConstants());
+    EXPECT_EQ(processing::LinearConstants({42, 43}), function.redConstants);
+    EXPECT_EQ(processing::LinearConstants({44, 45}), function.greenConstants);
+    EXPECT_EQ(processing::LinearConstants({46, 47}), function.blueConstants);
 }
