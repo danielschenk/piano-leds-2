@@ -2,7 +2,6 @@
 #define PROCESSING_NOTEVISUALIZER_H_
 
 #include <array>
-#include <atomic>
 #include <memory>
 #include <mutex>
 
@@ -24,8 +23,6 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
   public:
     NoteVisualizer(MidiInput& midiDriver, const processing::IRgbFunctionFactory& rgbFunctionFactory,
                    const MonotonicTime& time);
-
-    ~NoteVisualizer() override;
 
     NoteVisualizer(NoteVisualizer&) = delete;
     NoteVisualizer& operator=(NoteVisualizer&) = delete;
@@ -61,13 +58,12 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
     static constexpr const char* rgbFunctionJsonKey = "rgbFunction";
 
     mutable std::mutex mutex;
-    std::atomic<bool> active{false};
     bool usingPedal{true};
     const processing::IRgbFunctionFactory& rgbFunctionFactory;
     MidiInput& midiInput;
     uint8_t channel = 0;
     Scheduler scheduler;
-    std::array<processing::NoteState, MidiInterface::numNotes> noteStates;
+    std::vector<processing::NoteState> noteStates;
     bool pedalPressed{false};
     std::shared_ptr<processing::RgbFunction> rgbFunction;
     std::shared_ptr<processing::ColorPicker> pressDownColorPicker;

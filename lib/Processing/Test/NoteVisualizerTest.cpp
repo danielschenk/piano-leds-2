@@ -144,10 +144,11 @@ TEST_F(NoteVisualizerTest, noteOnOverwritesAlreadyEnabledLed)
 TEST_F(NoteVisualizerTest, deactivateDisablesAllNotes)
 {
     // (channel, number, velocity, on/off)
-    noteVisualizer.deactivate();
     observer->onNoteChange(0, 0, 1, true);
     observer->onNoteChange(0, 5, 6, true);
 
+    noteVisualizer.deactivate();
+    noteVisualizer.activate();
     noteVisualizer.execute(strip, noteToLightMap);
 
     EXPECT_THAT(strip, Each(processing::RgbColor({0, 0, 0})));

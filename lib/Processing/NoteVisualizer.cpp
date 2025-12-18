@@ -16,33 +16,24 @@ NoteVisualizer::NoteVisualizer(MidiInput& midiInput,
                                const MonotonicTime& time)
     : rgbFunctionFactory(rgbFunctionFactory), midiInput(midiInput), time(time)
 {
-    midiInput.subscribe(*this);
-}
-
-NoteVisualizer::~NoteVisualizer()
-{
-    midiInput.unsubscribe(*this);
 }
 
 void NoteVisualizer::activate()
 {
-    active = true;
+    midiInput.subscribe(*this);
+
+    std::lock_guard<std::mutex> lock(mutex);
+    noteStates.resize(MidiInterface::numNotes);
 }
 
 void NoteVisualizer::deactivate()
 {
-    scheduler.executeAll();
+    midiInput.unsubscribe(*this);
+    scheduler.clear();
 
-    {
-        std::lock_guard<std::mutex> lock(mutex);
-        for (auto& noteState : noteStates)
-        {
-            noteState.pressed = false;
-            noteState.sounding = false;
-        }
-    }
-
-    active = false;
+    std::lock_guard<std::mutex> lock(mutex);
+    noteStates.resize(0);
+    noteStates.shrink_to_fit();
 }
 
 void NoteVisualizer::execute(processing::RgbStrip& strip,
@@ -63,9 +54,6 @@ void NoteVisualizer::execute(processing::RgbStrip& strip,
 
 void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on)
 {
-    if (!active)
-        return;
-
     scheduler.schedule(
         [this, channel, number, velocity, on]()
         {
@@ -97,7 +85,7 @@ void NoteVisualizer::onNoteChange(uint8_t channel, uint8_t number, uint8_t veloc
 void NoteVisualizer::onControlChange(uint8_t channel, MidiInput::ControllerNumber number,
                                      uint8_t value)
 {
-    if ((number != MidiInterface::damperPedal) || !active)
+    if (number != MidiInterface::damperPedal)
         return;
 
     scheduler.schedule(
