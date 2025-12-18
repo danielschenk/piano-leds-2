@@ -1,9 +1,9 @@
-#ifndef PROCESSING_NOTEVISUALIZER_H_
-#define PROCESSING_NOTEVISUALIZER_H_
+#ifndef PROCESSING_NOTEVISUALIZER_HPP
+#define PROCESSING_NOTEVISUALIZER_HPP
 
-#include <array>
 #include <memory>
 #include <mutex>
+#include <vector>
 
 #include "MidiInput.hpp"
 #include "ProcessingBlock.hpp"
@@ -70,4 +70,4 @@ class NoteVisualizer : public ProcessingBlock, public MidiInput::Observer
     const MonotonicTime& time;
 };
 
-#endif /* PROCESSING_NOTEVISUALIZER_H_ */
+#endif /* PROCESSING_NOTEVISUALIZER_HPP */
