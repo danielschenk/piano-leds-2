@@ -26,6 +26,7 @@ ConcertInfrastructure::ConcertInfrastructure(MidiInput& midiInput, const Monoton
     concert.setNoteToLightMap(createDefaultOneToOneFullPianoMapping(1));
     LOG_INFO_PARAMS("strip size: %zd", concert.getStripSize());
     createLegacyPatches();
+    concert.reactivateLastActivePatch();
 }
 
 void ConcertInfrastructure::createLegacyPatches()
