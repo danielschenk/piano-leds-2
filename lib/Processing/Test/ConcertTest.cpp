@@ -60,7 +60,6 @@ TEST_F(ConcertTest, bankSelect)
 {
     const uint8_t channel(0);
 
-    concert->setListeningToProgramChange(true);
     concert->setProgramChangeChannel(channel);
 
     // Simulate a bank select sequence
@@ -76,7 +75,6 @@ TEST_F(ConcertTest, bankSelectFromOtherChannelIgnored)
     const uint8_t channel(0);
     const uint16_t bank(concert->getCurrentBank());
 
-    concert->setListeningToProgramChange(true);
     concert->setProgramChangeChannel(channel);
 
     // Simulate a bank select sequence
@@ -157,7 +155,6 @@ TEST_F(ConcertTest, patchChangeOnProgramChange)
     EXPECT_CALL(*mockPatch2, execute(_, _));
 
     uint8_t channel(2);
-    concert->setListeningToProgramChange(true);
     concert->setProgramChangeChannel(channel);
     sendBankSelectSequence(channel, testBankNumber);
     concert->onProgramChange(channel, program);
@@ -200,7 +197,6 @@ TEST_F(ConcertTest, updateStripSize)
 TEST_F(ConcertTest, convertToJson)
 {
     // Set some non-default values
-    concert->setListeningToProgramChange(true);
     concert->setCurrentBank(2);
     concert->setProgramChangeChannel(3);
 
@@ -230,7 +226,6 @@ TEST_F(ConcertTest, convertToJson)
     concert->addPatch();
 
     Json::object converted = concert->convertToJson().object_items();
-    EXPECT_EQ(true, converted.at("isListeningToProgramChange").bool_value());
     EXPECT_EQ(2, converted.at("currentBank").number_value());
     EXPECT_EQ(3, converted.at("programChangeChannel").number_value());
     EXPECT_EQ(processing::convert(map), converted.at("noteToLightMap").object_items());
@@ -246,7 +241,6 @@ TEST_F(ConcertTest, convertFromJson)
     std::string err;
     Json j(Json::parse(R"({
                 "objectType": "Concert",
-                "isListeningToProgramChange": true,
                 "currentBank": 2,
                 "programChangeChannel": 3,
                 "noteToLightMap": {
@@ -290,7 +284,6 @@ TEST_F(ConcertTest, convertFromJson)
         .WillOnce(Return(convertedPatch2));
 
     concert->convertFromJson(j);
-    EXPECT_EQ(true, concert->isListeningToProgramChange());
     EXPECT_EQ(2, concert->getCurrentBank());
     EXPECT_EQ(3, concert->getProgramChangeChannel());
 
