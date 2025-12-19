@@ -8,6 +8,7 @@
 #include "JsonConvertible.hpp"
 #include "MidiInput.hpp"
 #include "MidiInterface.hpp"
+#include "Platform.hpp"
 #include "ProcessingTypes.hpp"
 #include "Scheduler.hpp"
 
@@ -43,6 +44,8 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     PatchPosition addPatch(IPatch* patch);
     IPatch* getPatch(PatchPosition position) const;
     bool removePatch(PatchPosition position);
+
+    void reactivateLastActivePatch();
 
     // TODO
     // PatchPosition movePatchUp(PatchPosition position);
@@ -112,6 +115,10 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     Scheduler scheduler;
     std::list<IObserver*> observers;
     mutable std::mutex mutex;
+
+    static constexpr uint8_t lastProgramChangeXorMask = 0x5C;
+    static uint8_t lastProgramChange NOINIT;
+    static uint8_t lastProgramChangeXorCheck NOINIT;
 };
 
 #endif /* PROCESSING_CONCERT_H_ */

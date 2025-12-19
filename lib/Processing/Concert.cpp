@@ -9,6 +9,9 @@
 
 #define LOGGING_COMPONENT "Concert"
 
+uint8_t Concert::lastProgramChange;
+uint8_t Concert::lastProgramChangeXorCheck;
+
 Concert::Concert(MidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory)
     : midiInput(midiInput), processingBlockFactory(processingBlockFactory)
 {
@@ -86,6 +89,18 @@ bool Concert::removePatch(PatchPosition position)
 
     patches.erase(patches.begin() + position);
     return true;
+}
+
+void Concert::reactivateLastActivePatch()
+{
+    if ((lastProgramChange ^ lastProgramChangeXorMask) == lastProgramChangeXorCheck)
+    {
+        LOG_INFO_PARAMS("retriggering last program change from before reboot (%u)",
+                        lastProgramChange);
+        onProgramChange(programChangeChannel, lastProgramChange);
+    }
+    else
+        LOG_INFO("last program change recorded in RAM is invalid, not retriggering program change");
 }
 
 Json Concert::convertToJson() const
@@ -268,9 +283,10 @@ void Concert::onProgramChange(uint8_t channel, uint8_t program)
         std::lock_guard<std::mutex> lock(mutex);
 
         if (channel != programChangeChannel)
-        {
             return;
-        }
+
+        lastProgramChange = program;
+        lastProgramChangeXorCheck = program ^ lastProgramChangeXorMask;
 
         for (auto patchIt = patches.begin(); patchIt != patches.end(); ++patchIt)
         {
