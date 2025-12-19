@@ -116,6 +116,8 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     std::list<IObserver*> observers;
     mutable std::mutex mutex;
 
+    // use an arbitrary mask instead of XOR'ing all bits, to reduce the likelihood of an accidental
+    // false positive
     static constexpr uint8_t lastProgramChangeXorMask = 0x5C;
     static uint8_t lastProgramChange NOINIT;
     static uint8_t lastProgramChangeXorCheck NOINIT;
