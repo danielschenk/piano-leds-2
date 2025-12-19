@@ -109,7 +109,6 @@ Json Concert::convertToJson() const
 
     Json::object converted;
     converted[JsonConvertible::objectTypeKey] = getObjectType();
-    converted[isListeningToProgramChangeJsonKey] = listeningToProgramChange;
     converted[programChangeChannelJsonKey] = programChangeChannel;
     converted[currentBankJsonKey] = currentBank;
     converted[noteToLightMapJsonKey] = processing::convert(noteToLightMap);
@@ -129,7 +128,6 @@ void Concert::convertFromJson(const Json& converted)
     std::lock_guard<std::mutex> lock(mutex);
 
     Json11Helper helper(__PRETTY_FUNCTION__, converted);
-    helper.getItemIfPresent(isListeningToProgramChangeJsonKey, listeningToProgramChange);
     helper.getItemIfPresent(programChangeChannelJsonKey, programChangeChannel);
     helper.getItemIfPresent(currentBankJsonKey, currentBank);
 
@@ -155,20 +153,6 @@ void Concert::convertFromJson(const Json& converted)
             patches.push_back(processingBlockFactory.createPatch(convertedPatch));
         }
     }
-}
-
-bool Concert::isListeningToProgramChange() const
-{
-    std::lock_guard<std::mutex> lock(mutex);
-
-    return listeningToProgramChange;
-}
-
-void Concert::setListeningToProgramChange(bool listeningToProgramChange)
-{
-    std::lock_guard<std::mutex> lock(mutex);
-
-    this->listeningToProgramChange = listeningToProgramChange;
 }
 
 processing::NoteToLightMap Concert::getNoteToLightMap() const

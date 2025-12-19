@@ -53,8 +53,6 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     // TODO
     // PatchPosition movePatchDown(PatchPosition position);
 
-    bool isListeningToProgramChange() const;
-    void setListeningToProgramChange(bool listeningToProgramChange);
     processing::NoteToLightMap getNoteToLightMap() const;
     void setNoteToLightMap(processing::NoteToLightMap noteToLightMap);
     size_t getStripSize() const;
@@ -65,9 +63,6 @@ class Concert : public JsonConvertible, public MidiInput::Observer
 
     void execute();
 
-    /**
-     * Interface to implement by Concert observers.
-     */
     class IObserver
     {
       public:
@@ -80,7 +75,7 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     void subscribe(IObserver& observer);
     void unsubscribe(IObserver& observer);
 
-    // MidiInput::IObserver implementation
+    // MidiInput::Observer implementation
     void onProgramChange(uint8_t channel, uint8_t program) override;
     void onControlChange(uint8_t channel, MidiInterface::ControllerNumber number,
                          uint8_t value) override;
@@ -91,7 +86,6 @@ class Concert : public JsonConvertible, public MidiInput::Observer
 
   private:
     static constexpr const char* typeName = "Concert";
-    static constexpr const char* isListeningToProgramChangeJsonKey = "isListeningToProgramChange";
     static constexpr const char* noteToLightMapJsonKey = "noteToLightMap";
     static constexpr const char* programChangeChannelJsonKey = "programChangeChannel";
     static constexpr const char* currentBankJsonKey = "currentBank";
@@ -107,7 +101,6 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     processing::RgbStrip strip;
     Patches patches;
     PatchPosition activePatchPosition = invalidPatchPosition;
-    bool listeningToProgramChange{true};
     uint8_t programChangeChannel = 0;
     uint16_t currentBank = 0;
     MidiInput& midiInput;
