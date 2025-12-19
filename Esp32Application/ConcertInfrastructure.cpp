@@ -87,7 +87,7 @@ Patch* ConcertInfrastructure::addBasicPatch(
     std::shared_ptr<processing::ColorPicker> pressDownColorPicker)
 {
     auto patch = new Patch(processingBlockFactory);
-    auto block = new NoteVisualizer(midiInput, rgbFunctionFactory, time);
+    auto block = new NoteVisualizer(midiInput, time);
     std::shared_ptr<processing::RgbFunction> rgbFunction;
     if (likePiano)
         rgbFunction = std::make_shared<processing::PianoDecayRgbFunction>(color);
