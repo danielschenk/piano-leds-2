@@ -100,7 +100,7 @@ void Concert::reactivateLastActivePatch()
         onProgramChange(programChangeChannel, lastProgramChange);
     }
     else
-        LOG_INFO("last program change recorded in RAM is invalid, not retriggering program change");
+        LOG_INFO("Last program change checksum validation failed, skipping patch reactivation");
 }
 
 Json Concert::convertToJson() const
