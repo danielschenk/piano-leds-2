@@ -13,8 +13,7 @@ class SingleColorFill : public ProcessingBlock
     SingleColorFill& operator=(SingleColorFill&) = delete;
 
     // ProcessingBlock implementation.
-    void execute(processing::RgbStrip& strip,
-                 const processing::NoteToLightMap& noteToLightMap) override;
+    void execute(processing::RgbStrip& strip, const Input& input) override;
     Json convertToJson() const override;
     void convertFromJson(const Json& converted) override;
 

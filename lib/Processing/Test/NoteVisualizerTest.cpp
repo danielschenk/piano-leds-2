@@ -1,9 +1,6 @@
 #include "../Mock/MockRgbFunction.hpp"
-#include "../Mock/MockRgbFunctionFactory.hpp"
 #include "../NoteVisualizer.hpp"
 #include "Mock/LoggingTest.hpp"
-#include "Mock/MockMonotonicTime.hpp"
-#include "Test/MidiInputObserverTest.hpp"
 #include "gtest/gtest.h"
 
 using ::testing::_;
@@ -11,6 +8,7 @@ using ::testing::AnyNumber;
 using ::testing::Each;
 using ::testing::HasSubstr;
 using ::testing::InSequence;
+using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::SaveArg;
 
@@ -42,24 +40,12 @@ ACTION(ReturnMinimalWhiteWhenSounding)
     return output;
 }
 
-class NoteVisualizerTest : public LoggingTest, public MidiInputObserverTest, public ::testing::Test
+class NoteVisualizerTest : public LoggingTest, public ::testing::Test
 {
   public:
     static constexpr size_t stripSize = 10;
 
-    NoteVisualizerTest()
-        : strip(stripSize),
-          exampleJson(R"(
-             {
-                 "objectType": "NoteVisualizer",
-                 "channel": 6,
-                 "usingPedal": false,
-                 "rgbFunction": {
-                     "objectType": "MockRgbFunction",
-                     "someParameter": 42
-                 }
-             })"),
-          noteVisualizer(mockMidiInput, mockRgbFunctionFactory, mockTime)
+    NoteVisualizerTest() : strip(stripSize)
     {
         for (int i = 0; i < stripSize; ++i)
         {
@@ -83,12 +69,12 @@ class NoteVisualizerTest : public LoggingTest, public MidiInputObserverTest, pub
         }
     }
 
-    processing::MockRgbFunctionFactory mockRgbFunctionFactory;
-    NiceMock<MockMonotonicTime> mockTime;
     NoteVisualizer noteVisualizer;
     processing::RgbStrip strip;
 
     processing::NoteToLightMap noteToLightMap;
+    ProcessingBlock::NoteStates noteStates;
+    ProcessingBlock::Input input{0, noteToLightMap, noteStates};
 
     std::string exampleJson;
 };

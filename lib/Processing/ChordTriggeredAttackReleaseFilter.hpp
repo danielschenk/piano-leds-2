@@ -15,8 +15,7 @@ class ChordTriggeredAttackReleaseFilter : public ProcessingBlock
     uint32_t releaseMs{1000};
 
     // ProcessingBlock
-    void execute(processing::RgbStrip& strip,
-                 const processing::NoteToLightMap& noteToLightMap) override;
+    void execute(processing::RgbStrip& strip, const Input& input) override;
     Mode mode() const override;
 
   private:

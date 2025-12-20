@@ -31,7 +31,7 @@ class ProcessingChain : public IProcessingChain
     void convertFromJson(const Json& converted) override;
 
   protected:
-    // ProcessingBlock implementation
+    // JsonConvertible implementation
     std::string getObjectType() const override;
 
   private:

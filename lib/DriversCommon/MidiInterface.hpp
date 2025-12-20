@@ -30,6 +30,9 @@ class MidiInterface
     static constexpr unsigned int maxVelocity = 255;
     static constexpr uint16_t pitchBendCenter = 0x2000;
 
+    using Channel = uint8_t;
+    using Velocity = uint8_t;
+
     virtual ~MidiInterface() = default;
     virtual unsigned int getPortCount() const = 0;
     virtual void openPort(int number) = 0;
