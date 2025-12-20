@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "ProcessingBlock.hpp"
+#include "TimeEnvelope.hpp"
 
 class MonotonicTime;
 
@@ -24,8 +25,7 @@ class Twinkles : public ProcessingBlock
     // TODO instead of fixed interval just keep adding until strip is filled a certain pct
     // This allows to control density independently of strip size and fade times
     static constexpr uint32_t spawnIntervalMs{100};
-    static constexpr uint32_t fadeInMs{1000};
-    static constexpr uint32_t fadeOutMs{1000};
+    TimeEnvelope envelope{1000, 1000};
 
   private:
     void spawnTwinkle(std::size_t stripSize, uint32_t now);

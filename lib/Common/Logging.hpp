@@ -35,9 +35,9 @@
 
 #if ENABLE_LOG_DEBUG
 #define LOG_DEBUG(fmt, ...) \
-    LoggingEntryPoint::logMessage(Logging::Level::debug, LOGGING_COMPONENT, (fmt))
+    LoggingEntryPoint::logMessage(logging::Level::debug, LOGGING_COMPONENT, (fmt))
 #define LOG_DEBUG_PARAMS(fmt, ...) \
-    LoggingEntryPoint::logMessage(Logging::Level::debug, LOGGING_COMPONENT, (fmt), __VA_ARGS__)
+    LoggingEntryPoint::logMessage(logging::Level::debug, LOGGING_COMPONENT, (fmt), __VA_ARGS__)
 #else
 #define LOG_DEBUG(fmt, ...)
 #define LOG_DEBUG_PARAMS(fmt, ...)

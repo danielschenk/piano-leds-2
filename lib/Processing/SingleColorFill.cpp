@@ -2,6 +2,8 @@
 
 #include "Json11Helper.hpp"
 
+SingleColorFill::SingleColorFill(const processing::RgbColor& color) : color(color) {}
+
 void SingleColorFill::execute(processing::RgbStrip& strip,
                               const processing::NoteToLightMap& noteToLightMap)
 {

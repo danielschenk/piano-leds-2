@@ -7,6 +7,7 @@ class SingleColorFill : public ProcessingBlock
 {
   public:
     SingleColorFill() = default;
+    SingleColorFill(const processing::RgbColor& color);
 
     SingleColorFill(SingleColorFill&) = delete;
     SingleColorFill& operator=(SingleColorFill&) = delete;
