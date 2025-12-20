@@ -2,7 +2,10 @@
 
 #include <algorithm>
 
+#include "Logging.hpp"
 #include "MonotonicTime.hpp"
+
+#define LOGGING_COMPONENT "ChordTriggeredEnvelopeFilter"
 
 ChordTriggeredEnvelopeFilter::ChordTriggeredEnvelopeFilter(MidiInput& midiInput,
                                                            const MonotonicTime& time)
@@ -53,22 +56,29 @@ void ChordTriggeredEnvelopeFilter::onNoteChange(uint8_t channel, uint8_t pitch, 
             if (channel != this->channel)
                 return;
 
+            LOG_DEBUG_PARAMS("received note %u: %s", pitch, on ? "on" : "off");
             if (chordNotes.find(pitch) == chordNotes.end())
                 return;
+
             chordNotes[pitch] = on;
         });
 }
 
 void ChordTriggeredEnvelopeFilter::calculateTrigger(uint32_t now)
 {
-    if (triggerTimeMs.has_value() && !canRestart)
-        return;
-
     if (std::all_of(chordNotes.cbegin(), chordNotes.cend(),
                     [](const auto& pair) { return pair.second; }))
+    {
+        if (triggerTimeMs.has_value() && !canRestart)
+            return;
         triggerTimeMs = now;
+        LOG_DEBUG("triggered");
+    }
     else if (triggerTimeMs.has_value() && envelope.completed(now, *triggerTimeMs))
+    {
         triggerTimeMs.reset();
+        LOG_DEBUG("removed trigger");
+    }
 }
 
 void ChordTriggeredEnvelopeFilter::render(processing::RgbStrip& strip, uint32_t now)

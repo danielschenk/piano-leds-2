@@ -1,5 +1,6 @@
 #include "ConcertInfrastructure.hpp"
 
+#include "ChordTriggeredEnvelopeFilter.hpp"
 #include "Color.hpp"
 #include "HorizontalStretcher.hpp"
 #include "LinearRgbFunction.hpp"
@@ -50,11 +51,19 @@ void ConcertInfrastructure::createLegacyPatches()
     auto patch = addBasicPatch(white, false);
     patch->setProgram(52);
     patch->setName("Peter Gunn Intro");
-    auto fill = new SingleColorFill;
-    fill->color = blue * 0.1f;
+    auto fill = new SingleColorFill{blue * 0.1f};
     patch->getProcessingChain().insertBlock(fill, 0);
 
     patch = addBasicPatch(white, true, std::make_shared<processing::SequentialColorPicker>());
+    patch->getProcessingChain().insertBlock(new SingleColorFill{white * 0.2f}, 0);
+    // flash white every time first chord of cycle is played
+    // only during intro (distinguished by added bass note)
+    // 4s should be enough to not retrigger until in next cycle
+    auto backgroundFlashFilter = new ChordTriggeredEnvelopeFilter{midiInput, time};
+    backgroundFlashFilter->envelope = {0, 4000};
+    backgroundFlashFilter->canRestart = false;
+    backgroundFlashFilter->setNotes({43, 62, 67, 71});
+    patch->getProcessingChain().insertBlock(backgroundFlashFilter, 1);
     patch->setProgram(53);
     patch->setName("Multicolor");
 
