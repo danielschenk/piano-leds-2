@@ -71,6 +71,7 @@ struct RgbColor
         return RgbColor(r - other.r, g - other.g, b - other.b);
     }
 
+    RgbColor& operator*=(float factor);
     // Multiplies every color using other color as factor (meaning 255=100%).
     RgbColor& operator*=(const RgbColor& other);
 

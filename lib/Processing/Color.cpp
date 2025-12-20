@@ -5,6 +5,12 @@
 namespace processing
 {
 
+RgbColor& RgbColor::operator*=(float factor)
+{
+    *this = *this * factor;
+    return *this;
+}
+
 RgbColor& RgbColor::operator*=(const RgbColor& other)
 {
     *this = *this * other;

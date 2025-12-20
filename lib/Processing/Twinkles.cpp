@@ -61,7 +61,7 @@ void Twinkles::spawnTwinkle(std::size_t stripSize, uint32_t now)
 void Twinkles::pruneDeadTwinkles(uint32_t now)
 {
     for (auto& twinkle : twinkles)
-        if (twinkle.has_value() && (now > twinkle->spawnTimeMs + fadeInMs + fadeOutMs))
+        if (twinkle.has_value() && envelope.completed(now, twinkle->spawnTimeMs))
             twinkle.reset();
 }
 
@@ -73,12 +73,7 @@ void Twinkles::render(RgbStrip& strip, uint32_t now)
         if (!twinkle.has_value())
             continue;
 
-        auto spawnTimeMs = twinkle->spawnTimeMs;
-        bool fadingIn = (now - spawnTimeMs) <= fadeInMs;
-        float fadeProgress = fadingIn ? float(now - spawnTimeMs) / fadeInMs
-                                      : float(now - spawnTimeMs - fadeInMs) / fadeOutMs;
-        float brightness = fadingIn ? fadeProgress : 1 - fadeProgress;
-
+        float brightness = envelope.calculateProgress(now, twinkle->spawnTimeMs);
         strip[pos] = color * brightness;
     }
 }
