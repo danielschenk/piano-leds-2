@@ -184,11 +184,8 @@ void Concert::createMinimumAmountOfLights()
     }
 
     size_t minimumAmount(highestLightIndex + 1);
-    strip.reserve(minimumAmount);
-    for (unsigned int i(0); i < minimumAmount; ++i)
-    {
-        strip.push_back(processing::RgbColor());
-    }
+    if (strip.size() < minimumAmount)
+        strip.resize(minimumAmount);
 }
 
 size_t Concert::getStripSize() const
@@ -196,6 +193,13 @@ size_t Concert::getStripSize() const
     std::lock_guard<std::mutex> lock(mutex);
 
     return strip.size();
+}
+
+void Concert::setStripSize(size_t size)
+{
+    std::lock_guard<std::mutex> lock(mutex);
+
+    strip.resize(size);
 }
 
 uint8_t Concert::getProgramChangeChannel() const
@@ -281,7 +285,8 @@ void Concert::onProgramChange(uint8_t channel, uint8_t program)
                 {
                     if (patch->getProgram() == program)
                     {
-                        // Found a patch which matches the received program number and active bank.
+                        // Found a patch which matches the received program number and active
+                        // bank.
                         if (activePatchPosition != invalidPatchPosition)
                         {
                             IPatch* activePatch(patches.at(activePatchPosition));

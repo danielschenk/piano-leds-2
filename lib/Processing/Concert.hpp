@@ -56,6 +56,7 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     processing::NoteToLightMap getNoteToLightMap() const;
     void setNoteToLightMap(processing::NoteToLightMap noteToLightMap);
     size_t getStripSize() const;
+    void setStripSize(size_t size);
     uint8_t getProgramChangeChannel() const;
     void setProgramChangeChannel(uint8_t programChangeChannel);
     uint16_t getCurrentBank() const;
