@@ -2,13 +2,8 @@
 #define PROCESSING_NOTEVISUALIZER_HPP
 
 #include <memory>
-#include <mutex>
-#include <vector>
 
 #include "ProcessingBlock.hpp"
-
-class MonotonicTime;
-class NoteStateTracker;
 
 namespace processing
 {
@@ -19,14 +14,10 @@ class ColorPicker;
 class NoteVisualizer : public ProcessingBlock
 {
   public:
-    NoteVisualizer(NoteStateTracker& noteStateTracker, const MonotonicTime& time);
-
-    NoteVisualizer(NoteVisualizer&) = delete;
-    NoteVisualizer& operator=(NoteVisualizer&) = delete;
+    NoteVisualizer() = default;
 
     // ProcessingBlock implementation
-    void execute(processing::RgbStrip& strip, const NoteStates& noteStates,
-                 const processing::NoteToLightMap& noteToLightMap) override;
+    void execute(processing::RgbStrip& strip, const Input& input) override;
 
     void setRgbFunction(std::shared_ptr<processing::RgbFunction> rgbFunction);
 
@@ -39,9 +30,6 @@ class NoteVisualizer : public ProcessingBlock
     static constexpr const char* channelJsonKey = "channel";
     static constexpr const char* rgbFunctionJsonKey = "rgbFunction";
 
-    mutable std::mutex mutex;
-    NoteStateTracker& noteStateTracker;
-    const MonotonicTime& time;
     std::shared_ptr<processing::RgbFunction> rgbFunction;
 };
 

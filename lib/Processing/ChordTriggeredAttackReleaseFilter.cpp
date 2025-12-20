@@ -1,9 +1,6 @@
 #include "ChordTriggeredAttackReleaseFilter.hpp"
 
-void ChordTriggeredAttackReleaseFilter::execute(processing::RgbStrip& strip,
-                                                const processing::NoteToLightMap& noteToLightMap)
-{
-}
+void ChordTriggeredAttackReleaseFilter::execute(processing::RgbStrip& strip, const Input& input) {}
 
 ProcessingBlock::Mode ChordTriggeredAttackReleaseFilter::mode() const
 {

@@ -10,7 +10,7 @@ class HorizontalStretcher : public ProcessingBlock
 {
   public:
     HorizontalStretcher() = default;
-    void execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap) override;
+    void execute(RgbStrip& strip, const Input& input) override;
     Mode mode() const override;
 };
 

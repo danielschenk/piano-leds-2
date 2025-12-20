@@ -11,22 +11,13 @@
 
 #define LOGGING_COMPONENT "NoteVisualizer"
 
-NoteVisualizer::NoteVisualizer(NoteStateTracker& noteStateTracker, const MonotonicTime& time)
-    : noteStateTracker(noteStateTracker), time(time)
+void NoteVisualizer::execute(processing::RgbStrip& strip, const Input& input)
 {
-}
-
-void NoteVisualizer::execute(processing::RgbStrip& strip, const NoteStates& noteStates,
-                             const processing::NoteToLightMap& noteToLightMap)
-{
-    for (auto pair : noteToLightMap)
+    for (auto pair : input.noteToLightMap)
     {
         // first: note number, second: light number
         if (rgbFunction != nullptr && pair.second < strip.size())
-        {
-            strip[pair.second] = rgbFunction->calculate(
-                noteStateTracker.getNoteStates()[pair.first], time.getMilliseconds());
-        }
+            strip[pair.second] = rgbFunction->calculate(input.noteStates[pair.first], input.nowMs);
     }
 }
 

@@ -4,8 +4,7 @@
 
 SingleColorFill::SingleColorFill(const processing::RgbColor& color) : color(color) {}
 
-void SingleColorFill::execute(processing::RgbStrip& strip,
-                              const processing::NoteToLightMap& noteToLightMap)
+void SingleColorFill::execute(processing::RgbStrip& strip, const Input& input)
 {
     for (auto& it : strip)
     {

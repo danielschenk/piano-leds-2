@@ -1,9 +1,10 @@
 #ifndef PROCESSING_PROCESSINGELEMENT_H_
 #define PROCESSING_PROCESSINGELEMENT_H_
 
-#include <vector>
+#include <array>
 
 #include "JsonConvertible.hpp"
+#include "MidiInterface.hpp"
 #include "ProcessingTypes.hpp"
 
 class ProcessingBlock : public JsonConvertible
@@ -17,8 +18,15 @@ class ProcessingBlock : public JsonConvertible
 
     virtual void activate();
     virtual void deactivate();
-    virtual void execute(processing::RgbStrip& strip,
-                         const processing::NoteToLightMap& noteToLightMap) = 0;
+
+    using NoteStates = std::array<processing::NoteState, MidiInterface::numNotes>;
+    struct Input
+    {
+        uint32_t nowMs;
+        processing::NoteToLightMap& noteToLightMap;
+        NoteStates& noteStates;
+    };
+    virtual void execute(processing::RgbStrip& strip, const Input& input) = 0;
 
     enum class Mode
     {
