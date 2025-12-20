@@ -18,7 +18,7 @@ class ChordTriggeredEnvelopeFilter : public ProcessingBlock, MidiInput::Observer
   public:
     ChordTriggeredEnvelopeFilter(MidiInput& midiInput, const MonotonicTime& time);
 
-    processing::TimeEnvelope envelope{0, 4000};
+    processing::TimeEnvelope envelope;
     bool canRestart{true};
 
     uint8_t channel{0};
