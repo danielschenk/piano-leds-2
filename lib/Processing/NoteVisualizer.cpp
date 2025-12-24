@@ -36,6 +36,7 @@ void NoteVisualizer::deactivate()
     std::lock_guard<std::mutex> lock(mutex);
     noteStates.clear();
     noteStates.shrink_to_fit();
+    pedalPressed = false;
 }
 
 void NoteVisualizer::execute(processing::RgbStrip& strip,
