@@ -394,3 +394,34 @@ TEST_F(NoteVisualizerTest, convertFromJson)
     noteVisualizer.execute(testStrip, noteToLightMap);
     EXPECT_EQ(expected, testStrip);
 }
+
+TEST_F(NoteVisualizerTest, deactivateResetsPedalState)
+{
+    // Press a key
+    observer->onNoteChange(0, 0, 1, true);
+    // Press pedal
+    observer->onControlChange(0, MidiInterface::damperPedal, 0xff);
+    // Release key
+    observer->onNoteChange(0, 0, 1, false);
+
+    // Note should still be sounding due to pedal
+    auto expected = processing::RgbStrip(stripSize);
+    expected[0] = {0xff, 0xff, 0xff};
+    noteVisualizer.execute(strip, noteToLightMap);
+    EXPECT_EQ(expected, strip);
+
+    // Deactivate and reactivate (simulating a patch change)
+    noteVisualizer.deactivate();
+    noteVisualizer.activate();
+
+    // Press the same key again (without pedal)
+    observer->onNoteChange(0, 0, 1, true);
+    // Release the key
+    observer->onNoteChange(0, 0, 1, false);
+
+    // Note should NOT be sounding anymore (pedal state should have been reset)
+    expected[0] = {0, 0, 0};
+    resetStrip();
+    noteVisualizer.execute(strip, noteToLightMap);
+    EXPECT_EQ(expected, strip);
+}
