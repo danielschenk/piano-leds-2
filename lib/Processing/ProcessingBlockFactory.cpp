@@ -31,12 +31,7 @@ ProcessingBlock* ProcessingBlockFactory::createProcessingBlock(const Json& conve
         }
         else if (objectType == ProcessingBlock::typeNameNoteVisualizer)
         {
-            processingBlock = new NoteVisualizer(midiInput, rgbFunctionFactory, time);
-        }
-        else if (objectType == ProcessingBlock::typeNameProcessingChain)
-        {
-            // A processing chain needs the factory to construct its children
-            processingBlock = new ProcessingChain(*this);
+            processingBlock = new NoteVisualizer();
         }
 
         if (processingBlock != nullptr)

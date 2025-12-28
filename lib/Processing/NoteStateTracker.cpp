@@ -18,6 +18,11 @@ void NoteStateTracker::execute()
     scheduler.executeAll();
 }
 
+const processing::NoteStates& NoteStateTracker::noteStates() const
+{
+    return noteStates_;
+}
+
 void NoteStateTracker::onNoteChange(uint8_t channel, uint8_t number, uint8_t velocity, bool on)
 {
     scheduler.schedule(
@@ -29,19 +34,19 @@ void NoteStateTracker::onNoteChange(uint8_t channel, uint8_t number, uint8_t vel
             {
                 if (on)
                 {
-                    noteStates[number].pressDownVelocity = velocity;
-                    noteStates[number].noteOnTimeStamp = time.getMilliseconds();
-                    noteStates[number].pressed = true;
-                    noteStates[number].sounding = true;
+                    noteStates_[number].pressDownVelocity = velocity;
+                    noteStates_[number].noteOnTimeStamp = time.getMilliseconds();
+                    noteStates_[number].pressed = true;
+                    noteStates_[number].sounding = true;
                     if (pressDownColorPicker)
-                        noteStates[number].pressDownColor = pressDownColorPicker->pick();
+                        noteStates_[number].pressDownColor = pressDownColorPicker->pick();
                 }
                 else
                 {
-                    noteStates[number].pressed = false;
+                    noteStates_[number].pressed = false;
                     if (!pedalPressed)
                     {
-                        noteStates[number].sounding = false;
+                        noteStates_[number].sounding = false;
                     }
                 }
             }
@@ -59,7 +64,7 @@ void NoteStateTracker::onControlChange(uint8_t channel, MidiInput::ControllerNum
         {
             std::lock_guard<std::mutex> lock(mutex);
 
-            if (channel == this->channel && usingPedal)
+            if (channel == this->channel)
             {
                 pedalPressed = (value >= 64);
                 if (!pedalPressed)
@@ -67,41 +72,12 @@ void NoteStateTracker::onControlChange(uint8_t channel, MidiInput::ControllerNum
                     // Stop all notes which are sounding due to pedal only
                     for (int note = 0; note < MidiInterface::numNotes; ++note)
                     {
-                        if (!noteStates[note].pressed)
+                        if (!noteStates_[note].pressed)
                         {
-                            noteStates[note].sounding = false;
+                            noteStates_[note].sounding = false;
                         }
                     }
                 }
             }
         });
-}
-
-const std::vector<processing::NoteState>& NoteStateTracker::getNoteStates() const
-{
-    return noteStates;
-}
-
-uint8_t NoteStateTracker::getChannel() const
-{
-    std::lock_guard<std::mutex> lock(mutex);
-    return channel;
-}
-
-void NoteStateTracker::setChannel(uint8_t channel)
-{
-    std::lock_guard<std::mutex> lock(mutex);
-    this->channel = channel;
-}
-
-bool NoteStateTracker::isUsingPedal() const
-{
-    std::lock_guard<std::mutex> lock(mutex);
-    return usingPedal;
-}
-
-void NoteStateTracker::setUsingPedal(bool usingPedal)
-{
-    std::lock_guard<std::mutex> lock(mutex);
-    this->usingPedal = usingPedal;
 }

@@ -5,8 +5,7 @@
 #include <string>
 
 #include "IPatch.hpp"
-
-class IProcessingBlockFactory;
+#include "NoteStateTracker.hpp"
 
 /**
  * Class which represents a patch.
@@ -18,11 +17,6 @@ class IProcessingBlockFactory;
 class Patch : public IPatch
 {
   public:
-    /**
-     * Constructor.
-     *
-     * @param[in]   processingBlockFactory  Reference to the processing block factory.
-     */
     Patch(const IProcessingBlockFactory& processingBlockFactory);
 
     /**

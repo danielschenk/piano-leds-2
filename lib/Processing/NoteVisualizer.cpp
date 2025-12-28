@@ -2,29 +2,22 @@
 
 #include <functional>
 
-#include "ColorPicker.hpp"
 #include "Logging.hpp"
-#include "MidiInput.hpp"
-#include "MonotonicTime.hpp"
-#include "NoteStateTracker.hpp"
 #include "RgbFunction.hpp"
 
 #define LOGGING_COMPONENT "NoteVisualizer"
 
 void NoteVisualizer::execute(processing::RgbStrip& strip, const Input& input)
 {
-    for (auto pair : input.noteToLightMap)
-    {
-        // first: note number, second: light number
-        if (rgbFunction != nullptr && pair.second < strip.size())
-            strip[pair.second] = rgbFunction->calculate(input.noteStates[pair.first], input.nowMs);
-    }
-}
+    if (!rgbFunction)
+        return;
 
-void NoteVisualizer::setRgbFunction(std::shared_ptr<processing::RgbFunction> rgbFunction)
-{
-    std::lock_guard<std::mutex> lock(mutex);
-    this->rgbFunction = rgbFunction;
+    for (const auto& [note, lightIndex] : input.noteToLightMap)
+    {
+        if (lightIndex < strip.size())
+            strip[lightIndex] =
+                rgbFunction->calculate(input.noteStates.at(channel).get()[note], input.nowMs);
+    }
 }
 
 std::string NoteVisualizer::getObjectType() const

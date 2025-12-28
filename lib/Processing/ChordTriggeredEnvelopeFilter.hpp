@@ -11,12 +11,10 @@
 #include "Scheduler.hpp"
 #include "TimeEnvelope.hpp"
 
-class MonotonicTime;
-
 class ChordTriggeredEnvelopeFilter : public ProcessingBlock, MidiInput::Observer
 {
   public:
-    ChordTriggeredEnvelopeFilter(MidiInput& midiInput, const MonotonicTime& time);
+    explicit ChordTriggeredEnvelopeFilter(MidiInput& midiInput);
 
     processing::TimeEnvelope envelope;
     bool canRestart{true};
@@ -28,8 +26,7 @@ class ChordTriggeredEnvelopeFilter : public ProcessingBlock, MidiInput::Observer
     // ProcessingBlock
     void activate() override;
     void deactivate() override;
-    void execute(processing::RgbStrip& strip,
-                 const processing::NoteToLightMap& noteToLightMap) override;
+    void execute(processing::RgbStrip& strip, const ProcessingBlock::Input& input) override;
     Mode mode() const override;
 
   private:
@@ -42,7 +39,6 @@ class ChordTriggeredEnvelopeFilter : public ProcessingBlock, MidiInput::Observer
     std::map<uint8_t, bool> chordNotes;
 
     MidiInput& midiInput;
-    const MonotonicTime& time;
     std::optional<uint32_t> triggerTimeMs;
     Scheduler scheduler;
 };

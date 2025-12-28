@@ -20,6 +20,8 @@ class SingleColorFillTest : public ::testing::Test
 
     NiceMock<MockMonotonicTime> time;
     SingleColorFill source;
+    processing::NoteToLightMap noteToLightMap;
+    ProcessingBlock::Input input{0, noteToLightMap, {}};
 };
 
 TEST_F(SingleColorFillTest, executeDifferentColors)
@@ -30,7 +32,7 @@ TEST_F(SingleColorFillTest, executeDifferentColors)
     for (const auto& colorIt : colors)
     {
         source.color = colorIt;
-        source.execute(strip, processing::NoteToLightMap());
+        source.execute(strip, input);
         for (const auto& outputIt : strip)
         {
             EXPECT_EQ(outputIt, colorIt);

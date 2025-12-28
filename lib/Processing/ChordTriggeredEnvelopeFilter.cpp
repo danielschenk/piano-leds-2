@@ -3,13 +3,11 @@
 #include <algorithm>
 
 #include "Logging.hpp"
-#include "MonotonicTime.hpp"
 
 #define LOGGING_COMPONENT "ChordTriggeredEnvelopeFilter"
 
-ChordTriggeredEnvelopeFilter::ChordTriggeredEnvelopeFilter(MidiInput& midiInput,
-                                                           const MonotonicTime& time)
-    : midiInput(midiInput), time(time)
+ChordTriggeredEnvelopeFilter::ChordTriggeredEnvelopeFilter(MidiInput& midiInput)
+    : midiInput(midiInput)
 {
 }
 
@@ -33,13 +31,12 @@ void ChordTriggeredEnvelopeFilter::deactivate()
 }
 
 void ChordTriggeredEnvelopeFilter::execute(processing::RgbStrip& strip,
-                                           const processing::NoteToLightMap& noteToLightMap)
+                                           const ProcessingBlock::Input& input)
 {
     scheduler.executeAll();
 
-    auto now = time.getMilliseconds();
-    calculateTrigger(now);
-    render(strip, now);
+    calculateTrigger(input.nowMs);
+    render(strip, input.nowMs);
 }
 
 ProcessingBlock::Mode ChordTriggeredEnvelopeFilter::mode() const

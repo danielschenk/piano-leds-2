@@ -3,16 +3,13 @@
 #include <cstdlib>
 
 #include "Logging.hpp"
-#include "MonotonicTime.hpp"
 
 #define LOGGING_COMPONENT "Twinkles"
 
 namespace processing
 {
 
-Twinkles::Twinkles(const MonotonicTime& monotonicTime) : monotonicTime(monotonicTime) {}
-
-void Twinkles::execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap)
+void Twinkles::execute(RgbStrip& strip, const Input& input)
 {
     if (twinkles.size() != strip.size())
     {
@@ -20,16 +17,14 @@ void Twinkles::execute(RgbStrip& strip, const NoteToLightMap& noteToLightMap)
         twinkles.shrink_to_fit();
     }
 
-    auto now = monotonicTime.getMilliseconds();
-
-    pruneDeadTwinkles(now);
-    if (now - lastSpawnTimeMs >= spawnIntervalMs)
+    pruneDeadTwinkles(input.nowMs);
+    if (input.nowMs - lastSpawnTimeMs >= spawnIntervalMs)
     {
-        spawnTwinkle(strip.size(), now);
-        lastSpawnTimeMs = now;
+        spawnTwinkle(strip.size(), input.nowMs);
+        lastSpawnTimeMs = input.nowMs;
     }
 
-    render(strip, now);
+    render(strip, input.nowMs);
 }
 
 void Twinkles::deactivate()

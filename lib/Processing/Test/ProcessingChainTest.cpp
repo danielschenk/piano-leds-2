@@ -179,7 +179,7 @@ class FakeAdditiveBlock : public ProcessingBlock
 
     void activate() override {}
     void deactivate() override {}
-    void execute(processing::RgbStrip& strip, const processing::NoteToLightMap&) override
+    void execute(processing::RgbStrip& strip, const ProcessingBlock::Input&) override
     {
         strip[0] = color;
     }
