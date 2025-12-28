@@ -2,6 +2,8 @@
 #define PROCESSING_PROCESSINGELEMENT_H_
 
 #include <array>
+#include <functional>
+#include <map>
 
 #include "JsonConvertible.hpp"
 #include "MidiInterface.hpp"
@@ -19,12 +21,11 @@ class ProcessingBlock : public JsonConvertible
     virtual void activate();
     virtual void deactivate();
 
-    using NoteStates = std::array<processing::NoteState, MidiInterface::numNotes>;
     struct Input
     {
-        uint32_t nowMs;
+        processing::Timestamp nowMs;
         processing::NoteToLightMap& noteToLightMap;
-        NoteStates& noteStates;
+        std::map<MidiInterface::Channel, std::reference_wrapper<processing::NoteStates>> noteStates;
     };
     virtual void execute(processing::RgbStrip& strip, const Input& input) = 0;
 

@@ -19,18 +19,14 @@ class NoteVisualizer : public ProcessingBlock
     // ProcessingBlock implementation
     void execute(processing::RgbStrip& strip, const Input& input) override;
 
-    void setRgbFunction(std::shared_ptr<processing::RgbFunction> rgbFunction);
+    std::shared_ptr<processing::RgbFunction> rgbFunction;
 
   protected:
     // ProcessingBlock implementation
     std::string getObjectType() const override;
 
   private:
-    static constexpr const char* usingPedalJsonKey = "usingPedal";
-    static constexpr const char* channelJsonKey = "channel";
-    static constexpr const char* rgbFunctionJsonKey = "rgbFunction";
-
-    std::shared_ptr<processing::RgbFunction> rgbFunction;
+    MidiInterface::Channel channel{0};
 };
 
 #endif /* PROCESSING_NOTEVISUALIZER_HPP */

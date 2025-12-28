@@ -31,6 +31,7 @@ class MidiInterface
     static constexpr uint16_t pitchBendCenter = 0x2000;
 
     using Channel = uint8_t;
+    using NoteNumber = uint8_t;
     using Velocity = uint8_t;
 
     virtual ~MidiInterface() = default;

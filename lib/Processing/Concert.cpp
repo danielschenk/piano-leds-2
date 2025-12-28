@@ -12,8 +12,9 @@
 uint8_t Concert::lastProgramChange;
 uint8_t Concert::lastProgramChangeXorCheck;
 
-Concert::Concert(MidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory)
-    : midiInput(midiInput), processingBlockFactory(processingBlockFactory)
+Concert::Concert(MidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory,
+                 const MonotonicTime& time)
+    : midiInput(midiInput), processingBlockFactory(processingBlockFactory), nanf(midiInput, time)
 {
     midiInput.subscribe(*this);
 }

@@ -1,9 +1,9 @@
 #ifndef PROCESSING_NOTESTATETRACKER_HPP
 #define PROCESSING_NOTESTATETRACKER_HPP
 
+#include <array>
 #include <memory>
 #include <mutex>
-#include <vector>
 
 #include "ColorPicker.hpp"
 #include "MidiInput.hpp"
@@ -22,11 +22,9 @@ class NoteStateTracker : MidiInput::Observer
     NoteStateTracker& operator=(NoteStateTracker&) = delete;
 
     void execute();
+    const processing::NoteStates& noteStates() const;
 
-    uint8_t getChannel() const;
-    void setChannel(uint8_t channel);
-    bool isUsingPedal() const;
-    void setUsingPedal(bool usingPedal);
+    uint8_t channel{0};
 
   private:
     // MidiInput::Observer implementation
@@ -36,11 +34,9 @@ class NoteStateTracker : MidiInput::Observer
 
     mutable std::mutex mutex;
 
-    bool usingPedal{true};
     MidiInput& midiInput;
-    uint8_t channel = 0;
     Scheduler scheduler;
-    std::vector<processing::NoteState> noteStates;
+    processing::NoteStates noteStates_;
     bool pedalPressed{false};
     std::shared_ptr<processing::ColorPicker> pressDownColorPicker;
     const MonotonicTime& time;

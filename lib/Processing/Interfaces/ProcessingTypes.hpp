@@ -2,9 +2,11 @@
 #define PROCESSING_INTERFACES_PROCESSINGTYPES_H_
 
 #include "Color.hpp"
+#include "MidiInterface.hpp"
 #include "json11.hpp"
 using Json = json11::Json;
 
+#include <array>
 #include <cstdint>
 #include <map>
 #include <string>
@@ -47,14 +49,14 @@ struct NoteState
     /** Indicates if the note is sounding (either because it's pressed or the damper pedal is
      * pressed). */
     bool sounding{false};
-    /** The press down velocity. */
-    uint8_t pressDownVelocity{0};
+    MidiInterface::Velocity pressDownVelocity{0};
     /** The time stamp of the note on event. */
     Timestamp noteOnTimeStamp{0};
 
     // TODO temp hack - this ideally shouldn't be tracked here
     RgbColor pressDownColor;
 };
+using NoteStates = std::array<processing::NoteState, MidiInterface::numNotes>;
 
 }  // namespace processing
 

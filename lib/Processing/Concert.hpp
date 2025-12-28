@@ -8,6 +8,7 @@
 #include "JsonConvertible.hpp"
 #include "MidiInput.hpp"
 #include "MidiInterface.hpp"
+#include "NoteStateTracker.hpp"
 #include "Platform.hpp"
 #include "ProcessingTypes.hpp"
 #include "Scheduler.hpp"
@@ -25,7 +26,8 @@ class IPatch;
 class Concert : public JsonConvertible, public MidiInput::Observer
 {
   public:
-    Concert(MidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory);
+    Concert(MidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory,
+            const MonotonicTime& time);
     ~Concert() override;
 
     Concert() = delete;
@@ -108,6 +110,7 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     IProcessingBlockFactory& processingBlockFactory;
     Scheduler scheduler;
     std::list<IObserver*> observers;
+    NoteStateTracker noteStateTracker;
     mutable std::mutex mutex;
 
     // use an arbitrary mask instead of XOR'ing all bits, to reduce the likelihood of an accidental

@@ -60,7 +60,7 @@ void ConcertInfrastructure::createLegacyPatches()
     // flash white every time first chord of cycle is played
     // only during intro (distinguished by added bass note)
     // 4s should be enough to not retrigger until in next cycle
-    auto backgroundFlashFilter = new ChordTriggeredEnvelopeFilter{midiInput, time};
+    auto backgroundFlashFilter = new ChordTriggeredEnvelopeFilter{midiInput};
     backgroundFlashFilter->envelope = {0, 4000};
     backgroundFlashFilter->canRestart = false;
     backgroundFlashFilter->setNotes({43, 62, 67, 71});
