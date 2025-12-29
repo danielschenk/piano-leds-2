@@ -78,9 +78,9 @@ void Patch::deactivate()
     processingChain->deactivate();
 }
 
-void Patch::execute(processing::RgbStrip& strip, const processing::NoteToLightMap& noteToLightMap)
+void Patch::execute(processing::RgbStrip& strip, const ProcessingBlock::Input& input)
 {
-    processingChain->execute(strip, noteToLightMap);
+    processingChain->execute(strip, input);
 }
 
 uint8_t Patch::getBank() const

@@ -26,7 +26,7 @@ class ConcertTest : public MidiInputObserverTest, public ::testing::Test
     ConcertTest() : MidiInputObserverTest(), mockProcessingBlockFactory(), mockTime()
     {
         LoggingEntryPoint::setTime(&mockTime);
-        concert = new Concert(mockMidiInput, mockProcessingBlockFactory);
+        concert = new Concert(mockMidiInput, mockProcessingBlockFactory, mockTime);
 
         ON_CALL(mockProcessingBlockFactory, createPatch())
             .WillByDefault(ReturnNew<NiceMock<MockPatch>>());
@@ -102,7 +102,7 @@ TEST_F(ConcertTest, execute)
 
     // The mock patch should be executed, and given the configured note to light map.
     // Let the mock patch set some values on the strip during its execute
-    EXPECT_CALL(*mockPatch, execute(_, map)).WillOnce(SetArgReferee<0>(newStripValues));
+    EXPECT_CALL(*mockPatch, execute(_, _)).WillOnce(SetArgReferee<0>(newStripValues));
 
     // The new strip values should be notified
     EXPECT_CALL(observer, onStripUpdate(newStripValues));

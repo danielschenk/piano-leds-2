@@ -16,8 +16,13 @@ void NoteVisualizer::execute(processing::RgbStrip& strip, const Input& input)
     {
         if (lightIndex < strip.size())
             strip[lightIndex] =
-                rgbFunction->calculate(input.noteStates.at(channel).get()[note], input.nowMs);
+                rgbFunction->calculate(input.noteStates[midiSlot].get()[note], input.nowMs);
     }
+}
+
+bool NoteVisualizer::valid(const Input& input)
+{
+    return midiSlot < input.noteStates.size();
 }
 
 std::string NoteVisualizer::getObjectType() const

@@ -5,6 +5,7 @@
 #include <mutex>
 
 #include "IProcessingChain.hpp"
+#include "ProcessingBlock.hpp"
 
 class IProcessingBlockFactory;
 
@@ -23,8 +24,7 @@ class ProcessingChain : public IProcessingChain
     // IProcessingChain implementation
     void activate() override;
     void deactivate() override;
-    void execute(processing::RgbStrip& strip,
-                 const processing::NoteToLightMap& noteToLightMap) override;
+    void execute(processing::RgbStrip& strip, const ProcessingBlock::Input& input) override;
     void insertBlock(ProcessingBlock* block, unsigned int index) override;
     void insertBlock(ProcessingBlock* block) override;
     Json convertToJson() const override;

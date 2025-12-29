@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include <list>
+#include <memory>
+#include <set>
 #include <vector>
 
 #include "JsonConvertible.hpp"
@@ -10,6 +12,7 @@
 #include "MidiInterface.hpp"
 #include "NoteStateTracker.hpp"
 #include "Platform.hpp"
+#include "ProcessingBlock.hpp"
 #include "ProcessingTypes.hpp"
 #include "Scheduler.hpp"
 
@@ -64,6 +67,8 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     uint16_t getCurrentBank() const;
     void setCurrentBank(uint16_t bank);
 
+    void setMidiChannels(std::set<MidiInterface::Channel> channels);
+
     void execute();
 
     class IObserver
@@ -106,11 +111,26 @@ class Concert : public JsonConvertible, public MidiInput::Observer
     PatchPosition activePatchPosition = invalidPatchPosition;
     uint8_t programChangeChannel = 0;
     uint16_t currentBank = 0;
+
     MidiInput& midiInput;
+    const MonotonicTime& time;
+
+    struct MidiSlot
+    {
+        MidiSlot(MidiInput& midiInput, const MonotonicTime& time, MidiInterface::Channel channel)
+            : noteStateTracker(midiInput, time)
+        {
+            noteStateTracker.channel = channel;
+        }
+
+        NoteStateTracker noteStateTracker;
+    };
+    std::vector<std::shared_ptr<MidiSlot>> midiSlots;
+    ProcessingBlock::Input input{0, noteToLightMap, {}};
+
     IProcessingBlockFactory& processingBlockFactory;
     Scheduler scheduler;
     std::list<IObserver*> observers;
-    NoteStateTracker noteStateTracker;
     mutable std::mutex mutex;
 
     // use an arbitrary mask instead of XOR'ing all bits, to reduce the likelihood of an accidental

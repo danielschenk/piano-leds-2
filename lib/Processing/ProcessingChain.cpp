@@ -111,8 +111,7 @@ void ProcessingChain::deactivate()
     active = false;
 }
 
-void ProcessingChain::execute(processing::RgbStrip& strip,
-                              const processing::NoteToLightMap& noteToLightMap)
+void ProcessingChain::execute(processing::RgbStrip& strip, const ProcessingBlock::Input& input)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -127,14 +126,14 @@ void ProcessingChain::execute(processing::RgbStrip& strip,
             std::fill(intermediateStrip.begin(), intermediateStrip.end(),
                       processing::color_constants::off);
 
-            processingBlock->execute(intermediateStrip, noteToLightMap);
+            processingBlock->execute(intermediateStrip, input);
 
             std::transform(strip.begin(), strip.end(), intermediateStrip.begin(), strip.begin(),
                            std::plus<processing::RgbColor>());
         }
         else if (mode == ProcessingBlock::Mode::overwriting)
         {
-            processingBlock->execute(strip, noteToLightMap);
+            processingBlock->execute(strip, input);
         }
     }
 }

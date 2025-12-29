@@ -77,7 +77,7 @@ class NoteVisualizerTest : public LoggingTest, public ::testing::Test
 
     processing::NoteToLightMap noteToLightMap;
     processing::NoteStates noteStates;
-    ProcessingBlock::Input input{0, noteToLightMap, {{0, noteStates}}};
+    ProcessingBlock::Input input{0, noteToLightMap, {noteStates}};
 
     std::string exampleJson;
 };
@@ -126,18 +126,6 @@ TEST_F(NoteVisualizerTest, noteOnOverwritesAlreadyEnabledLed)
     expected[5] = {0x01, 0x01, 0x01};
 
     EXPECT_EQ(expected, strip);
-}
-
-TEST_F(NoteVisualizerTest, deactivateDisablesAllNotes)
-{
-    soundNote(0, 1);
-    soundNote(5, 6);
-
-    noteVisualizer.deactivate();
-    noteVisualizer.activate();
-    noteVisualizer.execute(strip, input);
-
-    EXPECT_THAT(strip, Each(processing::color_constants::off));
 }
 
 /** Action definition for mock RGB function. */
@@ -189,10 +177,9 @@ TEST_F(NoteVisualizerTest, timePassedToRgbFunction)
     noteVisualizer.rgbFunction = mockRgbFunction;
 
     InSequence dummy;
-
     for (processing::Timestamp t = 42; t < 45; ++t)
     {
-        EXPECT_CALL(*mockRgbFunction, calculate(_, t));
+        EXPECT_CALL(*mockRgbFunction, calculate(_, t)).Times(stripSize);
 
         input.nowMs = t;
         noteVisualizer.execute(strip, input);

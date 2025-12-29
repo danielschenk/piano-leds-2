@@ -7,6 +7,8 @@
 #include "IPatch.hpp"
 #include "NoteStateTracker.hpp"
 
+class IProcessingBlockFactory;
+
 /**
  * Class which represents a patch.
  *
@@ -37,8 +39,7 @@ class Patch : public IPatch
     virtual IProcessingChain& getProcessingChain() const;
     virtual void activate();
     virtual void deactivate();
-    virtual void execute(processing::RgbStrip& strip,
-                         const processing::NoteToLightMap& noteToLightMap);
+    virtual void execute(processing::RgbStrip& strip, const ProcessingBlock::Input& input);
     virtual bool hasBankAndProgram() const;
     virtual uint8_t getBank() const;
     virtual void setBank(uint8_t bank);

@@ -17,6 +17,7 @@ class NoteVisualizer : public ProcessingBlock
     NoteVisualizer() = default;
 
     // ProcessingBlock implementation
+    bool valid(const Input& input) override;
     void execute(processing::RgbStrip& strip, const Input& input) override;
 
     std::shared_ptr<processing::RgbFunction> rgbFunction;
@@ -26,7 +27,7 @@ class NoteVisualizer : public ProcessingBlock
     std::string getObjectType() const override;
 
   private:
-    MidiInterface::Channel channel{0};
+    std::size_t midiSlot{0};
 };
 
 #endif /* PROCESSING_NOTEVISUALIZER_HPP */

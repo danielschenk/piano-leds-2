@@ -6,6 +6,7 @@
 #include "IPatch.hpp"
 #include "IProcessingBlockFactory.hpp"
 #include "Json11Helper.hpp"
+#include "MonotonicTime.hpp"
 
 #define LOGGING_COMPONENT "Concert"
 
@@ -14,7 +15,7 @@ uint8_t Concert::lastProgramChangeXorCheck;
 
 Concert::Concert(MidiInput& midiInput, IProcessingBlockFactory& processingBlockFactory,
                  const MonotonicTime& time)
-    : midiInput(midiInput), processingBlockFactory(processingBlockFactory), nanf(midiInput, time)
+    : midiInput(midiInput), time(time), processingBlockFactory(processingBlockFactory)
 {
     midiInput.subscribe(*this);
 }
@@ -231,15 +232,29 @@ void Concert::setCurrentBank(uint16_t bank)
     currentBank = bank;
 }
 
+void Concert::setMidiChannels(std::set<MidiInterface::Channel> channels)
+{
+    std::lock_guard<std::mutex> lock(mutex);
+
+    midiSlots.clear();
+    for (auto channel : channels)
+        auto& slot = midiSlots.emplace_back(std::make_shared<MidiSlot>(midiInput, time, channel));
+
+    input.noteStates.clear();
+    for (auto& slot : midiSlots)
+        input.noteStates.push_back(slot->noteStateTracker.noteStates());
+}
+
 void Concert::execute()
 {
     scheduler.executeAll();
 
     std::lock_guard<std::mutex> lock(mutex);
 
+    input.nowMs = time.getMilliseconds();
     if (activePatchPosition != invalidPatchPosition)
     {
-        patches.at(activePatchPosition)->execute(strip, noteToLightMap);
+        patches.at(activePatchPosition)->execute(strip, input);
 
         for (auto observer : observers)
         {
