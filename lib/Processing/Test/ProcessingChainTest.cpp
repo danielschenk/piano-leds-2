@@ -28,6 +28,7 @@ class ProcessingChainTest : public ProcessingBlockContainerTest, public ::testin
 
     ProcessingChain processingChain;
     processing::NoteToLightMap map;
+    ProcessingBlock::Input input{0, map, {}};
 };
 
 TEST_F(ProcessingChainTest, empty)
@@ -37,7 +38,7 @@ TEST_F(ProcessingChainTest, empty)
     testStrip[1] = {0, 1, 0};
     testStrip[2] = {0, 0, 1};
 
-    processingChain.execute(testStrip, processing::NoteToLightMap());
+    processingChain.execute(testStrip, input);
     // strip is still zero
     EXPECT_EQ(strip, testStrip);
 }
@@ -52,7 +53,7 @@ TEST_F(ProcessingChainTest, insertOne)
     reference[1] = {10, 0, 0};
     reference[2] = {10, 0, 0};
 
-    processingChain.execute(strip, processing::NoteToLightMap());
+    processingChain.execute(strip, input);
     EXPECT_EQ(reference, strip);
 }
 
@@ -68,7 +69,7 @@ TEST_F(ProcessingChainTest, insertTwo)
     reference[1] = {20, 0, 0};
     reference[2] = {20, 0, 0};
 
-    processingChain.execute(strip, processing::NoteToLightMap());
+    processingChain.execute(strip, input);
     EXPECT_EQ(reference, strip);
 }
 
@@ -118,7 +119,7 @@ TEST_F(ProcessingChainTest, convertFromJson)
     reference[1] = {0, 20, 0};
     reference[2] = {0, 20, 0};
     processing::RgbStrip testStrip(3);
-    processingChain.execute(testStrip, processing::NoteToLightMap());
+    processingChain.execute(testStrip, input);
     EXPECT_EQ(reference, testStrip);
 }
 
@@ -213,7 +214,7 @@ TEST_F(ProcessingChainTest, additive)
     processingChain.insertBlock(new FakeAdditiveBlock(red));
     processingChain.insertBlock(new FakeAdditiveBlock(green));
 
-    processingChain.execute(strip, map);
+    processingChain.execute(strip, input);
     EXPECT_THAT(strip, ElementsAre(yellow, off, off));
 }
 
@@ -223,7 +224,7 @@ TEST_F(ProcessingChainTest, overwriting)
     processingChain.insertBlock(new FakeAdditiveBlock(red));
     processingChain.insertBlock(new FakeOverwritingBlock(green));
 
-    processingChain.execute(strip, map);
+    processingChain.execute(strip, input);
     EXPECT_THAT(strip, ElementsAre(green, off, off));
 }
 
@@ -234,7 +235,7 @@ TEST_F(ProcessingChainTest, additiveAndOverwriting)
     processingChain.insertBlock(new FakeOverwritingBlock(green));
     processingChain.insertBlock(new FakeAdditiveBlock(blue));
 
-    processingChain.execute(strip, map);
+    processingChain.execute(strip, input);
     EXPECT_THAT(strip, ElementsAre(cyan, off, off));
 }
 
@@ -242,7 +243,7 @@ TEST_F(ProcessingChainTest, doNotAccumulateIntoNextCycle)
 {
     processingChain.insertBlock(new FakeAdditiveBlock(processing::RgbColor{1, 0, 0}));
 
-    processingChain.execute(strip, map);
-    processingChain.execute(strip, map);
+    processingChain.execute(strip, input);
+    processingChain.execute(strip, input);
     EXPECT_EQ(strip[0], processing::RgbColor(1, 0, 0));
 }

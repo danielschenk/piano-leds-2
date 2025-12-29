@@ -3,7 +3,7 @@
 
 #include <array>
 #include <functional>
-#include <map>
+#include <vector>
 
 #include "JsonConvertible.hpp"
 #include "MidiInterface.hpp"
@@ -25,8 +25,9 @@ class ProcessingBlock : public JsonConvertible
     {
         processing::Timestamp nowMs;
         processing::NoteToLightMap& noteToLightMap;
-        std::map<MidiInterface::Channel, std::reference_wrapper<processing::NoteStates>> noteStates;
+        std::vector<std::reference_wrapper<const processing::NoteStates>> noteStates;
     };
+    virtual bool valid(const Input& input);
     virtual void execute(processing::RgbStrip& strip, const Input& input) = 0;
 
     enum class Mode

@@ -105,17 +105,18 @@ TEST_F(PatchTest, execute)
     // Pass a map with something we can verify
     processing::NoteToLightMap map;
     map[42] = 42;
+    ProcessingBlock::Input input{0, map, {}};
 
     // Let the mock processing chain do something with the strip which we can verify
     processing::RgbColor valueAfterProcessing({1, 2, 3});
     ASSERT_NE(valueAfterProcessing, strip[0]);
 
-    EXPECT_CALL(*processingChain, execute(_, map))
+    EXPECT_CALL(*processingChain, execute(_, _))
         .WillOnce(Invoke(
-            [valueAfterProcessing](processing::RgbStrip& strip, const processing::NoteToLightMap&)
+            [valueAfterProcessing](processing::RgbStrip& strip, const ProcessingBlock::Input& input)
             { strip[0] = valueAfterProcessing; }));
 
-    patch->execute(strip, map);
+    patch->execute(strip, input);
 
     EXPECT_EQ(valueAfterProcessing, strip[0]);
 }
