@@ -22,7 +22,7 @@ ConcertInfrastructure::ConcertInfrastructure(MidiInput& midiInput, const Monoton
     : midiInput(midiInput),
       time(time),
       processingBlockFactory(midiInput, rgbFunctionFactory, time),
-      concert(midiInput, processingBlockFactory)
+      concert(midiInput, processingBlockFactory, time)
 {
     concert.setNoteToLightMap(createDefaultOneToOneFullPianoMapping(1));
     concert.setStripSize(176);
@@ -73,7 +73,7 @@ void ConcertInfrastructure::createLegacyPatches()
     patch = addBasicPatch(white, false, xmasColorPicker);
     patch->setProgram(54);
     patch->setName("Merry Xmas Everybody");
-    patch->getProcessingChain().insertBlock(new processing::Twinkles(time));
+    patch->getProcessingChain().insertBlock(new processing::Twinkles);
 
     auto rastaColorPicker = std::make_shared<processing::SequentialColorPicker>();
     rastaColorPicker->sequence = {red, yellow, green};
@@ -87,14 +87,13 @@ Patch* ConcertInfrastructure::addBasicPatch(
     std::shared_ptr<processing::ColorPicker> pressDownColorPicker)
 {
     auto patch = new Patch(processingBlockFactory);
-    auto block = new NoteVisualizer(midiInput, time);
+    auto block = new NoteVisualizer;
     std::shared_ptr<processing::RgbFunction> rgbFunction;
     if (likePiano)
         rgbFunction = std::make_shared<processing::PianoDecayRgbFunction>(color);
     else
         rgbFunction = std::make_shared<processing::OnOffRgbFunction>(color);
-    block->setUsingPedal(true);
-    block->setRgbFunction(rgbFunction);
+    block->rgbFunction = rgbFunction;
     block->setPressDownColorPicker(pressDownColorPicker);
     patch->getProcessingChain().insertBlock(block);
 

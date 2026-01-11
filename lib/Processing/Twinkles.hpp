@@ -1,6 +1,7 @@
 #ifndef PROCESSING_TWINKLE_HPP
 #define PROCESSING_TWINKLE_HPP
 
+#include <cstddef>
 #include <optional>
 #include <vector>
 

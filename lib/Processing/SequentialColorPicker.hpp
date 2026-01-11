@@ -1,6 +1,7 @@
 #ifndef PROCESSING_SEQUENTIALCOLORPICKER_HPP
 #define PROCESSING_SEQUENTIALCOLORPICKER_HPP
 
+#include <cstddef>
 #include <vector>
 
 #include "Color.hpp"
