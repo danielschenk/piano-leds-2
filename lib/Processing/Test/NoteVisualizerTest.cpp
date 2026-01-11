@@ -219,3 +219,10 @@ TEST_F(NoteVisualizerTest, doNotWriteOutsideStrip)
 
     EXPECT_EQ(expected, shorterStrip);
 }
+
+TEST_F(NoteVisualizerTest, valid)
+{
+    EXPECT_TRUE(noteVisualizer.valid(input));
+    noteVisualizer.midiSlot = 1;
+    EXPECT_FALSE(noteVisualizer.valid(input));
+}

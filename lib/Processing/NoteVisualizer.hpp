@@ -1,6 +1,7 @@
 #ifndef PROCESSING_NOTEVISUALIZER_HPP
 #define PROCESSING_NOTEVISUALIZER_HPP
 
+#include <cstddef>
 #include <memory>
 
 #include "ProcessingBlock.hpp"
@@ -21,13 +22,11 @@ class NoteVisualizer : public ProcessingBlock
     void execute(processing::RgbStrip& strip, const Input& input) override;
 
     std::shared_ptr<processing::RgbFunction> rgbFunction;
+    std::size_t midiSlot{0};
 
   protected:
     // ProcessingBlock implementation
     std::string getObjectType() const override;
-
-  private:
-    std::size_t midiSlot{0};
 };
 
 #endif /* PROCESSING_NOTEVISUALIZER_HPP */
