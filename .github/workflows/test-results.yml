@@ -24,14 +24,14 @@ jobs:
 
     steps:
       - name: Download and Extract Test Results
-        uses: dawidd6/action-download-artifact@v12
+        uses: dawidd6/action-download-artifact@v14
         with:
           run_id: ${{ github.event.workflow_run.id }}
           name: Test Results
           path: artifacts/Test Results
 
       - name: Download and Extract Event File
-        uses: dawidd6/action-download-artifact@v12
+        uses: dawidd6/action-download-artifact@v14
         with:
           run_id: ${{ github.event.workflow_run.id }}
           name: Event File
