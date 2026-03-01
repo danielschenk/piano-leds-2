@@ -42,7 +42,7 @@ jobs:
 
       - name: Upload Test Results
         if: (!cancelled())
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Test Results
           path: |
@@ -50,7 +50,7 @@ jobs:
 
       - name: Upload Firmware
         if: (!cancelled())
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Firmware
           path: |
@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Upload
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Event File
           path: ${{ github.event_path }}
