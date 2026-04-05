@@ -10,9 +10,14 @@ on:
     tags:
       - v*.*.*
 
+permissions: {}
+
 jobs:
   CI:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
 
     env:
       python-version: '3.11'
@@ -61,6 +66,9 @@ jobs:
   event_file:
     name: "Event File"
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+
     steps:
       - name: Upload
         uses: actions/upload-artifact@v7
