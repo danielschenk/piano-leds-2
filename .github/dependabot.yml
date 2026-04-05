@@ -3,7 +3,12 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: weekly
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+      semver-minor-days: 30
+      semver-patch-days: 1
     commit-message:
       prefix: chore(deps)
     groups:
