@@ -23,7 +23,7 @@ jobs:
       python-version: '3.11'
 
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7.0.1
       - uses: actions/cache@v6.1.0
         with:
           path: |
@@ -34,7 +34,7 @@ jobs:
             py${{ env.python-version }}-${{ hashFiles('platformio.ini') }}
             py${{ env.python-version }}-
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ env.python-version }}
       - name: Install PlatformIO Core
